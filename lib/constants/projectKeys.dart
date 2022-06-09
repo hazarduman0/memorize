@@ -1,0 +1,34 @@
+class ProjectKeys{
+  final String title = 'MEMORIZE';
+  final String slogan = '"Zihninizi genişletin, blabla"';
+  final String searchText = 'Aramak için yazın..';
+  final String statistics = 'istatistik';
+  final String homePage = 'anasayfa';
+  final String exams = 'sınavlar';
+  final String noArchiveText1 = 'Hay Aksi!';
+  final String noArchiveText2 = 'Burada bir şeyler olmalıydı..';
+  final String noArchiveText3 = 'Nereye koyduysan oradadır.\nAramaya devam et!';
+  final String noArchiveButtonText = 'Yeni arşiv oluştur';
+  final String createArchiveButtonText = 'Yeni Arşiv Oluştur';
+  final String updateArchiveButtonText = 'Arşivi Güncelle';
+  final String addButtonText = 'Ekle';
+  final String updateButtonText = 'Güncelle';
+  final String turnBackText = 'geri dön';
+  final String createArchiveStage = 'Arşiv Oluşturma Aşaması';
+  final String updateArchiveStage = 'Arşiv Güncelleme Aşaması';
+  final String archiveName = 'Arşiv Adı';
+  final String word = 'Kelime';
+  final String archiveDescription = 'Arşiv Açıklaması';
+  final String coloPicker = 'Renk seçiçi';
+  final String archiveNameFormValidator = 'Bu alan boş bırakılmamalı.';
+  final String deleteAlertDialog1 = 'Arşiv silinecek';
+  final String deleteAlertDialog2 = 'Onaylıyor musun?';
+  final String yesString = 'evet';
+  final String noString = 'hayır';
+  final String customAppBarArchiveText = 'Arşivler';
+  final String customAppBarCreateArchivesText = 'arşiv oluştur';
+  final String customAppBarStatisticsText = 'İstatistikler';
+  final String customAppBarQuizsText = 'Sınavlar';
+  final String ooDelete = 'Sil    ';
+  final String ooEdit = 'Düzenle';
+}
