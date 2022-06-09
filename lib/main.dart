@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //Size size = MediaQuery.of(context).size;
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Memorize',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // navigationBarTheme: NavigationBarThemeData(
