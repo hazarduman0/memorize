@@ -151,26 +151,4 @@ class AppTextStyles{
     fontWeight: FontWeight.w400,
     fontSize: 12.0
   );
-
-
-//   Color? setTextColor(String? color){
-//     if(color == 'selectableGreenColor'){
-//       return AppColors.selectableGreenColor;
-//     }
-//     else if(color == 'selectableOrangeColor'){
-//       return AppColors.selectableOrangeColor;
-//     }
-//     else if(color == 'selectableYellowColor'){
-//       return AppColors.selectableYellowColor;
-//     }
-//     else if(color == 'selectablePurpleColor'){
-//       return AppColors.selectablePurpleColor;
-//     }
-//     else if(color == 'selectableBlueColor'){
-//       return AppColors.selectableBlueColor;
-//     }
-//     else {
-//       return Colors.black;
-//     }
-//   }
  }

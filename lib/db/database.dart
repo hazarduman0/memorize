@@ -90,80 +90,9 @@ class DatabaseRepository {
 ''');
   }
 
-  // Future<Archive> createArchive(Archive archive) async {
-  //   final db = await instance.database;
-
-  //   final id = await db.insert(tableArchives, archive.toJson());
-  //   return archive.copy(id: id);
-  // }
-
-  // Future<List<Archive>> getAllArchives() async {
-  //   final db = await instance.database;
-
-  //   const orderBy = '${ArchiveFields.time} ASC';
-  //   // final result =
-  //   //     await db.rawQuery('SELECT * FROM $tableNotes ORDER BY $orderBy');
-
-  //   final result = await db.query(tableArchives, orderBy: orderBy);
-
-  //   return result.map((json) => Archive.fromJson(json)).toList();
-  // }
-
   Future<void> deleDataBase() async {
     final dbPath = await getDatabasesPath();
 
     return await deleteDatabase(dbPath);
   }
-
-  // Future<List<Archive>> getPinnedArchives() async {
-  //   final db = await instance.database;
-
-  //   const orderBy = '${ArchiveFields.time} ASC';
-
-  //   const where = '${ArchiveFields.isPinned} = ?';
-
-  //   const whereArgs = [1];
-
-  //   final result = await db.query(tableArchives,
-  //       orderBy: orderBy, where: where, whereArgs: whereArgs);
-
-  //   return result.map((json) => Archive.fromJson(json)).toList();
-  // }
-
-  // Future<List<Archive>> getNormalArchives() async {
-  //   final db = await instance.database;
-
-  //   const orderBy = '${ArchiveFields.time} ASC';
-
-  //   const where = '${ArchiveFields.isPinned} = ?';
-
-  //   const whereArgs = [0];
-
-  //   final result = await db.query(tableArchives,
-  //       orderBy: orderBy, where: where, whereArgs: whereArgs);
-
-  //   return result.map((json) => Archive.fromJson(json)).toList();
-  // }
-
-  // Future<int> updateArchive(Archive archive) async {
-  //   final db = await instance.database;
-
-  //   return db.update(
-  //     tableArchives,
-  //     archive.toJson(),
-  //     where: '${ArchiveFields.id} = ?',
-  //     whereArgs: [archive.id],
-  //   );
-  // }
-
-  // Future<int> deleteArchive(int id) async{
-  //   final db = await instance.database;
-
-  //   return await db.delete(
-  //     tableArchives,
-  //     where: '${ArchiveFields.id} = ?',
-  //     whereArgs: [id],
-  //     );
-  // }
-
 }

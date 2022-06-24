@@ -48,14 +48,12 @@ class _WordsPageState extends State<WordsPage> {
   //   return await wordOperations.getArchiveWords(archive.id);
   // }
 
-
   Future getWords(Archive archive) async {
     //setState(() => isLoading = true);
     words = await wordOperations.getArchiveWords(archive.id);
     setState(() {});
     //setState(() => isLoading = false);
   }
-
 
   void parentChange(int? fclickedWordID, String fclickedWord,
       bool fotherOptions, Word fword) {
@@ -70,7 +68,7 @@ class _WordsPageState extends State<WordsPage> {
     });
   }
 
-  void meaningChange(Meaning fmeaning, bool fotherOptions){
+  void meaningChange(Meaning fmeaning, bool fotherOptions) {
     meaning = fmeaning;
     setState(() {
       clickedMeaningID = fmeaning.id;
@@ -113,162 +111,185 @@ class _WordsPageState extends State<WordsPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    return wordsPageScaffoldBuild(context, size);
+  }
+
+  Scaffold wordsPageScaffoldBuild(BuildContext context, Size size) {
     return Scaffold(
       body: Form(
         key: _formKey,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                //const CustomAppBar(),
-                //const SizedBox(height: 10.0,),
-                Expanded(
-                  flex: 7,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20.0, right: 5.0, left: 5.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: AppColors.archiveAreaBackgroundColor,
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 5.0, left: 5.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 25.0, right: 8.0, left: 8.0),
-                              child: upperSide(context, size),
-                            ),
-                            const SizedBox(
-                              height: 0.0,
-                            ),
-                            underPart(size)
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const Expanded(flex: 1, child: SizedBox())
-              ],
-            ),
-            addOrUpdateStackBool ? addWordStack(size) : const SizedBox(),
-            otherOptions ? ooWordStack(size) : const SizedBox(),
-          ],
-        ),
+        child: wordPageStackBuild(context, size),
       ),
     );
   }
 
-  Expanded underPart(Size size) {
-    return Expanded(
-      child: words.isEmpty
-          ? Center(
-              child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: addFirstWordButton(),
-              ),
-            ))
-          : ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              itemCount: words.length,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: WordCardWidget(
-                    word: words[index],
-                    customFunction: parentChange,
-                    meaningFunction: meaningChange,
-                  ),
-                );
-              }),
-    );
-  }
-
-  Column upperSide(BuildContext context, Size size) {
-    return Column(
+  Stack wordPageStackBuild(BuildContext context, Size size) {
+    return Stack(
       children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                    height: size.height * 0.0267,
-                    width: size.width * 0.25014,
-                    child: TurnBackButton(height: size.height)),
-                IconButton(
-                    onPressed: () {
-                      setState(() {
-                        addOrUpdateStackBool = true;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.add,
-                      color: color,
-                      size: size.height * 0.0267,
-                    ))
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10.0,
-        ),
-        Align(
-          alignment: const Alignment(-0.9, 0),
-          child: Hero(
-            tag: widget.archive.id.toString(),
-            child: Material(
-              color: Colors.transparent,
-              child: Text(
-                widget.archive.archiveName,
-                style: textStyles.archiveNameStyle
-                    .copyWith(color: color, fontSize: size.height * 0.03125),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10.0,
-        ),
-        widget.archive.description.isNotEmpty
-            ? Align(
-                alignment: const Alignment(-0.9, 0),
-                child: Hero(
-                  tag: heroBool ? '${widget.archive.id.toString()}de' : '',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Text(
-                      widget.archive.description,
-                      style: textStyles.archiveDescriptionTextStyle,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              )
-            : const SizedBox(),
+        wordsView(context, size),
+        addOrUpdateStackBool ? addWordStack(size) : const SizedBox(),
+        otherOptions ? ooWordStack(size) : const SizedBox(),
       ],
     );
   }
 
-  GestureDetector ooWordStack(
-    Size size,
-  ) {
+  Column wordsView(BuildContext context, Size size) {
+    return Column(
+      children: [
+        //const CustomAppBar(),
+        //const SizedBox(height: 10.0,),
+        Expanded(
+          flex: 7,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0, right: 5.0, left: 5.0),
+            child: Container(
+              decoration: wordsPageBackGroundDecoration(),
+              child: wordPageItems(context, size),
+            ),
+          ),
+        ),
+        const Expanded(flex: 1, child: SizedBox())
+      ],
+    );
+  }
+
+  Padding wordPageItems(BuildContext context, Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 5.0, left: 5.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          upperSide(context, size),
+          const SizedBox(
+            height: 0.0,
+          ),
+          underPart(size)
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration wordsPageBackGroundDecoration() {
+    return BoxDecoration(
+        color: AppColors.archiveAreaBackgroundColor,
+        borderRadius: BorderRadius.circular(10.0));
+  }
+
+  Expanded underPart(Size size) {
+    return Expanded(
+      child: words.isEmpty ? noWordPage() : wordList(),
+    );
+  }
+
+  ListView wordList() {
+    return ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+        itemCount: words.length,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: WordCardWidget(
+              word: words[index],
+              customFunction: parentChange,
+              meaningFunction: meaningChange,
+            ),
+          );
+        });
+  }
+
+  Center noWordPage() {
+    return Center(
+        child: SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: addFirstWordButton(),
+      ),
+    ));
+  }
+
+  Padding upperSide(BuildContext context, Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 25.0, right: 8.0, left: 8.0),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                      height: size.height * 0.0267,
+                      width: size.width * 0.25014,
+                      child: TurnBackButton(height: size.height)),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          addOrUpdateStackBool = true;
+                        });
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        color: color,
+                        size: size.height * 0.0267,
+                      ))
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Align(
+            alignment: const Alignment(-0.9, 0),
+            child: Hero(
+              tag: widget.archive.id.toString(),
+              child: Material(
+                color: Colors.transparent,
+                child: Text(
+                  widget.archive.archiveName,
+                  style: textStyles.archiveNameStyle
+                      .copyWith(color: color, fontSize: size.height * 0.03125),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10.0,
+          ),
+          widget.archive.description.isNotEmpty
+              ? Align(
+                  alignment: const Alignment(-0.9, 0),
+                  child: Hero(
+                    tag: heroBool ? '${widget.archive.id.toString()}de' : '',
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        widget.archive.description,
+                        style: textStyles.archiveDescriptionTextStyle,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox(),
+        ],
+      ),
+    );
+  }
+
+  GestureDetector ooWordStack(Size size,) {
     return GestureDetector(
       onTap: () {
         setState(() {
           otherOptions = false;
+          editMeaning = false;
           // initialValue = '';
           // addOrUpdateStackBool = false;
         });
@@ -310,67 +331,14 @@ class _WordsPageState extends State<WordsPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      //delete button
                       InkWell(
                           onTap: () async {
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      elevation: 24.0,
-                                      title: Text(
-                                        '#$clickedWord',
-                                        style: textStyles.archiveNameStyle
-                                            .copyWith(
-                                                color: Colors.black,
-                                                fontSize:
-                                                    size.height * 0.03125),
-                                      ),
-                                      content: const Text(
-                                          'silinecek onaylıyor musun?'), // düzenle
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () async {
-                                              !editMeaning ? await wordOperations
-                                                  .deleteWord(clickedWordID) : await meaningOperations.deleteMeaning(clickedMeaningID);
-                                              setState(() {
-                                                otherOptions = false;
-                                                editMeaning = false;
-                                              });
-                                              getWords(widget.archive);
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(keys.yesString)),
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(keys.noString))
-                                      ],
-                                    ),
-                                barrierDismissible: false);
+                            await wordShowDialogBuild(size);
                           },
                           child: wordOptions(size, 'delete')),
-                      InkWell(
-                          onTap: () {
-                            otherOptions = false;
-                            //getWords(widget.archive);
-                            setState(() {
-                              initialValue = clickedWord;
-                              addOrUpdateStackBool = true;
-                              if(editMeaning){
-                                addMeanBool = true;
-                              }
-                            });
-                          },
-                          child: wordOptions(size, 'edit')),
-                     !editMeaning ? InkWell(
-                          onTap: () {
-                            setState(() {
-                              addMeanBool = true;
-                              addOrUpdateStackBool = true;
-                              otherOptions = false;
-                            });
-                          },
-                          child: wordOptions(size, 'add')) : const SizedBox(),
+                      editButton(size),
+                      !editMeaning ? addButton(size) : const SizedBox(),
                     ],
                   ),
                 )
@@ -380,6 +348,70 @@ class _WordsPageState extends State<WordsPage> {
         ),
       ),
     );
+  }
+
+  InkWell addButton(Size size) {
+    return InkWell(
+        onTap: () {
+          setState(() {
+            addMeanBool = true;
+            addOrUpdateStackBool = true;
+            otherOptions = false;
+          });
+        },
+        child: wordOptions(size, 'add'));
+  }
+
+  InkWell editButton(Size size) {
+    return InkWell(
+        onTap: () {
+          otherOptions = false;
+          //getWords(widget.archive);
+          setState(() {
+            initialValue = clickedWord;
+            addOrUpdateStackBool = true;
+            if (editMeaning) {
+              addMeanBool = true;
+            }
+          });
+        },
+        child: wordOptions(size, 'edit'));
+  }
+
+  wordShowDialogBuild(Size size) async {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              elevation: 24.0,
+              title: Text(
+                '#$clickedWord',
+                style: textStyles.archiveNameStyle.copyWith(
+                    color: Colors.black, fontSize: size.height * 0.03125),
+              ),
+              content: const Text('silinecek onaylıyor musun?'), // düzenle
+              actions: [
+                TextButton(
+                    onPressed: () async {
+                      !editMeaning
+                          ? await wordOperations.deleteWord(clickedWordID)
+                          : await meaningOperations
+                              .deleteMeaning(clickedMeaningID);
+                      setState(() {
+                        otherOptions = false;
+                        editMeaning = false;
+                      });
+                      getWords(widget.archive);
+                      Navigator.pop(context);
+                    },
+                    child: Text(keys.yesString)),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(keys.noString))
+              ],
+            ),
+        barrierDismissible: false);
   }
 
   Container wordOptions(Size size, String key) {
@@ -394,39 +426,47 @@ class _WordsPageState extends State<WordsPage> {
     return Container(
       height: size.width * 0.076647,
       //width: size.width * 0.176647,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          color: _add
-              ? Colors.blueAccent
-              : _edit
-                  ? Colors.amber
-                  : Colors.teal),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              _add
-                  ? Icons.add
-                  : _edit
-                      ? Icons.edit
-                      : Icons.delete,
-              size: iconSize,
-              color: _add
-                  ? AppColors.insideCreateArchiveButtonColor1
-                  : _edit
-                      ? AppColors.insideCreateArchiveButtonColor2
-                      : Colors.red,
-            ),
-            const SizedBox(
-              width: 3.0,
-            ),
-            Text(text),
-          ],
-        ),
+      decoration: wordOptionButtonDecoration(_add, _edit),
+      child: wordOptionButtonInside(_add, _edit, iconSize, text),
+    );
+  }
+
+  Padding wordOptionButtonInside(bool _add, bool _edit, double iconSize, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            _add
+                ? Icons.add
+                : _edit
+                    ? Icons.edit
+                    : Icons.delete,
+            size: iconSize,
+            color: _add
+                ? AppColors.insideCreateArchiveButtonColor1
+                : _edit
+                    ? AppColors.insideCreateArchiveButtonColor2
+                    : Colors.red,
+          ),
+          const SizedBox(
+            width: 3.0,
+          ),
+          Text(text),
+        ],
       ),
     );
+  }
+
+  BoxDecoration wordOptionButtonDecoration(bool _add, bool _edit) {
+    return BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: _add
+            ? Colors.blueAccent
+            : _edit
+                ? Colors.amber
+                : Colors.teal);
   }
 
   GestureDetector addWordStack(Size size) {
@@ -440,119 +480,151 @@ class _WordsPageState extends State<WordsPage> {
           editMeaning = false;
         });
       },
-      child: GlassmorphicContainer(
-        height: size.height,
-        width: size.width,
-        borderRadius: 0.0,
-        blur: 4.0,
-        border: 0.0,
-        linearGradient: AppColors.glassmorphicLinearGradient,
-        borderGradient: AppColors.glassmorphicLinearGradient,
-        alignment: Alignment.center,
-        // decoration: BoxDecoration(
-        //   color: AppColors.transparentBackgroundColor,
-        // ),
-        child: SizedBox(
-          height: size.height / 3,
-          width: size.width * 0.8,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    addMeanBool && initialValue.isEmpty
-                        ? 'Anlam Ekle'
-                        : addMeanBool && initialValue.isNotEmpty
-                            ? 'Anlam Güncelle'
-                            : initialValue.isEmpty
-                                ? 'Kelime ekle'
-                                : 'Kelime güncelle',
-                    style: textStyles.archiveNameStyle.copyWith(
-                        color: color, fontSize: size.height * 0.03125),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                SizedBox(
-                  height: size.height * 0.06964,
-                  child: TextFormField(
-                    initialValue: initialValue,
-                    cursorColor: Colors.black,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      filled: true,
-                      labelText: addMeanBool ? 'anlam' : keys.word,
-                      labelStyle: textStyles.archiveTextFormFieldTextStyle
-                          .copyWith(fontSize: size.height * 0.02285),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      floatingLabelAlignment: FloatingLabelAlignment.start,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                          borderSide: BorderSide(
-                              color: AppColors
-                                  .createArchivePageTextFormFieldBorderColor,
-                              width: 1.0)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6.0),
-                          borderSide: BorderSide(
-                              color: AppColors
-                                  .createArchivePageTextFormFieldBorderColor,
-                              width: 1.0)),
-                    ),
-                    validator: (word) => word != null && word.isEmpty
-                        ? keys.archiveNameFormValidator
-                        : null,
-                    //onSaved: (archiveName) => setState(() => archiveName = archiveName),
-                    onChanged: (wordt) => setState(() => sword = wordt),
-                  ),
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                SizedBox(
-                  height: size.height * 0.0479,
-                  width: size.width,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        addMeanBool
-                            ? createOrUpdateMeaning()
-                            : createOrUpdateWord();
-                        setState(() {
-                        getWords(widget.archive);              
-                        if (addMeanBool) {
-                          addMeanBool = false;
-                        }
-                          initialValue = '';
-                          addOrUpdateStackBool = false;
-                        });
-                      },
-                      style: ButtonStyle(
-                          elevation: MaterialStateProperty.all<double>(0.0),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              AppColors.createArchiveButtonColor),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10.0)))),
-                      child: Text(
-                        initialValue.isEmpty
-                            ? keys.addButtonText
-                            : keys.updateButtonText,
-                        style: textStyles.createArchiveButtonTextStyle2
-                            .copyWith(fontSize: size.height * 0.01874),
-                      )),
-                )
-              ],
+      child: addingUpdateProccesView(size),
+    );
+  }
+
+  GlassmorphicContainer addingUpdateProccesView(Size size) {
+    return GlassmorphicContainer(
+      height: size.height,
+      width: size.width,
+      borderRadius: 0.0,
+      blur: 4.0,
+      border: 0.0,
+      linearGradient: AppColors.glassmorphicLinearGradient,
+      borderGradient: AppColors.glassmorphicLinearGradient,
+      alignment: Alignment.center,
+      // decoration: BoxDecoration(
+      //   color: AppColors.transparentBackgroundColor,
+      // ),
+      child: addingUptateProccesItems(size),
+    );
+  }
+
+  SizedBox addingUptateProccesItems(Size size) {
+    return SizedBox(
+      height: size.height / 3,
+      width: size.width * 0.8,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            addUpdateWord(size),
+            const SizedBox(
+              height: 20.0,
             ),
-          ),
+            addUpdateWordForm(size),
+            const SizedBox(
+              height: 40.0,
+            ),
+            addUpdateWordButton(size)
+          ],
         ),
       ),
     );
+  }
+
+  SizedBox addUpdateWordButton(Size size) {
+    return SizedBox(
+            height: size.height * 0.0479,
+            width: size.width,
+            child: ElevatedButton(
+                onPressed: () {
+                  addMeanBool
+                      ? createOrUpdateMeaning()
+                      : createOrUpdateWord();
+                  setState(() {
+                    getWords(widget.archive);
+                    if (addMeanBool) {
+                      addMeanBool = false;
+                    }
+                    initialValue = '';
+                    addOrUpdateStackBool = false;
+                  });
+                },
+                style: addUpdateWordButtonStyle(),
+                child: addUpdateWordButtonText(size)),
+          );
+  }
+
+  Text addUpdateWordButtonText(Size size) {
+    return Text(
+                initialValue.isEmpty
+                    ? keys.addButtonText
+                    : keys.updateButtonText,
+                style: textStyles.createArchiveButtonTextStyle2
+                    .copyWith(fontSize: size.height * 0.01874),
+              );
+  }
+
+  ButtonStyle addUpdateWordButtonStyle() {
+    return ButtonStyle(
+                  elevation: MaterialStateProperty.all<double>(0.0),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      AppColors.createArchiveButtonColor),
+                  shape:
+                      MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(10.0))));
+  }
+
+  SizedBox addUpdateWordForm(Size size) {
+    return SizedBox(
+            height: size.height * 0.06964,
+            child: TextFormField(
+              initialValue: initialValue,
+              cursorColor: Colors.black,
+              decoration: addUpdateWordFormDecoration(size),
+              validator: (word) => word != null && word.isEmpty
+                  ? keys.archiveNameFormValidator
+                  : null,
+              //onSaved: (archiveName) => setState(() => archiveName = archiveName),
+              onChanged: (wordt) => setState(() => sword = wordt),
+            ),
+          );
+  }
+
+  InputDecoration addUpdateWordFormDecoration(Size size) {
+    return InputDecoration(
+              fillColor: Colors.white,
+              filled: true,
+              labelText: addMeanBool ? 'anlam' : keys.word,
+              labelStyle: textStyles.archiveTextFormFieldTextStyle
+                  .copyWith(fontSize: size.height * 0.02285),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              floatingLabelAlignment: FloatingLabelAlignment.start,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6.0),
+                  borderSide: BorderSide(
+                      color: AppColors
+                          .createArchivePageTextFormFieldBorderColor,
+                      width: 1.0)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6.0),
+                  borderSide: BorderSide(
+                      color: AppColors
+                          .createArchivePageTextFormFieldBorderColor,
+                      width: 1.0)),
+            );
+  }
+
+  Align addUpdateWord(Size size) {
+    return Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              addMeanBool && initialValue.isEmpty
+                  ? 'Anlam Ekle'
+                  : addMeanBool && initialValue.isNotEmpty
+                      ? 'Anlam Güncelle'
+                      : initialValue.isEmpty
+                          ? 'Kelime ekle'
+                          : 'Kelime güncelle',
+              style: textStyles.archiveNameStyle.copyWith(
+                  color: color, fontSize: size.height * 0.03125),
+            ),
+          );
   }
 
   Widget addFirstWordButton() {
@@ -581,11 +653,11 @@ class _WordsPageState extends State<WordsPage> {
 
   Future updateMeaning() async {
     final meaning = this.meaning!.copy(
-      id: clickedMeaningID,
-      archiveID: clickedWordID,
-      meaning: sword,
-      createdTime: DateTime.now(),
-    );
+          id: clickedMeaningID,
+          archiveID: clickedWordID,
+          meaning: sword,
+          createdTime: DateTime.now(),
+        );
     setState(() {
       initialValue = '';
     });

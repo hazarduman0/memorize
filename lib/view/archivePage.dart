@@ -6,7 +6,6 @@ import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/widgets/normalArchiveWidget.dart';
 import 'package:memorize/widgets/pinnedArchiveWidget.dart';
-import 'package:memorize/widgets/searchBarArea.dart';
 
 class ArchivePage extends StatelessWidget {
   ArchivePage(

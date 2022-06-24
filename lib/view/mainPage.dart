@@ -12,7 +12,6 @@ import 'package:memorize/view/chartPage.dart';
 import 'package:memorize/view/createEditArchivePage.dart';
 import 'package:memorize/view/noDataPage.dart';
 import 'package:memorize/view/quizPage.dart';
-import 'package:memorize/widgets/customAppBar.dart';
 import 'package:memorize/widgets/custom_appbar.dart';
 import 'package:memorize/widgets/navigationBarItem.dart';
 
@@ -119,125 +118,161 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    return mainPageScaffoldBuild(size);
+  }
+
+  Scaffold mainPageScaffoldBuild(Size size) {
     return Scaffold(
-      body: normalArchive.isEmpty && pinnedArchive.isEmpty
-          ? const NoDataPage()
-          : Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 25.0, right: 8.0, left: 8.0, bottom: 10.0),
-                  child: Column(
-                    children: [
-                      CustomAppBar(currentPage: currentPage),
-                      Expanded(
-                        flex: 7,
-                        child: PageView(
-                          controller: pageController,
-                          onPageChanged: (value) {
-                            setState(() {
-                              currentPage = value;
-                            });
-                          },
-                          children: [
-                            ChartPage(),
-                            ArchivePage(
-                              normalArchive: normalArchive,
-                              pinnedArchive: pinnedArchive,
-                              customFunction: parentChange,
-                            ),
-                            QuizPage(),
-                          ],
+    body: normalArchive.isEmpty && pinnedArchive.isEmpty
+        ? const NoDataPage()
+        : haveDataPageStack(size),
+  );
+  }
+
+  Stack haveDataPageStack(Size size) {
+    return Stack(
+          children: [
+            normalMainPageView(size),
+            otherOptions
+                ? otherOptionsAvailable(size)
+                : const SizedBox(),
+          ],
+        );
+  }
+
+  GestureDetector otherOptionsAvailable(Size size) {
+    return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      otherOptions = false;
+                    });
+                  },
+                  child: otherOptionsGlassMorphicContainerBuild(size),
+                );
+  }
+
+  GlassmorphicContainer otherOptionsGlassMorphicContainerBuild(Size size) {
+    return GlassmorphicContainer(
+                  height: size.height,
+                  width: size.width,
+                  borderRadius: 0.0,
+                  blur: 5.0,
+                  border: 0.0,
+                  linearGradient: AppColors.glassmorphicLinearGradient,
+                  borderGradient: AppColors.glassmorphicLinearGradient,
+                  alignment: Alignment.center,
+                  child: glassMorphicContainerDatasAndOptions(size),
+                );
+  }
+
+  SizedBox glassMorphicContainerDatasAndOptions(Size size) {
+    return SizedBox(
+                  // height: size.height / 3,
+                  width: size.width * 0.8,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 180.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ooArchiveName,
+                          style: textStyles.archiveNameStyle.copyWith(
+                              fontSize: size.width * 0.1,
+                              color: ooArchiveColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomBottomNavigationBar(
-                                  currentPage: currentPage,
-                                  keys: keys,
-                                  textStyles: textStyles,
-                                  size: size),
-                            ],
-                          ))
-                    ],
-                  ),
-                ),
-                otherOptions
-                    ? GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            otherOptions = false;
-                          });
-                        },
-                        child: GlassmorphicContainer(
-                          height: size.height,
-                          width: size.width,
-                          borderRadius: 0.0,
-                          blur: 5.0,
-                          border: 0.0,
-                          linearGradient: AppColors.glassmorphicLinearGradient,
-                          borderGradient: AppColors.glassmorphicLinearGradient,
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            // height: size.height / 3,
-                            width: size.width * 0.8,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10.0, vertical: 180.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    ooArchiveName,
-                                    style: textStyles.archiveNameStyle.copyWith(
-                                        fontSize: size.width * 0.1,
-                                        color: ooArchiveColor),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: Text(
-                                      ooArchiveDescription,
-                                      style: textStyles
-                                          .archiveDescriptionTextStyle
-                                          .copyWith(
-                                              fontSize: size.width * 0.05),
-                                      maxLines: 3,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ooContainer(size, 'delete'),
-                                        ooContainer(size, 'edit'),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                        const SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0),
+                          child: Text(
+                            ooArchiveDescription,
+                            style: textStyles
+                                .archiveDescriptionTextStyle
+                                .copyWith(
+                                    fontSize: size.width * 0.05),
+                            maxLines: 3,
                           ),
                         ),
-                      )
-                    : const SizedBox(),
-              ],
-            ),
-    );
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              ooContainer(size, 'delete'),
+                              ooContainer(size, 'edit'),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+  }
+
+  Padding normalMainPageView(Size size) {
+    return Padding(
+            padding: const EdgeInsets.only(
+                top: 25.0, right: 8.0, left: 8.0, bottom: 10.0),
+            child: mainPageColumnBuild(size),
+          );
+  }
+
+  Column mainPageColumnBuild(Size size) {
+    return Column(
+            children: [
+              CustomAppBar(currentPage: currentPage),
+              mainPagePageViewBuild(),
+              mainPageBottomNavigaitonBarBuild(size)
+            ],
+          );
+  }
+
+  Expanded mainPageBottomNavigaitonBarBuild(Size size) {
+    return Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomBottomNavigationBar(
+                        currentPage: currentPage,
+                        keys: keys,
+                        textStyles: textStyles,
+                        size: size),
+                  ],
+                ));
+  }
+
+  Expanded mainPagePageViewBuild() {
+    return Expanded(
+              flex: 7,
+              child: PageView(
+                controller: pageController,
+                onPageChanged: (value) {
+                  setState(() {
+                    currentPage = value;
+                  });
+                },
+                children: [
+                  ChartPage(),
+                  ArchivePage(
+                    normalArchive: normalArchive,
+                    pinnedArchive: pinnedArchive,
+                    customFunction: parentChange,
+                  ),
+                  QuizPage(),
+                ],
+              ),
+            );
   }
 
   Widget ooContainer(Size size, String key) {
@@ -245,67 +280,79 @@ class _MainPageState extends State<MainPage> {
     return GestureDetector(
       onTap: () {
         delete
-            ? showDialog(
-                context: context,
-                builder: (_) => AlertDialog(
-                      elevation: 24.0,
-                      title: Text(keys.deleteAlertDialog1),
-                      content: Text(keys.deleteAlertDialog2),
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              deleteArchive(archive!.id);
-                              setState(() {
-                                otherOptions = false;
-                              });
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MainPage(),
-                                  ));
-                            },
-                            child: Text(keys.yesString)),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(keys.noString))
-                      ],
-                    ),
-                barrierDismissible: false)
+            ? showDialogBuild()
             : Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => CreateEditArchivePage(archive: archive),
                 ));
       },
-      child: Container(
-        height: size.width * 0.07,
-        width: size.width * 0.3,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: delete
-                ? const Color.fromARGB(255, 251, 125, 125)
-                : const Color.fromARGB(255, 136, 241, 190),
-            borderRadius: BorderRadius.circular(5.0)),
-        child: Row(
-          children: [
-            const Spacer(),
-            Icon(
-              delete ? Icons.delete : Icons.edit,
-              color: delete ? Colors.red : Colors.greenAccent.shade400,
-            ),
-            const SizedBox(
-              width: 3.0,
-            ),
-            Text(
-              delete ? keys.ooDelete : keys.ooEdit,
-              style: textStyles.ooOptions.copyWith(fontSize: size.width * 0.03),
-            ),
-            const Spacer(),
-          ],
-        ),
+      child: optionButton(size, delete),
+    );
+  }
+
+  Container optionButton(Size size, bool delete) {
+    return Container(
+      height: size.width * 0.07,
+      width: size.width * 0.3,
+      alignment: Alignment.center,
+      decoration: optionButtonDecoration(delete),
+      child: Row(
+        children: [
+          const Spacer(),
+          Icon(
+            delete ? Icons.delete : Icons.edit,
+            color: delete ? Colors.red : Colors.greenAccent.shade400,
+          ),
+          const SizedBox(
+            width: 3.0,
+          ),
+          Text(
+            delete ? keys.ooDelete : keys.ooEdit,
+            style: textStyles.ooOptions.copyWith(fontSize: size.width * 0.03),
+          ),
+          const Spacer(),
+        ],
       ),
     );
+  }
+
+  BoxDecoration optionButtonDecoration(bool delete) {
+    return BoxDecoration(
+        color: delete
+            ? const Color.fromARGB(255, 251, 125, 125)
+            : const Color.fromARGB(255, 136, 241, 190),
+        borderRadius: BorderRadius.circular(5.0));
+  }
+
+  Future<dynamic> showDialogBuild() {
+    return showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                    elevation: 24.0,
+                    title: Text(keys.deleteAlertDialog1),
+                    content: Text(keys.deleteAlertDialog2),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            deleteArchive(archive!.id);
+                            setState(() {
+                              otherOptions = false;
+                            });
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MainPage(),
+                                ));
+                          },
+                          child: Text(keys.yesString)),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(keys.noString))
+                    ],
+                  ),
+              barrierDismissible: false);
   }
 }

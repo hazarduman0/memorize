@@ -22,7 +22,7 @@ class NoDataPage extends StatelessWidget {
             top: 25.0, right: 8.0, left: 8.0, bottom: 10.0),
         child: Column(
           children: [
-            const SDFSD(),
+            const NoDataPageCustomAppBar(),
             SizedBox(
               height: size.height * 0.18,
             ),

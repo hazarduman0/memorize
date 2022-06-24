@@ -24,148 +24,164 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return navigationBarItems();
+  }
+
+  Row navigationBarItems() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(
-          width: 5.0,
-        ),
-        InkWell(
-          child: Column(
-            // buradan
-            children: [
-              Center(
-                child: Row(
-                  children: [
-                    Icon(
-                      CustomIcons.presentation,
-                      color: currentPage == 0
-                          ? AppColors.selectedBottomColor
-                          : AppColors.unSelectedBottomColor,
-                    ),
-                    const SizedBox(
-                      width: 3.0,
-                    ),
-                    Text(
-                      keys.statistics,
-                      style: currentPage == 0
-                          ? textStyles.selectedbottomTextStyle
-                          : textStyles.unselectedbottomTextStyle,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: currentPage == 0 ? 6.0 : 5.0,
-                width: size.width * 0.277,
-                decoration: BoxDecoration(
-                  color: currentPage == 0
-                      ? AppColors.selectedBottomColor
-                      : AppColors.unSelectedBottomColor,
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(10.0)),
-                  border: currentPage == 0
-                      ? Border.all(
-                          color: AppColors.selectedBottomBorderColor,
-                          width: 1.0)
-                      : Border.all(width: 0.0),
-                ),
-              )
-            ],
-          ),
-        ),
-        InkWell(
-          child: Column(
-            // buradan
-            children: [
-              Center(
-                child: Row(
-                  children: [
-                    Icon(
-                      CustomIcons.discovery,
-                      color: currentPage == 1
-                          ? AppColors.selectedBottomColor
-                          : AppColors.unSelectedBottomColor,
-                    ),
-                    const SizedBox(
-                      width: 3.0,
-                    ),
-                    Text(
-                      keys.homePage,
-                      style: currentPage == 1
-                          ? textStyles.selectedbottomTextStyle
-                          : textStyles.unselectedbottomTextStyle,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: currentPage == 1 ? 6.0 : 5.0,
-                width: size.width * 0.277,
-                decoration: BoxDecoration(
-                  color: currentPage == 1
-                      ? AppColors.selectedBottomColor
-                      : AppColors.unSelectedBottomColor,
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(10.0)),
-                  border: currentPage == 1
-                      ? Border.all(
-                          color: AppColors.selectedBottomBorderColor,
-                          width: 1.0)
-                      : Border.all(width: 0.0),
-                ),
-              )
-            ],
-          ),
-        ),
-        InkWell(
-          child: Column(
-            // buradan
-            children: [
-              Center(
-                child: Row(
-                  children: [
-                    Icon(
-                      CustomIcons.discovery,
-                      color: currentPage == 2
-                          ? AppColors.selectedBottomColor
-                          : AppColors.unSelectedBottomColor,
-                    ),
-                    const SizedBox(
-                      width: 3.0,
-                    ),
-                    Text(
-                      keys.exams,
-                      style: currentPage == 2
-                          ? textStyles.selectedbottomTextStyle
-                          : textStyles.unselectedbottomTextStyle,
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                height: currentPage == 2 ? 6.0 : 5.0,
-                width: size.width * 0.277,
-                decoration: BoxDecoration(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      const SizedBox(
+        width: 5.0,
+      ),
+      navigationStatisticsItem(),
+      navigationHomePageItem(),
+      navigationExamsItem(),
+      const SizedBox(
+        width: 5.0,
+      ),
+    ],
+  );
+  }
+
+  InkWell navigationExamsItem() {
+    return InkWell(
+      child: Column(
+        // buradan
+        children: [
+          Center(
+            child: Row(
+              children: [
+                Icon(
+                  CustomIcons.discovery,
                   color: currentPage == 2
                       ? AppColors.selectedBottomColor
                       : AppColors.unSelectedBottomColor,
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(10.0)),
-                  border: currentPage == 2
-                      ? Border.all(
-                          color: AppColors.selectedBottomBorderColor,
-                          width: 1.0)
-                      : Border.all(width: 0.0),
                 ),
-              )
-            ],
+                const SizedBox(
+                  width: 3.0,
+                ),
+                Text(
+                  keys.exams,
+                  style: currentPage == 2
+                      ? textStyles.selectedbottomTextStyle
+                      : textStyles.unselectedbottomTextStyle,
+                )
+              ],
+            ),
           ),
-        ),
-        const SizedBox(
-          width: 5.0,
-        ),
-      ],
+          Container(
+            height: currentPage == 2 ? 6.0 : 5.0,
+            width: size.width * 0.277,
+            decoration: BoxDecoration(
+              color: currentPage == 2
+                  ? AppColors.selectedBottomColor
+                  : AppColors.unSelectedBottomColor,
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(10.0)),
+              border: currentPage == 2
+                  ? Border.all(
+                      color: AppColors.selectedBottomBorderColor,
+                      width: 1.0)
+                  : Border.all(width: 0.0),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  InkWell navigationHomePageItem() {
+    return InkWell(
+      child: Column(
+        // buradan
+        children: [
+          Center(
+            child: Row(
+              children: [
+                Icon(
+                  CustomIcons.discovery,
+                  color: currentPage == 1
+                      ? AppColors.selectedBottomColor
+                      : AppColors.unSelectedBottomColor,
+                ),
+                const SizedBox(
+                  width: 3.0,
+                ),
+                Text(
+                  keys.homePage,
+                  style: currentPage == 1
+                      ? textStyles.selectedbottomTextStyle
+                      : textStyles.unselectedbottomTextStyle,
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: currentPage == 1 ? 6.0 : 5.0,
+            width: size.width * 0.277,
+            decoration: BoxDecoration(
+              color: currentPage == 1
+                  ? AppColors.selectedBottomColor
+                  : AppColors.unSelectedBottomColor,
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(10.0)),
+              border: currentPage == 1
+                  ? Border.all(
+                      color: AppColors.selectedBottomBorderColor,
+                      width: 1.0)
+                  : Border.all(width: 0.0),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  InkWell navigationStatisticsItem() {
+    return InkWell(
+      child: Column(
+        // buradan
+        children: [
+          Center(
+            child: Row(
+              children: [
+                Icon(
+                  CustomIcons.presentation,
+                  color: currentPage == 0
+                      ? AppColors.selectedBottomColor
+                      : AppColors.unSelectedBottomColor,
+                ),
+                const SizedBox(
+                  width: 3.0,
+                ),
+                Text(
+                  keys.statistics,
+                  style: currentPage == 0
+                      ? textStyles.selectedbottomTextStyle
+                      : textStyles.unselectedbottomTextStyle,
+                )
+              ],
+            ),
+          ),
+          Container(
+            height: currentPage == 0 ? 6.0 : 5.0,
+            width: size.width * 0.277,
+            decoration: BoxDecoration(
+              color: currentPage == 0
+                  ? AppColors.selectedBottomColor
+                  : AppColors.unSelectedBottomColor,
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(10.0)),
+              border: currentPage == 0
+                  ? Border.all(
+                      color: AppColors.selectedBottomBorderColor,
+                      width: 1.0)
+                  : Border.all(width: 0.0),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
