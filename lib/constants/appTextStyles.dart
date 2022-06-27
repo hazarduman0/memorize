@@ -175,4 +175,24 @@ class AppTextStyles{
     fontWeight: FontWeight.w500,
     fontSize: 12.0
   );
+
+  TextStyle takeExamTextStyle = GoogleFonts.inter(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontSize: 12.0
+  );
+
+  TextStyle tableColumnNameTextStyle = GoogleFonts.inter(
+    color: AppColors.tableColor,
+    fontStyle: FontStyle.italic,
+    fontWeight: FontWeight.w500,
+    fontSize: 12.0
+  );
+
+  TextStyle lastQuizsTextStyle = GoogleFonts.inter(
+    color: Colors.black,
+    fontStyle: FontStyle.italic,
+    fontWeight: FontWeight.w500,
+    fontSize: 12.0
+  );
  }

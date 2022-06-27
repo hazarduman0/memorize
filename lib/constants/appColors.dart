@@ -50,6 +50,7 @@ class AppColors {
   static Color meaningTextColor = const Color.fromRGBO(118, 118, 118, 1.0);
   static Color transparentBackgroundColor =
       Colors.grey.shade300.withOpacity(0.9);
+  static Color tableColor = const Color.fromRGBO(179, 179, 179, 1.0);    
 
       
   static LinearGradient glassmorphicLinearGradient = LinearGradient(
