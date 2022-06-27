@@ -9,7 +9,10 @@ import 'package:memorize/widgets/pinnedArchiveWidget.dart';
 
 class ArchivePage extends StatelessWidget {
   ArchivePage(
-      {Key? key, this.normalArchive = const [], this.pinnedArchive = const [], required this.customFunction})
+      {Key? key,
+      this.normalArchive = const [],
+      this.pinnedArchive = const [],
+      required this.customFunction})
       : super(key: key);
 
   List<Archive>? normalArchive;
@@ -48,12 +51,9 @@ class ArchivePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
     return Column(
       children: [
-        SizedBox(
-          height: size.height * 0.01,
-        ),
+        topSpace(size),
         //const SearchBarArea(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -62,71 +62,92 @@ class ArchivePage extends StatelessWidget {
         SizedBox(
           height: size.height * 0.015,
         ),
-        Container(
-          height: size.height * 0.7,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: AppColors.archiveAreaBackgroundColor,
-            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          ),
-          child: Column(
+        archiveArea(size),
+      ],
+    );
+  }
+
+  Container archiveArea(Size size) {
+    return Container(
+      height: size.height * 0.7,
+      width: double.infinity,
+      decoration: archiveAreaDecoration(),
+      child: archiveAreaItems(size),
+    );
+  }
+
+  Column archiveAreaItems(Size size) {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView(
+            scrollDirection: Axis.vertical,
             children: [
-              Expanded(
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    pinnedArchive!.isEmpty
-                        ? const SizedBox()
-                        : ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.symmetric(vertical: 15.0),
-                            itemCount: pinnedArchive!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return index == pinnedArchive!.length - 1
-                                  ? PinnedArchive(
-                                      archive: pinnedArchive![index],
-                                      customFunction: customFunction,
-                                    )
-                                  : Column(
-                                      children: [
-                                        PinnedArchive(
-                                          archive: pinnedArchive![index],
-                                          customFunction: customFunction,
-                                        ),
-                                        const SizedBox(
-                                          height: 15.0,
-                                        )
-                                      ],
-                                    );
-                            }),
-                    normalArchive!.isEmpty
-                        ? const SizedBox()
-                        : GridView.builder(
-                            scrollDirection: Axis.vertical,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 0.0,
-                              mainAxisExtent: (size.height / (896 / 170)) + 15,
-                            ),
-                            itemCount: normalArchive!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return NormalArchiveWidget(
-                                archive: normalArchive![index],
-                                customFunction: customFunction,
-                              );
-                            }),
-                  ],
-                ),
-              ),
+              pinnedArchive!.isEmpty ? const SizedBox() : pinnedArchives(),
+              normalArchive!.isEmpty ? const SizedBox() : normalArchives(size),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  GridView normalArchives(Size size) {
+    return GridView.builder(
+        scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 0.0,
+          mainAxisExtent: (size.height / (896 / 170)) + 15,
+        ),
+        itemCount: normalArchive!.length,
+        itemBuilder: (BuildContext context, int index) {
+          return NormalArchiveWidget(
+            archive: normalArchive![index],
+            customFunction: customFunction,
+          );
+        });
+  }
+
+  ListView pinnedArchives() {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(vertical: 15.0),
+        itemCount: pinnedArchive!.length,
+        itemBuilder: (BuildContext context, int index) {
+          return index == pinnedArchive!.length - 1
+              ? PinnedArchive(
+                  archive: pinnedArchive![index],
+                  customFunction: customFunction,
+                )
+              : Column(
+                  children: [
+                    PinnedArchive(
+                      archive: pinnedArchive![index],
+                      customFunction: customFunction,
+                    ),
+                    const SizedBox(
+                      height: 15.0,
+                    )
+                  ],
+                );
+        });
+  }
+
+  BoxDecoration archiveAreaDecoration() {
+    return BoxDecoration(
+      color: AppColors.archiveAreaBackgroundColor,
+      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+    );
+  }
+
+  SizedBox topSpace(Size size) {
+    return SizedBox(
+      height: size.height * 0.01,
     );
   }
 
@@ -150,7 +171,11 @@ class ArchivePage extends StatelessWidget {
             const SizedBox(
               width: 5.0,
             ),
-            Text(keys.searchText, style: textStyles.searchTextStyle.copyWith(fontSize: size.width * 0.035),),
+            Text(
+              keys.searchText,
+              style: textStyles.searchTextStyle
+                  .copyWith(fontSize: size.width * 0.035),
+            ),
           ],
         ),
       ),

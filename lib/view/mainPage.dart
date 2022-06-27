@@ -123,156 +123,144 @@ class _MainPageState extends State<MainPage> {
 
   Scaffold mainPageScaffoldBuild(Size size) {
     return Scaffold(
-    body: normalArchive.isEmpty && pinnedArchive.isEmpty
-        ? const NoDataPage()
-        : haveDataPageStack(size),
-  );
+      body: normalArchive.isEmpty && pinnedArchive.isEmpty
+          ? const NoDataPage()
+          : haveDataPageStack(size),
+    );
   }
 
   Stack haveDataPageStack(Size size) {
     return Stack(
-          children: [
-            normalMainPageView(size),
-            otherOptions
-                ? otherOptionsAvailable(size)
-                : const SizedBox(),
-          ],
-        );
+      children: [
+        normalMainPageView(size),
+        otherOptions ? otherOptionsAvailable(size) : const SizedBox(),
+      ],
+    );
   }
 
   GestureDetector otherOptionsAvailable(Size size) {
     return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      otherOptions = false;
-                    });
-                  },
-                  child: otherOptionsGlassMorphicContainerBuild(size),
-                );
+      onTap: () {
+        setState(() {
+          otherOptions = false;
+        });
+      },
+      child: otherOptionsGlassMorphicContainerBuild(size),
+    );
   }
 
   GlassmorphicContainer otherOptionsGlassMorphicContainerBuild(Size size) {
     return GlassmorphicContainer(
-                  height: size.height,
-                  width: size.width,
-                  borderRadius: 0.0,
-                  blur: 5.0,
-                  border: 0.0,
-                  linearGradient: AppColors.glassmorphicLinearGradient,
-                  borderGradient: AppColors.glassmorphicLinearGradient,
-                  alignment: Alignment.center,
-                  child: glassMorphicContainerDatasAndOptions(size),
-                );
+      height: size.height,
+      width: size.width,
+      borderRadius: 0.0,
+      blur: 5.0,
+      border: 0.0,
+      linearGradient: AppColors.glassmorphicLinearGradient,
+      borderGradient: AppColors.glassmorphicLinearGradient,
+      alignment: Alignment.center,
+      child: glassMorphicContainerDatasAndOptions(size),
+    );
   }
 
   SizedBox glassMorphicContainerDatasAndOptions(Size size) {
     return SizedBox(
-                  // height: size.height / 3,
-                  width: size.width * 0.8,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 180.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          ooArchiveName,
-                          style: textStyles.archiveNameStyle.copyWith(
-                              fontSize: size.width * 0.1,
-                              color: ooArchiveColor),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0),
-                          child: Text(
-                            ooArchiveDescription,
-                            style: textStyles
-                                .archiveDescriptionTextStyle
-                                .copyWith(
-                                    fontSize: size.width * 0.05),
-                            maxLines: 3,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10.0),
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            children: [
-                              ooContainer(size, 'delete'),
-                              ooContainer(size, 'edit'),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
+      // height: size.height / 3,
+      width: size.width * 0.8,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 180.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              ooArchiveName,
+              style: textStyles.archiveNameStyle
+                  .copyWith(fontSize: size.width * 0.1, color: ooArchiveColor),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Text(
+                ooArchiveDescription,
+                style: textStyles.archiveDescriptionTextStyle
+                    .copyWith(fontSize: size.width * 0.05),
+                maxLines: 3,
+              ),
+            ),
+            const SizedBox(
+              height: 50.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ooContainer(size, 'delete'),
+                ooContainer(size, 'edit'),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Padding normalMainPageView(Size size) {
     return Padding(
-            padding: const EdgeInsets.only(
-                top: 25.0, right: 8.0, left: 8.0, bottom: 10.0),
-            child: mainPageColumnBuild(size),
-          );
+      padding:
+          const EdgeInsets.only(top: 25.0, right: 8.0, left: 8.0, bottom: 10.0),
+      child: mainPageColumnBuild(size),
+    );
   }
 
   Column mainPageColumnBuild(Size size) {
     return Column(
-            children: [
-              CustomAppBar(currentPage: currentPage),
-              mainPagePageViewBuild(),
-              mainPageBottomNavigaitonBarBuild(size)
-            ],
-          );
+      children: [
+        CustomAppBar(currentPage: currentPage),
+        mainPagePageViewBuild(),
+        mainPageBottomNavigaitonBarBuild(size)
+      ],
+    );
   }
 
   Expanded mainPageBottomNavigaitonBarBuild(Size size) {
     return Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomBottomNavigationBar(
-                        currentPage: currentPage,
-                        keys: keys,
-                        textStyles: textStyles,
-                        size: size),
-                  ],
-                ));
+        flex: 1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomBottomNavigationBar(
+                currentPage: currentPage,
+                keys: keys,
+                textStyles: textStyles,
+                size: size),
+          ],
+        ));
   }
 
   Expanded mainPagePageViewBuild() {
     return Expanded(
-              flex: 7,
-              child: PageView(
-                controller: pageController,
-                onPageChanged: (value) {
-                  setState(() {
-                    currentPage = value;
-                  });
-                },
-                children: [
-                  ChartPage(),
-                  ArchivePage(
-                    normalArchive: normalArchive,
-                    pinnedArchive: pinnedArchive,
-                    customFunction: parentChange,
-                  ),
-                  QuizPage(),
-                ],
-              ),
-            );
+      flex: 7,
+      child: PageView(
+        controller: pageController,
+        onPageChanged: (value) {
+          setState(() {
+            currentPage = value;
+          });
+        },
+        children: [
+          ChartPage(),
+          ArchivePage(
+            normalArchive: normalArchive,
+            pinnedArchive: pinnedArchive,
+            customFunction: parentChange,
+          ),
+          QuizPage(),
+        ],
+      ),
+    );
   }
 
   Widget ooContainer(Size size, String key) {
@@ -302,7 +290,9 @@ class _MainPageState extends State<MainPage> {
           const Spacer(),
           Icon(
             delete ? Icons.delete : Icons.edit,
-            color: delete ? Colors.red : Colors.greenAccent.shade400,
+            color: delete
+                ? Color.fromARGB(255, 255, 255, 255)
+                : Color.fromARGB(255, 255, 255, 255),
           ),
           const SizedBox(
             width: 3.0,
@@ -320,39 +310,39 @@ class _MainPageState extends State<MainPage> {
   BoxDecoration optionButtonDecoration(bool delete) {
     return BoxDecoration(
         color: delete
-            ? const Color.fromARGB(255, 251, 125, 125)
-            : const Color.fromARGB(255, 136, 241, 190),
+            ? const Color.fromARGB(255, 255, 0, 0)
+            : const Color.fromARGB(255, 0, 255, 132),
         borderRadius: BorderRadius.circular(5.0));
   }
 
   Future<dynamic> showDialogBuild() {
     return showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                    elevation: 24.0,
-                    title: Text(keys.deleteAlertDialog1),
-                    content: Text(keys.deleteAlertDialog2),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            deleteArchive(archive!.id);
-                            setState(() {
-                              otherOptions = false;
-                            });
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MainPage(),
-                                ));
-                          },
-                          child: Text(keys.yesString)),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text(keys.noString))
-                    ],
-                  ),
-              barrierDismissible: false);
+        context: context,
+        builder: (_) => AlertDialog(
+              elevation: 24.0,
+              title: Text(keys.deleteAlertDialog1),
+              content: Text(keys.deleteAlertDialog2),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      deleteArchive(archive!.id);
+                      setState(() {
+                        otherOptions = false;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainPage(),
+                          ));
+                    },
+                    child: Text(keys.yesString)),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(keys.noString))
+              ],
+            ),
+        barrierDismissible: false);
   }
 }
