@@ -146,9 +146,33 @@ class AppTextStyles{
     fontSize: 12.0
   );
 
-  TextStyle ooOptions = GoogleFonts.inter(
+  TextStyle ooOptionsTextStyle = GoogleFonts.inter(
     color: Colors.white,
     fontWeight: FontWeight.w400,
+    fontSize: 12.0
+  );
+
+  TextStyle deleteAlertDialogTextStyle1 = GoogleFonts.inter(
+    color: Colors.black,
+    fontWeight: FontWeight.w600,
+    fontSize: 20.0
+  );
+
+  TextStyle deleteAlertDialogTextStyle2 = GoogleFonts.inter(
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    fontSize: 16.0
+  );
+
+  TextStyle yesStringTextStyle= GoogleFonts.inter(
+    color: const Color.fromARGB(255, 31, 15, 133),
+    fontWeight: FontWeight.w500,
+    fontSize: 12.0
+  );
+
+  TextStyle noStringTextStyle = GoogleFonts.inter(
+    color: const Color.fromARGB(255, 31, 15, 133),
+    fontWeight: FontWeight.w500,
     fontSize: 12.0
   );
  }

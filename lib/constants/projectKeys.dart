@@ -23,8 +23,8 @@ class ProjectKeys{
   final String archiveNameFormValidator = 'Bu alan boş bırakılmamalı.';
   final String deleteAlertDialog1 = 'Arşiv silinecek';
   final String deleteAlertDialog2 = 'Onaylıyor musun?';
-  final String yesString = 'evet';
-  final String noString = 'hayır';
+  final String yesString = 'EVET';
+  final String noString = 'HAYIR';
   final String customAppBarArchiveText = 'Arşivler';
   final String customAppBarCreateArchivesText = 'arşiv oluştur';
   final String customAppBarStatisticsText = 'İstatistikler';

@@ -299,7 +299,8 @@ class _MainPageState extends State<MainPage> {
           ),
           Text(
             delete ? keys.ooDelete : keys.ooEdit,
-            style: textStyles.ooOptions.copyWith(fontSize: size.width * 0.03),
+            style: textStyles.ooOptionsTextStyle
+                .copyWith(fontSize: size.width * 0.03),
           ),
           const Spacer(),
         ],
@@ -319,11 +320,18 @@ class _MainPageState extends State<MainPage> {
     return showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              elevation: 24.0,
+              titleTextStyle: textStyles.deleteAlertDialogTextStyle1,
+              contentTextStyle: textStyles.deleteAlertDialogTextStyle2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide.none),
+              contentPadding: const EdgeInsets.all(25.0),
+              //elevation: 24.0,
               title: Text(keys.deleteAlertDialog1),
               content: Text(keys.deleteAlertDialog2),
               actions: [
                 TextButton(
+                    style: textButtonStyle(),
                     onPressed: () {
                       deleteArchive(archive!.id);
                       setState(() {
@@ -337,6 +345,7 @@ class _MainPageState extends State<MainPage> {
                     },
                     child: Text(keys.yesString)),
                 TextButton(
+                    style: textButtonStyle(),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -344,5 +353,12 @@ class _MainPageState extends State<MainPage> {
               ],
             ),
         barrierDismissible: false);
+  }
+
+  ButtonStyle textButtonStyle() {
+    return ButtonStyle(
+      textStyle:
+          MaterialStateProperty.all<TextStyle?>(textStyles.yesStringTextStyle),
+    );
   }
 }
