@@ -284,7 +284,9 @@ class _WordsPageState extends State<WordsPage> {
     );
   }
 
-  GestureDetector ooWordStack(Size size,) {
+  GestureDetector ooWordStack(
+    Size size,
+  ) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -324,23 +326,20 @@ class _WordsPageState extends State<WordsPage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 40.0,
+                  height: 60.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //delete button
-                      InkWell(
-                          onTap: () async {
-                            await wordShowDialogBuild(size);
-                          },
-                          child: wordOptions(size, 'delete')),
-                      editButton(size),
-                      !editMeaning ? addButton(size) : const SizedBox(),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //delete button
+                    InkWell(
+                        onTap: () async {
+                          await wordShowDialogBuild(size);
+                        },
+                        child: wordOptions(size, 'delete')),
+                    editButton(size),
+                    !editMeaning ? addButton(size) : const SizedBox(),
+                  ],
                 )
               ],
             ),
@@ -424,36 +423,39 @@ class _WordsPageState extends State<WordsPage> {
             ? 'Düzenle'
             : 'Sil';
     return Container(
+      alignment: Alignment.center,
       height: size.width * 0.076647,
       //width: size.width * 0.176647,
       decoration: wordOptionButtonDecoration(_add, _edit),
-      child: wordOptionButtonInside(_add, _edit, iconSize, text),
+      child: wordOptionButtonInside(_add, _edit, iconSize, text, size),
     );
   }
 
-  Padding wordOptionButtonInside(bool _add, bool _edit, double iconSize, String text) {
+  Padding wordOptionButtonInside(
+      bool _add, bool _edit, double iconSize, String text, Size size) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
-            _add
-                ? Icons.add
-                : _edit
-                    ? Icons.edit
-                    : Icons.delete,
-            size: iconSize,
-            color: _add
-                ? AppColors.insideCreateArchiveButtonColor1
-                : _edit
-                    ? AppColors.insideCreateArchiveButtonColor2
-                    : Colors.red,
-          ),
+              _add
+                  ? Icons.add
+                  : _edit
+                      ? Icons.edit
+                      : Icons.delete,
+              size: iconSize,
+              color: AppColors.insideCreateArchiveButtonColor1),
           const SizedBox(
-            width: 3.0,
+            width: 10.0,
           ),
-          Text(text),
+          Text(
+            text,
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+                fontSize: size.width * 0.038),
+          ),
         ],
       ),
     );
@@ -466,7 +468,7 @@ class _WordsPageState extends State<WordsPage> {
             ? Colors.blueAccent
             : _edit
                 ? Colors.amber
-                : Colors.teal);
+                : const Color.fromARGB(255, 255, 17, 0));
   }
 
   GestureDetector addWordStack(Size size) {
@@ -527,104 +529,94 @@ class _WordsPageState extends State<WordsPage> {
 
   SizedBox addUpdateWordButton(Size size) {
     return SizedBox(
-            height: size.height * 0.0479,
-            width: size.width,
-            child: ElevatedButton(
-                onPressed: () {
-                  addMeanBool
-                      ? createOrUpdateMeaning()
-                      : createOrUpdateWord();
-                  setState(() {
-                    getWords(widget.archive);
-                    if (addMeanBool) {
-                      addMeanBool = false;
-                    }
-                    initialValue = '';
-                    addOrUpdateStackBool = false;
-                  });
-                },
-                style: addUpdateWordButtonStyle(),
-                child: addUpdateWordButtonText(size)),
-          );
+      height: size.height * 0.0479,
+      width: size.width,
+      child: ElevatedButton(
+          onPressed: () {
+            addMeanBool ? createOrUpdateMeaning() : createOrUpdateWord();
+            setState(() {
+              getWords(widget.archive);
+              if (addMeanBool) {
+                addMeanBool = false;
+              }
+              initialValue = '';
+              addOrUpdateStackBool = false;
+            });
+          },
+          style: addUpdateWordButtonStyle(),
+          child: addUpdateWordButtonText(size)),
+    );
   }
 
   Text addUpdateWordButtonText(Size size) {
     return Text(
-                initialValue.isEmpty
-                    ? keys.addButtonText
-                    : keys.updateButtonText,
-                style: textStyles.createArchiveButtonTextStyle2
-                    .copyWith(fontSize: size.height * 0.01874),
-              );
+      initialValue.isEmpty ? keys.addButtonText : keys.updateButtonText,
+      style: textStyles.createArchiveButtonTextStyle2
+          .copyWith(fontSize: size.height * 0.01874),
+    );
   }
 
   ButtonStyle addUpdateWordButtonStyle() {
     return ButtonStyle(
-                  elevation: MaterialStateProperty.all<double>(0.0),
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      AppColors.createArchiveButtonColor),
-                  shape:
-                      MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(10.0))));
+        elevation: MaterialStateProperty.all<double>(0.0),
+        backgroundColor: MaterialStateProperty.all<Color>(
+            AppColors.createArchiveButtonColor),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))));
   }
 
   SizedBox addUpdateWordForm(Size size) {
     return SizedBox(
-            height: size.height * 0.06964,
-            child: TextFormField(
-              initialValue: initialValue,
-              cursorColor: Colors.black,
-              decoration: addUpdateWordFormDecoration(size),
-              validator: (word) => word != null && word.isEmpty
-                  ? keys.archiveNameFormValidator
-                  : null,
-              //onSaved: (archiveName) => setState(() => archiveName = archiveName),
-              onChanged: (wordt) => setState(() => sword = wordt),
-            ),
-          );
+      height: size.height * 0.06964,
+      child: TextFormField(
+        initialValue: initialValue,
+        cursorColor: Colors.black,
+        decoration: addUpdateWordFormDecoration(size),
+        validator: (word) =>
+            word != null && word.isEmpty ? keys.archiveNameFormValidator : null,
+        //onSaved: (archiveName) => setState(() => archiveName = archiveName),
+        onChanged: (wordt) => setState(() => sword = wordt),
+      ),
+    );
   }
 
   InputDecoration addUpdateWordFormDecoration(Size size) {
     return InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              labelText: addMeanBool ? 'anlam' : keys.word,
-              labelStyle: textStyles.archiveTextFormFieldTextStyle
-                  .copyWith(fontSize: size.height * 0.02285),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              floatingLabelAlignment: FloatingLabelAlignment.start,
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(
-                      color: AppColors
-                          .createArchivePageTextFormFieldBorderColor,
-                      width: 1.0)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(6.0),
-                  borderSide: BorderSide(
-                      color: AppColors
-                          .createArchivePageTextFormFieldBorderColor,
-                      width: 1.0)),
-            );
+      fillColor: Colors.white,
+      filled: true,
+      labelText: addMeanBool ? 'anlam' : keys.word,
+      labelStyle: textStyles.archiveTextFormFieldTextStyle
+          .copyWith(fontSize: size.height * 0.02285),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      floatingLabelAlignment: FloatingLabelAlignment.start,
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(
+              color: AppColors.createArchivePageTextFormFieldBorderColor,
+              width: 1.0)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(
+              color: AppColors.createArchivePageTextFormFieldBorderColor,
+              width: 1.0)),
+    );
   }
 
   Align addUpdateWord(Size size) {
     return Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              addMeanBool && initialValue.isEmpty
-                  ? 'Anlam Ekle'
-                  : addMeanBool && initialValue.isNotEmpty
-                      ? 'Anlam Güncelle'
-                      : initialValue.isEmpty
-                          ? 'Kelime ekle'
-                          : 'Kelime güncelle',
-              style: textStyles.archiveNameStyle.copyWith(
-                  color: color, fontSize: size.height * 0.03125),
-            ),
-          );
+      alignment: Alignment.topLeft,
+      child: Text(
+        addMeanBool && initialValue.isEmpty
+            ? 'Anlam Ekle'
+            : addMeanBool && initialValue.isNotEmpty
+                ? 'Anlam Güncelle'
+                : initialValue.isEmpty
+                    ? 'Kelime ekle'
+                    : 'Kelime güncelle',
+        style: textStyles.archiveNameStyle
+            .copyWith(color: color, fontSize: size.height * 0.03125),
+      ),
+    );
   }
 
   Widget addFirstWordButton() {

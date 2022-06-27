@@ -295,12 +295,12 @@ class _MainPageState extends State<MainPage> {
                 : Color.fromARGB(255, 255, 255, 255),
           ),
           const SizedBox(
-            width: 3.0,
+            width: 5.0,
           ),
           Text(
             delete ? keys.ooDelete : keys.ooEdit,
             style: textStyles.ooOptionsTextStyle
-                .copyWith(fontSize: size.width * 0.03),
+                .copyWith(fontSize: size.width * 0.035),
           ),
           const Spacer(),
         ],

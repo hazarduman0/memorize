@@ -148,7 +148,7 @@ class AppTextStyles{
 
   TextStyle ooOptionsTextStyle = GoogleFonts.inter(
     color: Colors.white,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w600,
     fontSize: 12.0
   );
 
