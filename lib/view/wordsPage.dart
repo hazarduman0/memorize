@@ -284,9 +284,7 @@ class _WordsPageState extends State<WordsPage> {
     );
   }
 
-  GestureDetector ooWordStack(
-    Size size,
-  ) {
+  GestureDetector ooWordStack(Size size) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -381,15 +379,22 @@ class _WordsPageState extends State<WordsPage> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
+              titleTextStyle: textStyles.deleteAlertDialogTextStyle1,
+              contentTextStyle: textStyles.deleteAlertDialogTextStyle2,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide.none),
+              contentPadding: const EdgeInsets.all(25.0),
               elevation: 24.0,
               title: Text(
                 '#$clickedWord',
                 style: textStyles.archiveNameStyle.copyWith(
                     color: Colors.black, fontSize: size.height * 0.03125),
               ),
-              content: const Text('silinecek onaylıyor musun?'), // düzenle
+              content: const Text('Silinecek onaylıyor musun?'), // düzenle
               actions: [
                 TextButton(
+                  style: textButtonStyle(),
                     onPressed: () async {
                       !editMeaning
                           ? await wordOperations.deleteWord(clickedWordID)
@@ -404,6 +409,7 @@ class _WordsPageState extends State<WordsPage> {
                     },
                     child: Text(keys.yesString)),
                 TextButton(
+                  style: textButtonStyle(),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -696,5 +702,12 @@ class _WordsPageState extends State<WordsPage> {
       initialValue = '';
     });
     await wordOperations.updateWord(word);
+  }
+
+ButtonStyle textButtonStyle() {
+    return ButtonStyle(
+      textStyle:
+          MaterialStateProperty.all<TextStyle?>(textStyles.yesStringTextStyle),
+    );
   }
 }
