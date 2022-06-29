@@ -98,12 +98,8 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
                     onTap: () {
                       Navigator.pop(context);
                     },
-                    child: SizedBox(
-                        height: size.height * 0.0267,
-                        width: size.width * 0.25014,
-                        child: TurnBackButton(
-                          height: size.height,
-                        )),
+                    child: TurnBackButton(
+                    ),
                   ),
                 ),
                 const SizedBox(

@@ -223,10 +223,7 @@ class _WordsPageState extends State<WordsPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                      height: size.height * 0.0267,
-                      width: size.width * 0.25014,
-                      child: TurnBackButton(height: size.height)),
+                  TurnBackButton(),
                   IconButton(
                       onPressed: () {
                         setState(() {

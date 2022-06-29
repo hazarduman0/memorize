@@ -193,7 +193,7 @@ class _QuizBoxState extends State<QuizBox> {
           child: Text(
             keys.takeExam,
             style: textStyles.takeExamTextStyle
-                .copyWith(fontSize: size.height * 0.017),
+                .copyWith(fontSize: size.height * 0.015),
           ),
         ),
         Padding(

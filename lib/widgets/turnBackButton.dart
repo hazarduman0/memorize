@@ -5,28 +5,34 @@ import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/constants/projectKeys.dart';
 
 class TurnBackButton extends StatelessWidget {
-  TurnBackButton({ Key? key, required this.height }) : super(key: key);
-  double height;
+  TurnBackButton({
+    Key? key,
+  }) : super(key: key);
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(
-          CustomIcons.arrowLeft,
-          color: AppColors.turnBackTextColor,
-          size: height * 0.0347,
-        ),
-        Text(
-          keys.turnBackText,
-          style: textStyles.turnBackTextStyle.copyWith(
-            fontSize: height * 0.02185,
+    Size size = MediaQuery.of(context).size;
+    return SizedBox(
+      height: size.height * 0.0267,
+      width: size.width * 0.28014,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            CustomIcons.arrowLeft,
+            color: AppColors.turnBackTextColor,
+            size: size.height * 0.0347,
           ),
-        ),
-      ],
+          Text(
+            keys.turnBackText,
+            style: textStyles.turnBackTextStyle.copyWith(
+              fontSize: size.height * 0.02185,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

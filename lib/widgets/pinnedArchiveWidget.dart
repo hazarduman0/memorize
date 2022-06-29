@@ -151,7 +151,7 @@ class _PinnedArchiveState extends State<PinnedArchive> {
                           style: textStyles.archiveNameStyle.copyWith(
                               color: color,
                               fontSize: size.height *
-                                  0.03125)),
+                                  0.02925)),
                     ),
                   ), 
                   GestureDetector(
@@ -168,7 +168,7 @@ class _PinnedArchiveState extends State<PinnedArchive> {
                   color: Colors.transparent,
                   child: Text(description,
                       style: textStyles.archiveDescriptionTextStyle
-                          .copyWith(fontSize: size.height * 0.018857),
+                          .copyWith(fontSize: size.height * 0.016857),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis),
                 ),
@@ -197,7 +197,7 @@ class _PinnedArchiveState extends State<PinnedArchive> {
                         wordCount,
                         style: textStyles.wordCount.copyWith(
                             color: color,
-                            fontSize: size.height * 0.017857),
+                            fontSize: size.height * 0.014857),
                       ),
                     ),
                   )
