@@ -139,8 +139,8 @@ class _WordCardWidgetState extends State<WordCardWidget> {
 
   Container showLessButton(Size size) {
     return Container(
-      height: size.width * 0.038647,
-      width: size.width * 0.188404,
+      height: size.width * 0.044647,
+      width: size.width * 0.208404,
       decoration: BoxDecoration(
           color: Colors.green, borderRadius: BorderRadius.circular(5.0)),
       child: Center(
@@ -222,8 +222,8 @@ class _WordCardWidgetState extends State<WordCardWidget> {
 
   Container showMoreButton(Size size) {
     return Container(
-      height: size.width * 0.038647,
-      width: size.width * 0.188404,
+      height: size.width * 0.044647,
+      width: size.width * 0.208404,
       decoration: showMoreButtonDecoration(),
       child: Center(
         child: Text(
@@ -249,8 +249,8 @@ class _WordCardWidgetState extends State<WordCardWidget> {
             widget.word.id, widget.word.word, true, widget.word);
       },
       child: Container(
-        height: size.width * 0.038647,
-        width: size.width * 0.038647,
+        height: size.width * 0.050647,
+        width: size.width * 0.050647,
         decoration: wordOtherOptionsButtonDecoration(),
         child: Center(
           child: Icon(
@@ -300,7 +300,7 @@ class _WordCardWidgetState extends State<WordCardWidget> {
         widget.meaningFunction(fmeaning, true);
       },
       child: Container(
-        height: size.height * 0.020625,
+        height: size.height * 0.025625,
         width: (meaning.length + 4) *
             (size.width * (1 / 90)), //1/90 -> (4 * 100 / 360) / 100
         decoration: BoxDecoration(

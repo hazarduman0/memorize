@@ -356,7 +356,7 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
 
   SizedBox archiveNameForm(Size size) {
     return SizedBox(
-      height: size.height * 0.06964,
+      height: size.height * 0.05564,
       child: TextFormField(
         initialValue: archiveName,
         cursorColor: Colors.black,

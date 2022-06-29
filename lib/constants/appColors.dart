@@ -25,21 +25,26 @@ class AppColors {
       const Color.fromRGBO(29, 46, 54, 1.0);
   static Color createArchivePageTextFormFieldBorderColor =
       const Color.fromRGBO(200, 200, 200, 1.0);
-  static Color selectableGreenColor = const Color.fromRGBO(1, 132, 22, 1.0);
+      //const Color.fromRGBO(1, 132, 22, 1.0);
+  static Color selectableGreenColor = const Color.fromARGB(255, 30, 167, 52);
   static Color selectableLightGreenColor =
       const Color.fromRGBO(124, 191, 135, 1.0);
-  static Color selectableOrangeColor = const Color.fromRGBO(214, 90, 0, 1.0);
+      //const Color.fromRGBO(214, 90, 0, 1.0);
+  static Color selectableOrangeColor = const Color.fromARGB(255, 245, 128, 44);
   static Color selectableLightOrangeColor =
-      const Color.fromRGBO(255, 149, 72, 1.0);
-  static Color selectableYellowColor = const Color.fromRGBO(206, 148, 1, 1.0);
+      const Color.fromARGB(255, 228, 156, 105);
+      //const Color.fromRGBO(206, 148, 1, 1.0);
+  static Color selectableYellowColor = const Color.fromARGB(255, 255, 197, 49);
   static Color selectableLightYellowColor =
-      const Color.fromRGBO(237, 201, 111, 1.0);
-  static Color selectablePurpleColor = const Color.fromRGBO(118, 3, 137, 1.0);
+      const Color.fromARGB(255, 243, 205, 110);
+      //const Color.fromRGBO(118, 3, 137, 1.0);
+  static Color selectablePurpleColor = Color.fromARGB(255, 183, 11, 213);
   static Color selectableLightPurpleColor =
       const Color.fromRGBO(185, 112, 197, 1.0);
-  static Color selectableBlueColor = const Color.fromRGBO(16, 123, 182, 1.0);
+      //const Color.fromRGBO(16, 123, 182, 1.0);
+  static Color selectableBlueColor = const Color.fromARGB(255, 16, 148, 218);
   static Color selectableLightBlueColor =
-      const Color.fromRGBO(24, 149, 218, 1.0);
+      const Color.fromARGB(255, 63, 173, 232);
   static Color backgroundColor = Colors.white;
   static Color archiveAreaBackgroundColor =
       const Color.fromRGBO(246, 246, 246, 1.0);

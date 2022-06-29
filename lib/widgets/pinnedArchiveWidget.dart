@@ -11,8 +11,7 @@ import 'package:memorize/view/wordsPage.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PinnedArchive extends StatefulWidget {
-   PinnedArchive(
-      {Key? key,required this.archive, required this.customFunction})
+  PinnedArchive({Key? key, required this.archive, required this.customFunction})
       : super(key: key);
 
   Archive archive;
@@ -81,21 +80,29 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     ProjectKeys keys = ProjectKeys();
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => WordsPage(archive: widget.archive),));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WordsPage(archive: widget.archive),
+            ));
       },
-      child: pinnedArchiveWidgetBuild(widgetHeight, widgetWidth, textStyles, size),
+      child:
+          pinnedArchiveWidgetBuild(widgetHeight, widgetWidth, textStyles, size),
     );
   }
 
-  SizedBox pinnedArchiveWidgetBuild(double widgetHeight, double widgetWidth, AppTextStyles textStyles, Size size) {
+  SizedBox pinnedArchiveWidgetBuild(double widgetHeight, double widgetWidth,
+      AppTextStyles textStyles, Size size) {
     return SizedBox(
       height: widgetHeight,
       width: widgetWidth,
-      child: pinnedArchiveWidgetView(widgetWidth, widgetHeight, textStyles, size),
+      child:
+          pinnedArchiveWidgetView(widgetWidth, widgetHeight, textStyles, size),
     );
   }
 
-  Column pinnedArchiveWidgetView(double widgetWidth, double widgetHeight, AppTextStyles textStyles, Size size) {
+  Column pinnedArchiveWidgetView(double widgetWidth, double widgetHeight,
+      AppTextStyles textStyles, Size size) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,103 +130,108 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     );
   }
 
-  Container pinnedArchiveInside(double widgetHeight, double widgetWidth, AppTextStyles textStyles, Size size) {
+  Container pinnedArchiveInside(double widgetHeight, double widgetWidth,
+      AppTextStyles textStyles, Size size) {
     return Container(
-        height: widgetHeight - 6.0,
-        width: widgetWidth,
-        decoration: pinnedArchiveInsideDecoration(),
-        child: pinnedArchiveInsideItemsAndFeatures(textStyles, size),
-      );
+      height: widgetHeight - 6.0,
+      width: widgetWidth,
+      decoration: pinnedArchiveInsideDecoration(),
+      child: pinnedArchiveInsideItemsAndFeatures(textStyles, size),
+    );
   }
 
-  Padding pinnedArchiveInsideItemsAndFeatures(AppTextStyles textStyles, Size size) {
+  Padding pinnedArchiveInsideItemsAndFeatures(
+      AppTextStyles textStyles, Size size) {
     return Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Hero(
-                    tag: widget.archive.id.toString(),//'pinnedArchiveName',
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Text(archiveName,
-                          style: textStyles.archiveNameStyle.copyWith(
-                              color: color,
-                              fontSize: size.height *
-                                  0.02925)),
-                    ),
-                  ), 
-                  GestureDetector(
-                  onTap: () {
-                    widget.customFunction(true, widget.archive.id);
-                  },
-                  child: Icon(CustomIcons.more, color: color, size: size.width * 0.07,)),
-                
-                ],
-              ),
-              Hero(
-                tag: '${widget.archive.id.toString()}de',//'archiveDescription',
-                child: Material(
-                  color: Colors.transparent,
-                  child: Text(description,
-                      style: textStyles.archiveDescriptionTextStyle
-                          .copyWith(fontSize: size.height * 0.016857),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    lastUpdate,
-                    style: textStyles.archiveLastUpdateDateTextStyle
-                        .copyWith(
-                            color: color,
-                            fontSize: size.height * 0.018857),
+      padding: const EdgeInsets.all(10.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Hero(
+                  tag: widget.archive.id.toString(), //'pinnedArchiveName',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text(archiveName,
+                        style: textStyles.archiveNameStyle.copyWith(
+                            color: color, fontSize: size.height * 0.02925)),
                   ),
-                  Container(
-                    height: size.height / 32.0,
-                    width: size.width / 4.8,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100.0),
-                        border: Border.all(
-                          color: color,
-                          width: 2.0,
-                        )),
-                    child: Center(
-                      child: Text(
-                        wordCount,
-                        style: textStyles.wordCount.copyWith(
-                            color: color,
-                            fontSize: size.height * 0.014857),
-                      ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      widget.customFunction(true, widget.archive.id);
+                    },
+                    icon: Icon(
+                      CustomIcons.more,
+                      color: color,
+                      size: size.width * 0.07,
+                    )),
+                // GestureDetector(
+                // onTap: () {
+                //   widget.customFunction(true, widget.archive.id);
+                // },
+                // child: Icon(CustomIcons.more, color: color, size: size.width * 0.07,)),
+              ],
+            ),
+            Hero(
+              tag: '${widget.archive.id.toString()}de', //'archiveDescription',
+              child: Material(
+                color: Colors.transparent,
+                child: Text(description,
+                    style: textStyles.archiveDescriptionTextStyle
+                        .copyWith(fontSize: size.height * 0.016857),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  lastUpdate,
+                  style: textStyles.archiveLastUpdateDateTextStyle
+                      .copyWith(color: color, fontSize: size.height * 0.018857),
+                ),
+                Container(
+                  height: size.height / 32.0,
+                  width: size.width / 4.8,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100.0),
+                      border: Border.all(
+                        color: color,
+                        width: 2.0,
+                      )),
+                  child: Center(
+                    child: Text(
+                      wordCount,
+                      style: textStyles.wordCount.copyWith(
+                          color: color, fontSize: size.height * 0.014857),
                     ),
-                  )
-                ],
-              )
-            ],
-          ),
+                  ),
+                )
+              ],
+            )
+          ],
         ),
-      );
+      ),
+    );
   }
 
   BoxDecoration pinnedArchiveInsideDecoration() {
     return BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 3.0,
-              blurRadius: 5.0,
-              offset: const Offset(0, 5),
-            ),
-          ]);
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 3.0,
+            blurRadius: 5.0,
+            offset: const Offset(0, 5),
+          ),
+        ]);
   }
 }

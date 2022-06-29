@@ -434,8 +434,7 @@ class _WordsPageState extends State<WordsPage> {
     );
   }
 
-  Padding wordOptionButtonInside(
-      bool _add, bool _edit, double iconSize, String text, Size size) {
+  Padding wordOptionButtonInside(bool _add, bool _edit, double iconSize, String text, Size size) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
@@ -570,7 +569,7 @@ class _WordsPageState extends State<WordsPage> {
 
   SizedBox addUpdateWordForm(Size size) {
     return SizedBox(
-      height: size.height * 0.06964,
+      height: size.height * 0.05564,
       child: TextFormField(
         initialValue: initialValue,
         cursorColor: Colors.black,
