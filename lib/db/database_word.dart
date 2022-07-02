@@ -1,6 +1,7 @@
 import 'package:memorize/db/database.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/model/word.dart';
+import 'package:sqflite/sqflite.dart';
 
 class WordOperations{
   DatabaseRepository dbRepository = DatabaseRepository.instance;
@@ -49,7 +50,35 @@ class WordOperations{
     return result.map((json) => Word.fromJson(json)).toList();
   }
 
+  Future<int?> getWordCount(int? archiveID) async{
+    final db = await dbRepository.database;
+
+    const where = '${WordFields.archiveID} = ?';
+
+    var whereArgs = [archiveID];
+
+    final result = await db.query(
+      tableWords,
+      where: where,
+      whereArgs: whereArgs
+      );
+    return result.map((json) => Word.fromJson(json)).toList().length;  
+  }
+
+//   Future<int?> getWordCount(int? archiveID) async {
+//     final db = await dbRepository.database;
+
+//     const where = WordFields.archiveID;
+
+//     var whereArgs = archiveID;
+
+//     var x = await db.rawQuery('SELECT COUNT (*) from $tableWords $where = $whereArgs');
+//     int? count = Sqflite.firstIntValue(x);
+//     return count;
+// }
+
   Future<List<Word>> getArchiveWords(int? archiveID) async{
+    
     final db = await dbRepository.database;
 
     const where = '${WordFields.archiveID} = ?';
@@ -61,7 +90,6 @@ class WordOperations{
       where: where,
       whereArgs: whereArgs
     );
-
     return result.map((json) => Word.fromJson(json)).toList();
   }
 }

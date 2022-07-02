@@ -4,6 +4,7 @@ import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database_archive.dart';
+import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/createEditArchivePage.dart';
 import 'package:memorize/view/mainPage.dart';
@@ -28,8 +29,9 @@ class _PinnedArchiveState extends State<PinnedArchive> {
   late String lastUpdate;
   late Color color;
   late Color lightColor;
-  String wordCount = '200 kelime';
+  String wordCount = '';
   ArchiveOperations archiveOperations = ArchiveOperations();
+  WordOperations wordOperations = WordOperations();
 
   @override
   void initState() {
@@ -40,6 +42,22 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     lastUpdate = timeago.format(widget.archive.createdTime, locale: 'tr');
     color = getColor(widget.archive.color);
     lightColor = getLightColor(widget.archive.color);
+    getWordCount();
+  }
+  
+  @override
+  void didUpdateWidget(covariant PinnedArchive oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (widget.archive.archiveName != archiveName) {
+      getWordCount();
+    }
+  }
+
+   Future<void> getWordCount() async{
+    int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
+    print('sayi $_wordCount');
+    wordCount = '${_wordCount.toString()} kelime';
   }
 
   Color getColor(String color) {

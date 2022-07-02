@@ -51,6 +51,18 @@ class ArchiveOperations{
     return result.first;
   }
 
+  Future<List<Archive>> getArchives() async {
+    final db = await dbRepository.database;
+
+    const orderBy = '${ArchiveFields.time} ASC';
+
+    final result = await db.query(
+      tableArchives,
+      orderBy: orderBy,);
+
+    return result.map((json) => Archive.fromJson(json)).toList();
+  }
+
   Future<List<Archive>> getPinnedArchives() async {
     final db = await dbRepository.database;
 

@@ -46,9 +46,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  InkWell navigationExamsItem() {
+  GestureDetector navigationExamsItem() {
     bool _iscurrent = currentPage == 2;
-    return InkWell(
+    return GestureDetector(
       child: Column(
         // buradan
         children: [
@@ -87,9 +87,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
             decoration: boxDecorationBuild(_iscurrent));
   }
 
-  InkWell navigationHomePageItem() {
+  GestureDetector navigationHomePageItem() {
     bool _iscurrent = currentPage == 1;
-    return InkWell(
+    return GestureDetector(
       child: Column(
         // buradan
         children: [
@@ -123,9 +123,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   SizedBox currentSizedBox(bool _iscurrent) => SizedBox(height: _iscurrent ? 5.0 : 0.0,);
 
-  InkWell navigationStatisticsItem() {
+  GestureDetector navigationStatisticsItem() {
     bool _iscurrent = currentPage == 0;
-    return InkWell(
+    return GestureDetector(
       child: Column(
         // buradan
         children: [

@@ -4,6 +4,7 @@ import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database_archive.dart';
+import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/createEditArchivePage.dart';
 import 'package:memorize/view/mainPage.dart';
@@ -26,9 +27,10 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
   late String archiveName;
   late Color color;
   late Color lightColor;
-  String wordCount = '200 kelime';
+  String? wordCount;
   ProjectKeys keys = ProjectKeys();
   ArchiveOperations archiveOperations = ArchiveOperations();
+  WordOperations wordOperations = WordOperations();
 
   @override
   void initState() {
@@ -38,6 +40,17 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
     color = getColor(widget.archive.color);
     lightColor = getLightColor(widget.archive.color);
   }
+
+  Future<void> getWordCount() async{
+    int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
+    wordCount = '${_wordCount.toString()} kelime';
+  }
+
+  // Future<String> getWordCount() async{
+  //  int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
+  //   wordCount = '${_wordCount.toString()} kelime';
+  //   return wordCount;
+  // }
 
   Color getColor(String color) {
     if (color == 'selectableOrangeColor') {
@@ -195,7 +208,7 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
                 )),
             child: Center(
               child: Text(
-                wordCount,
+                wordCount!,
                 style: textStyles.wordCount
                     .copyWith(color: color, fontSize: size.height * 0.01674),
               ),
