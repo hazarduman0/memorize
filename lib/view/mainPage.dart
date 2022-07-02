@@ -27,8 +27,6 @@ class _MainPageState extends State<MainPage> {
   String ooArchiveName = '';
   String ooArchiveDescription = '';
   Color ooArchiveColor = Colors.white;
-  //  List<Archive> normalArchive = [];
-  //  List<Archive> pinnedArchive = [];
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
   bool otherOptions = false;
@@ -77,10 +75,6 @@ class _MainPageState extends State<MainPage> {
         overlays: [SystemUiOverlay.top]);
     pageController = PageController(initialPage: 1);
     //SystemChrome.latestStyle!.systemNavigationBarColor;
-    // normalArchive = [];
-    // pinnedArchive = [];
-    // getNormalArchiveList();
-    // getPinnedArchiveList();
   }
 
   @override
@@ -91,42 +85,6 @@ class _MainPageState extends State<MainPage> {
     pageController.dispose();
     super.dispose();
   }
-
-  // Future getArchiveList() async {
-  //   archiveList = await archiveOperations.getArchives();
-  // }
-
-  // List<Archive> getNormalArchiveList(List<Archive> archiveList) {
-  //   List<Archive> normalArchiveList = [];
-  //   for (int i = 0; i < archiveList.length; i++) {
-  //     if (!archiveList[i].isPinned) {
-  //       normalArchive.add(archiveList[i]);
-  //     }
-  //   }
-  //   return normalArchiveList;
-  // }
-
-  // List<Archive> getPinnedArchiveList(List<Archive> archiveList) {
-  //   List<Archive> pinnedArchiveList = [];
-  //   for (int i = 0; i < archiveList.length; i++) {
-  //     if (archiveList[i].isPinned) {
-  //       pinnedArchiveList.add(archiveList[i]);
-  //     }
-  //   }
-  //   return pinnedArchiveList;
-  // }
-
-  // Future getNormalArchiveList() async {
-  //   setState(() => isLoading = true);
-  //   normalArchive = await archiveOperations.getNormalArchives();
-  //   setState(() => isLoading = false);
-  // }
-
-  // Future getPinnedArchiveList() async {
-  //   setState(() => isLoading = true);
-  //   pinnedArchive = await archiveOperations.getPinnedArchives();
-  //   setState(() => isLoading = false);
-  // }
 
   Future<void> deleteArchive(int? id) async {
     await archiveOperations.deleteArchive(id);
@@ -143,48 +101,27 @@ class _MainPageState extends State<MainPage> {
     Size size,
   ) {
     return Scaffold(
-        body: FutureBuilder(
-      future: Future.wait([
-        archiveOperations.getNormalArchives(),
-        archiveOperations.getPinnedArchives()
-      ]),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        Widget children;
-        if (snapshot.hasData) {
-          children =
-              haveDataPageStack(size, snapshot.data[0], snapshot.data[1]);
-        } else if (snapshot.hasError) {
-          children = Center(child: Text('${snapshot.error}'));
-        } else {
-          children = const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return children;
-        // switch (snapshot.connectionState) {
-        //   case ConnectionState.waiting:
-        //     return const Center(
-        //       child: CircularProgressIndicator(),
-        //     );
-        //   case ConnectionState.done:
-        //   default:
-        //     if (snapshot.hasError) {
-        //       return Center(child: Text('${snapshot.error}'));
-        //     } else if (snapshot.hasData) {
-        //       // print('girdi1');
-        //       // print(snapshot.data[0]);
-        //       haveDataPageStack(size, snapshot.data[0], snapshot.data[1]);
-        //     } else {
-        //       return const NoDataPage();
-        //     }
-        // }
-      },
-    )
-
-        // normalArchive.isEmpty && pinnedArchive.isEmpty
-        //     ? const NoDataPage()
-        //     : haveDataPageStack(size),
-        );
+      body: FutureBuilder(
+        future: Future.wait([
+          archiveOperations.getNormalArchives(),
+          archiveOperations.getPinnedArchives()
+        ]),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          Widget children;
+          if (snapshot.hasData) {
+            children =
+                haveDataPageStack(size, snapshot.data[0], snapshot.data[1]);
+          } else if (snapshot.hasError) {
+            children = Center(child: Text('${snapshot.error}'));
+          } else {
+            children = const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return children;
+        },
+      ),
+    );
   }
 
   Stack haveDataPageStack(

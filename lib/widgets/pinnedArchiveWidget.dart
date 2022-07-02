@@ -44,7 +44,7 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     lightColor = getLightColor(widget.archive.color);
     getWordCount();
   }
-  
+
   @override
   void didUpdateWidget(covariant PinnedArchive oldWidget) {
     // TODO: implement didUpdateWidget
@@ -54,7 +54,7 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     }
   }
 
-   Future<void> getWordCount() async{
+  Future<void> getWordCount() async {
     int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
     print('sayi $_wordCount');
     wordCount = '${_wordCount.toString()} kelime';
@@ -170,73 +170,105 @@ class _PinnedArchiveState extends State<PinnedArchive> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Hero(
-                  tag: widget.archive.id.toString(), //'pinnedArchiveName',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Text(archiveName,
-                        style: textStyles.archiveNameStyle.copyWith(
-                            color: color, fontSize: size.height * 0.02925)),
-                  ),
-                ),
-                IconButton(
-                    onPressed: () {
-                      widget.customFunction(true, widget.archive.id);
-                    },
-                    icon: Icon(
-                      CustomIcons.more,
-                      color: color,
-                      size: size.width * 0.07,
-                    )),
-                // GestureDetector(
-                // onTap: () {
-                //   widget.customFunction(true, widget.archive.id);
-                // },
-                // child: Icon(CustomIcons.more, color: color, size: size.width * 0.07,)),
+                pinnedArchiveName(textStyles, size),
+                moreButtonBuild(size),
               ],
             ),
-            Hero(
-              tag: '${widget.archive.id.toString()}de', //'archiveDescription',
-              child: Material(
-                color: Colors.transparent,
-                child: Text(description,
-                    style: textStyles.archiveDescriptionTextStyle
-                        .copyWith(fontSize: size.height * 0.016857),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis),
-              ),
-            ),
+            archiveDescription(textStyles, size),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  lastUpdate,
-                  style: textStyles.archiveLastUpdateDateTextStyle
-                      .copyWith(color: color, fontSize: size.height * 0.018857),
-                ),
-                Container(
-                  height: size.height / 32.0,
-                  width: size.width / 4.8,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100.0),
-                      border: Border.all(
-                        color: color,
-                        width: 2.0,
-                      )),
-                  child: Center(
-                    child: Text(
-                      wordCount,
-                      style: textStyles.wordCount.copyWith(
-                          color: color, fontSize: size.height * 0.014857),
-                    ),
-                  ),
-                )
+                lastUpdateText(textStyles, size),
+                FutureBuilder(
+                    future: wordOperations.getWordCount(widget.archive.id),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      Widget children;
+                      if (snapshot.hasData) {
+                        children = counterContainer(size, snapshot, textStyles);
+                      } else if (snapshot.hasError) {
+                        children = Center(child: Text('${snapshot.error}'));
+                      } else {
+                        children = const SizedBox();
+                      }
+                      return children;
+                    }),
               ],
             )
           ],
         ),
       ),
     );
+  }
+
+  Text lastUpdateText(AppTextStyles textStyles, Size size) {
+    return Text(
+      lastUpdate,
+      style: textStyles.archiveLastUpdateDateTextStyle
+          .copyWith(color: color, fontSize: size.height * 0.018857),
+    );
+  }
+
+  Hero archiveDescription(AppTextStyles textStyles, Size size) {
+    return Hero(
+      tag: '${widget.archive.id.toString()}de', //'archiveDescription',
+      child: Material(
+        color: Colors.transparent,
+        child: Text(description,
+            style: textStyles.archiveDescriptionTextStyle
+                .copyWith(fontSize: size.height * 0.016857),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis),
+      ),
+    );
+  }
+
+  IconButton moreButtonBuild(Size size) {
+    return IconButton(
+        onPressed: () {
+          widget.customFunction(true, widget.archive.id);
+        },
+        icon: Icon(
+          CustomIcons.more,
+          color: color,
+          size: size.width * 0.07,
+        ));
+  }
+
+  Hero pinnedArchiveName(AppTextStyles textStyles, Size size) {
+    return Hero(
+      tag: widget.archive.id.toString(), //'pinnedArchiveName',
+      child: Material(
+        color: Colors.transparent,
+        child: Text(archiveName,
+            style: textStyles.archiveNameStyle
+                .copyWith(color: color, fontSize: size.height * 0.02925)),
+      ),
+    );
+  }
+
+  Container counterContainer(
+      Size size, AsyncSnapshot<dynamic> snapshot, AppTextStyles textStyles) {
+    return Container(
+      height: size.height / 32.0,
+      width: size.width / 4.8,
+      decoration: counterContainerDecoration(),
+      child: Center(
+        child: Text(
+          '${snapshot.data.toString()} kelime',
+          style: textStyles.wordCount
+              .copyWith(color: color, fontSize: size.height * 0.014857),
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration counterContainerDecoration() {
+    return BoxDecoration(
+        borderRadius: BorderRadius.circular(100.0),
+        border: Border.all(
+          color: color,
+          width: 2.0,
+        ));
   }
 
   BoxDecoration pinnedArchiveInsideDecoration() {

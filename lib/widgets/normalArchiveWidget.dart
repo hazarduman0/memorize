@@ -27,7 +27,6 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
   late String archiveName;
   late Color color;
   late Color lightColor;
-  String? wordCount;
   ProjectKeys keys = ProjectKeys();
   ArchiveOperations archiveOperations = ArchiveOperations();
   WordOperations wordOperations = WordOperations();
@@ -41,10 +40,10 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
     lightColor = getLightColor(widget.archive.color);
   }
 
-  Future<void> getWordCount() async{
-    int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
-    wordCount = '${_wordCount.toString()} kelime';
-  }
+  // Future<void> getWordCount() async{
+  //   int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
+  //   wordCount = '${_wordCount.toString()} kelime';
+  // }
 
   // Future<String> getWordCount() async{
   //  int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
@@ -165,58 +164,82 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                  height: size.height / (896 / 70),
-                  width: size.width / (414 / 98),
-                  child: Hero(
-                    tag: widget.archive.id.toString(), //'normalArchiveName',
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Text(archiveName,
-                          style: textStyles.archiveNameStyle.copyWith(
-                            color: color,
-                            fontSize: size.height * 0.02225,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis),
-                    ),
-                  )),
-              IconButton(
-                  onPressed: () {
-                    widget.customFunction(true, widget.archive.id);
-                  },
-                  icon: Icon(
-                    CustomIcons.more,
-                    color: color,
-                    size: size.width * 0.06,
-                  )),
-              // GestureDetector(
-              // onTap: () {
-              //   widget.customFunction(true, widget.archive.id);
-              // },
-              //   child: Icon(CustomIcons.more, color: color, size: size.width * 0.06,)),
+              archiveNameText(size, textStyles),
+              moreButtonBuild(size),
             ],
           ),
-          Container(
-            height: size.height / 32.0,
-            width: size.width / 2.855,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100.0),
-                border: Border.all(
-                  color: color,
-                  width: 2.0,
-                )),
-            child: Center(
-              child: Text(
-                wordCount!,
-                style: textStyles.wordCount
-                    .copyWith(color: color, fontSize: size.height * 0.01674),
-              ),
-            ),
-          )
+          FutureBuilder(
+              future: wordOperations.getWordCount(widget.archive.id),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                Widget children;
+                if (snapshot.hasData) {
+                  children = wordCounterContainer(size, textStyles, snapshot);
+                } else if (snapshot.hasError) {
+                  children = Center(child: Text('${snapshot.error}'));
+                } else {
+                  children = const SizedBox();
+                }
+                return children;
+              })
         ],
       ),
     );
+  }
+
+  Container wordCounterContainer(
+      Size size, AppTextStyles textStyles, AsyncSnapshot<dynamic> snapshot) {
+    return Container(
+      height: size.height / 32.0,
+      width: size.width / 2.855,
+      decoration: wordCounterContainerDecoration(),
+      child: Center(
+        child: Text(
+          '${snapshot.data.toString()} kelime',
+          style: textStyles.wordCount
+              .copyWith(color: color, fontSize: size.height * 0.01674),
+        ),
+      ),
+    );
+  }
+
+  BoxDecoration wordCounterContainerDecoration() {
+    return BoxDecoration(
+        borderRadius: BorderRadius.circular(100.0),
+        border: Border.all(
+          color: color,
+          width: 2.0,
+        ));
+  }
+
+  IconButton moreButtonBuild(Size size) {
+    return IconButton(
+        onPressed: () {
+          widget.customFunction(true, widget.archive.id);
+        },
+        icon: Icon(
+          CustomIcons.more,
+          color: color,
+          size: size.width * 0.06,
+        ));
+  }
+
+  SizedBox archiveNameText(Size size, AppTextStyles textStyles) {
+    return SizedBox(
+        height: size.height / (896 / 70),
+        width: size.width / (414 / 98),
+        child: Hero(
+          tag: widget.archive.id.toString(), //'normalArchiveName',
+          child: Material(
+            color: Colors.transparent,
+            child: Text(archiveName,
+                style: textStyles.archiveNameStyle.copyWith(
+                  color: color,
+                  fontSize: size.height * 0.02225,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis),
+          ),
+        ));
   }
 
   BoxDecoration normalArchiveInsideDecoration() {
