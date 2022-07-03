@@ -1,9 +1,7 @@
 import 'package:memorize/db/database.dart';
 import 'package:memorize/model/archive.dart';
 
-
-class ArchiveOperations{
-
+class ArchiveOperations {
   DatabaseRepository dbRepository = DatabaseRepository.instance;
 
   Future<Archive> createArchive(Archive archive) async {
@@ -24,27 +22,25 @@ class ArchiveOperations{
     );
   }
 
-  Future<int> deleteArchive(int? id) async{
+  Future<int> deleteArchive(int? id) async {
     final db = await dbRepository.database;
 
     return await db.delete(
       tableArchives,
       where: '${ArchiveFields.id} = ?',
       whereArgs: [id],
-      );
+    );
   }
 
-  Future<Archive> getArchive(int? archiveID) async{
+  Future<Archive> getArchive(int? archiveID) async {
     final db = await dbRepository.database;
 
     const where = '${ArchiveFields.id} = ?';
 
     var whereArgs = [archiveID];
 
-    final query = await db.query(
-      tableArchives,
-      where: where, 
-      whereArgs: whereArgs);
+    final query =
+        await db.query(tableArchives, where: where, whereArgs: whereArgs);
 
     final result = query.map((json) => Archive.fromJson(json)).toList();
 
@@ -58,7 +54,8 @@ class ArchiveOperations{
 
     final result = await db.query(
       tableArchives,
-      orderBy: orderBy,);
+      orderBy: orderBy,
+    );
 
     return result.map((json) => Archive.fromJson(json)).toList();
   }
@@ -72,11 +69,8 @@ class ArchiveOperations{
 
     const whereArgs = [1];
 
-    final result = await db.query(
-      tableArchives,
-      orderBy: orderBy, 
-      where: where, 
-      whereArgs: whereArgs);
+    final result = await db.query(tableArchives,
+        orderBy: orderBy, where: where, whereArgs: whereArgs);
 
     return result.map((json) => Archive.fromJson(json)).toList();
   }
@@ -96,4 +90,16 @@ class ArchiveOperations{
     return result.map((json) => Archive.fromJson(json)).toList();
   }
 
+  Future<List<Archive>> getAllArchives() async {
+    final db = await dbRepository.database;
+
+    const orderBy = '${ArchiveFields.time} ASC';
+
+    final result = await db.query(
+      tableArchives,
+      orderBy: orderBy,
+    );
+
+    return result.map((json) => Archive.fromJson(json)).toList();
+  }
 }

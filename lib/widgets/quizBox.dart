@@ -6,22 +6,45 @@ import 'package:memorize/model/archive.dart';
 
 class QuizBox extends StatefulWidget {
   QuizBox({
-    Key? key,
+    Key? key, required this.archive
   }) : super(key: key);
+
+  Archive archive;
 
   @override
   State<QuizBox> createState() => _QuizBoxState();
 }
 
 class _QuizBoxState extends State<QuizBox> {
-  //Archive archive;
-  Color tempColor = Colors.blue;
+  late Color color;
+  late String archiveName;
 
   AppTextStyles textStyles = AppTextStyles();
 
   ProjectKeys keys = ProjectKeys();
 
   bool openedCard = false;
+
+  Color getColor(String color) {
+    if (color == 'selectableOrangeColor') {
+      return AppColors.selectableOrangeColor;
+    } else if (color == 'selectableYellowColor') {
+      return AppColors.selectableYellowColor;
+    } else if (color == 'selectablePurpleColor') {
+      return AppColors.selectablePurpleColor;
+    } else if (color == 'selectableBlueColor') {
+      return AppColors.selectableBlueColor;
+    }
+    return AppColors.selectableGreenColor;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    archiveName = widget.archive.archiveName;
+    color = getColor(widget.archive.color);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,11 +190,11 @@ class _QuizBoxState extends State<QuizBox> {
   //archive info!!
   Text archiveText(Size size) {
     return Text(
-      'İngilizce Sözcükler',
+      archiveName,
       style: TextStyle(
           fontSize: size.width * 0.04,
           fontWeight: FontWeight.bold,
-          color: tempColor),
+          color: color),
     );
   }
 
@@ -204,7 +227,7 @@ class _QuizBoxState extends State<QuizBox> {
             child: Center(
                 child: Icon(
               Icons.arrow_forward_ios,
-              color: tempColor,
+              color: color,
               size: size.height * 0.02,
             )),
           ),
@@ -215,6 +238,6 @@ class _QuizBoxState extends State<QuizBox> {
 
   BoxDecoration examButtonDecoration() {
     return BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0), color: tempColor);
+        borderRadius: BorderRadius.circular(25.0), color: color);
   }
 }

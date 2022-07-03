@@ -6,8 +6,6 @@ import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
-import 'package:memorize/view/createEditArchivePage.dart';
-import 'package:memorize/view/mainPage.dart';
 import 'package:memorize/view/wordsPage.dart';
 
 class NormalArchiveWidget extends StatefulWidget {
@@ -23,7 +21,6 @@ class NormalArchiveWidget extends StatefulWidget {
 }
 
 class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
-  //bool animatedBool = true;
   late String archiveName;
   late Color color;
   late Color lightColor;
@@ -39,17 +36,6 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
     color = getColor(widget.archive.color);
     lightColor = getLightColor(widget.archive.color);
   }
-
-  // Future<void> getWordCount() async{
-  //   int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
-  //   wordCount = '${_wordCount.toString()} kelime';
-  // }
-
-  // Future<String> getWordCount() async{
-  //  int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
-  //   wordCount = '${_wordCount.toString()} kelime';
-  //   return wordCount;
-  // }
 
   Color getColor(String color) {
     if (color == 'selectableOrangeColor') {
@@ -80,15 +66,9 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // double animatedHeight =
-    //     animatedBool ? size.width * 0.057971 : size.width * 0.173913;
-    // double animatedWidth = size.width * 0.057971;
-    AppTextStyles textStyles = AppTextStyles(/*height: size.height*/);
+    AppTextStyles textStyles = AppTextStyles();
     double widgetWidth = size.width / (414 / 165);
     double widgetHeight = size.height * 0.170;
-    // double iconSize = animatedHeight / 3.2;
-    // double widgetWidth = size.width * 0.39855;
-    // double widgetHeight = size.height * 0.1618;
 
     return GestureDetector(
       onTap: () {
@@ -121,7 +101,7 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
       children: [
         Container(
           height: 3.0,
-          width: widgetWidth - 6.0,
+          width: widgetWidth - 9.0,
           decoration: BoxDecoration(
               color: lightColor, //renk buraya
               borderRadius: const BorderRadius.only(
@@ -130,7 +110,7 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
         ),
         Container(
           height: 3.0,
-          width: widgetWidth - 3.0,
+          width: widgetWidth - 6.0,
           decoration: BoxDecoration(
               color: color, //renk buraya
               borderRadius: const BorderRadius.only(
@@ -228,7 +208,7 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
         height: size.height / (896 / 70),
         width: size.width / (414 / 98),
         child: Hero(
-          tag: widget.archive.id.toString(), //'normalArchiveName',
+          tag: widget.archive.id.toString(),
           child: Material(
             color: Colors.transparent,
             child: Text(archiveName,

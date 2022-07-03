@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
-import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
-import 'package:memorize/view/createEditArchivePage.dart';
-import 'package:memorize/view/mainPage.dart';
 import 'package:memorize/view/wordsPage.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -89,13 +86,9 @@ class _PinnedArchiveState extends State<PinnedArchive> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // double animatedHeight = size.height *  0.03125;
-    // double animatedWidth = animatedBool ? size.width * 0.057971 : size.width * 0.207971;
-    // double iconSize = animatedWidth / 4;
     AppTextStyles textStyles = AppTextStyles();
     double widgetWidth = size.width * 0.8695;
     double widgetHeight = size.height * 0.180;
-    ProjectKeys keys = ProjectKeys();
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -127,7 +120,7 @@ class _PinnedArchiveState extends State<PinnedArchive> {
       children: [
         Container(
           height: 3.0,
-          width: widgetWidth - 10.0,
+          width: widgetWidth - 15.0,
           decoration: BoxDecoration(
               color: lightColor, //renk buraya
               borderRadius: const BorderRadius.only(
@@ -136,7 +129,7 @@ class _PinnedArchiveState extends State<PinnedArchive> {
         ),
         Container(
           height: 3.0,
-          width: widgetWidth - 5.0,
+          width: widgetWidth - 10.0,
           decoration: BoxDecoration(
               color: color, //renk buraya
               borderRadius: const BorderRadius.only(

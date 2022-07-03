@@ -157,7 +157,7 @@ class ArchivePage extends StatelessWidget {
       width: size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
-        color: Color.fromARGB(255, 216, 222, 225),
+        color: const Color.fromARGB(255, 216, 222, 225),
       ),
       child: Padding(
         padding: const EdgeInsets.only(left: 5.0),
