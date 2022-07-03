@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/model/meaning.dart';
+import 'package:memorize/model/quiz.dart';
 import 'package:memorize/model/word.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -32,7 +33,7 @@ class DatabaseRepository {
 
     return db.delete(tableArchives);
   }
-  
+
   Future<int> deleteWord() async {
     final db = await instance.database;
 
@@ -57,6 +58,7 @@ class DatabaseRepository {
     const nullableTextType = 'TEXT';
     const boolType = 'BOOLEAN NOT NULL';
     const integerType = 'INTEGER NOT NULL';
+    const realType = 'REAL NOT NULL';
 
     await db.execute(''' 
     CREATE TABLE $tableArchives (
@@ -88,6 +90,21 @@ class DatabaseRepository {
       FOREIGN KEY (${MeaningFields.wordId}) REFERENCES $tableWords (${WordFields.id}) ON DELETE CASCADE
     )
 ''');
+
+    await db.execute('''
+    CREATE TABLE $tableQuizs (
+      ${QuizFields.id} $idType,
+      ${QuizFields.archiveID} $integerType,
+      ${QuizFields.trueCount} $integerType,
+      ${QuizFields.falseCount} $integerType,
+      ${QuizFields.noAnswerCount} $integerType,
+      ${QuizFields.correctRate} $realType,
+      ${QuizFields.wordCount} $integerType,
+      ${QuizFields.counter} $notNullableTextType,
+      ${QuizFields.date} $notNullableTextType,
+      FOREIGN KEY (${QuizFields.archiveID} REFERENCES $tableArchives (${ArchiveFields.id}) ON DELETE CASCADE)
+    )
+ ''');
   }
 
   Future<void> deleDataBase() async {
