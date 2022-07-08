@@ -195,4 +195,24 @@ class AppTextStyles{
     fontWeight: FontWeight.w500,
     fontSize: 12.0
   );
+
+  TextStyle enterTimeTextStyle = GoogleFonts.inter(
+    color: Colors.grey,
+    fontStyle: FontStyle.italic,
+    fontWeight: FontWeight.w400,
+    fontSize: 12.0
+  );
+
+  TextStyle enterQuestionNumberTextStyle = GoogleFonts.inter(
+    color: Colors.black,
+    fontStyle: FontStyle.italic,
+    fontWeight: FontWeight.w400,
+    fontSize: 12.0
+  );
+
+  TextStyle colonSymbolTextStyle = GoogleFonts.inter(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: 12.0
+  );
  }

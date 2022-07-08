@@ -6,6 +6,7 @@ import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/mainPage.dart';
 import 'package:memorize/widgets/customAppBar.dart';
+import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
 
 class CreateEditArchivePage extends StatefulWidget {
@@ -20,9 +21,7 @@ class CreateEditArchivePage extends StatefulWidget {
 class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
-  Color lightGreenColor = const Color.fromRGBO(167, 255, 216, 1.0);
-  Color greenColor = const Color.fromRGBO(91, 228, 168, 1.0);
-  Color darkGreenColor = const Color.fromRGBO(0, 165, 93, 1.0);
+
   ArchiveOperations archiveOperations = ArchiveOperations();
   final _formKey = GlobalKey<FormState>();
   late String archiveName;
@@ -53,17 +52,17 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
 
   Scaffold createEditArchivePageScaffoldBuild(Size size, BuildContext context) {
     return Scaffold(
-    body: Form(
-      key: _formKey,
-      child: createEditArchivePageGenerally(size, context),
-    ),
-  );
+      body: Form(
+        key: _formKey,
+        child: createEditArchivePageGenerally(size, context),
+      ),
+    );
   }
 
   Padding createEditArchivePageGenerally(Size size, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-          top: 25.0, right: 8.0, left: 8.0, bottom: 10.0),
+      padding:
+          const EdgeInsets.only(top: 25.0, right: 8.0, left: 8.0, bottom: 10.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -79,60 +78,57 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
 
   Container createEditArchivePageInside(Size size, BuildContext context) {
     return Container(
-            height: size.height * 0.72,
-            width: size.width,
-            decoration: createEditArchivePageInsideDecoration(),
-            child: createEditArchivePageItems(context, size),
-          );
+      height: size.height * 0.72,
+      width: size.width,
+      decoration: createEditArchivePageInsideDecoration(),
+      child: createEditArchivePageItems(context, size),
+    );
   }
 
   Padding createEditArchivePageItems(BuildContext context, Size size) {
     return Padding(
-            padding: const EdgeInsets.only(
-                top: 20.0, right: 20.0, left: 20.0),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: TurnBackButton(
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                createEditStageText(size),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                archiveNameForm(size),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                archiveDescriptionForm(size),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                colorPickerContainer(
-                    size), //ilk otomatik bir renk seçili olsun
-                const SizedBox(
-                  height: 25.0,
-                ),
-                createEditArchiveButton(size)
-              ],
+      padding: const EdgeInsets.only(top: 20.0, right: 20.0, left: 20.0),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: TurnBackButton(),
             ),
-          );
+          ),
+          const SizedBox(
+            height: 40.0,
+          ),
+          createEditStageText(size),
+          const SizedBox(
+            height: 25.0,
+          ),
+          archiveNameForm(size),
+          const SizedBox(
+            height: 25.0,
+          ),
+          archiveDescriptionForm(size),
+          const SizedBox(
+            height: 25.0,
+          ),
+          colorPickerContainer(size), //ilk otomatik bir renk seçili olsun
+          const SizedBox(
+            height: 25.0,
+          ),
+          createEditArchiveButton(size)
+        ],
+      ),
+    );
   }
 
   BoxDecoration createEditArchivePageInsideDecoration() {
     return BoxDecoration(
-            color: AppColors.archiveAreaBackgroundColor,
-            borderRadius: BorderRadius.circular(10.0),
-          );
+      color: AppColors.archiveAreaBackgroundColor,
+      borderRadius: BorderRadius.circular(10.0),
+    );
   }
 
   void createOrUpdateArchive() async {
@@ -201,22 +197,21 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
 
   Text createEditArchiveButtonText(Size size) {
     return Text(
-          widget.archive == null
-              ? keys.createArchiveButtonText
-              : keys.updateArchiveButtonText,
-          style: textStyles.createArchiveButtonTextStyle2
-              .copyWith(fontSize: size.height * 0.01874),
-        );
+      widget.archive == null
+          ? keys.createArchiveButtonText
+          : keys.updateArchiveButtonText,
+      style: textStyles.createArchiveButtonTextStyle2
+          .copyWith(fontSize: size.height * 0.01874),
+    );
   }
 
   ButtonStyle createEditArchiveButtonStyle() {
     return ButtonStyle(
-            elevation: MaterialStateProperty.all<double>(0.0),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                AppColors.createArchiveButtonColor),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0))));
+        elevation: MaterialStateProperty.all<double>(0.0),
+        backgroundColor: MaterialStateProperty.all<Color>(
+            AppColors.createArchiveButtonColor),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))));
   }
 
   Container colorPickerContainer(Size size) {
@@ -237,8 +232,8 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
         children: [
           Text(
             keys.coloPicker,
-            style: textStyles.archiveTextFormFieldTextStyle.copyWith(
-                fontSize: size.height * 0.02085), //01885 iphone için
+            style: textStyles.archiveTextFormFieldTextStyle
+                .copyWith(fontSize: size.height * 0.02085), //01885 iphone için
           ),
           SizedBox(
             width: size.width * 0.1,
@@ -247,8 +242,8 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                colorContainer(size, AppColors.selectableGreenColor,
-                    greenChoose, 'green'),
+                colorContainer(
+                    size, AppColors.selectableGreenColor, greenChoose, 'green'),
                 colorContainer(size, AppColors.selectableOrangeColor,
                     orangeChoose, 'orange'),
                 colorContainer(size, AppColors.selectableYellowColor,
@@ -315,9 +310,9 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
 
   BoxDecoration colorContainerDecoration(Color color) {
     return BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(100.0),
-      );
+      color: color,
+      borderRadius: BorderRadius.circular(100.0),
+    );
   }
 
   TextFormField archiveDescriptionForm(Size size) {
@@ -373,24 +368,24 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
 
   InputDecoration archiveNameFormDecoration(Size size) {
     return InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
-        labelText: keys.archiveName,
-        labelStyle: textStyles.archiveTextFormFieldTextStyle
-            .copyWith(fontSize: size.height * 0.02285),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        floatingLabelAlignment: FloatingLabelAlignment.start,
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.0),
-            borderSide: BorderSide(
-                color: AppColors.createArchivePageTextFormFieldBorderColor,
-                width: 1.0)),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6.0),
-            borderSide: BorderSide(
-                color: AppColors.createArchivePageTextFormFieldBorderColor,
-                width: 1.0)),
-      );
+      fillColor: Colors.white,
+      filled: true,
+      labelText: keys.archiveName,
+      labelStyle: textStyles.archiveTextFormFieldTextStyle
+          .copyWith(fontSize: size.height * 0.02285),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      floatingLabelAlignment: FloatingLabelAlignment.start,
+      border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(
+              color: AppColors.createArchivePageTextFormFieldBorderColor,
+              width: 1.0)),
+      focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6.0),
+          borderSide: BorderSide(
+              color: AppColors.createArchivePageTextFormFieldBorderColor,
+              width: 1.0)),
+    );
   }
 
   Row createEditStageText(Size size) {
@@ -409,7 +404,7 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
             const SizedBox(
               width: 6.0,
             ),
-            ornoment(size)
+            OrnomentWidget(),
           ],
         ),
         InkWell(
@@ -426,70 +421,29 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
 
   Container pinnerBox(Size size) {
     return Container(
-            height: size.height * 0.02285,
-            width: size.height * 0.02285,
-            decoration: pinnerBoxDecoration(),
-            child: Center(
-              child: isPinned
-                  ? Icon(
-                      Icons.push_pin_outlined,
-                      color: Colors.black,
-                      size: size.height * 0.01885,
-                    )
-                  : Icon(
-                      Icons.push_pin_rounded,
-                      color: Colors.black,
-                      size: size.height * 0.01885,
-                    ),
-            ));
+        height: size.height * 0.02285,
+        width: size.height * 0.02285,
+        decoration: pinnerBoxDecoration(),
+        child: Center(
+          child: isPinned
+              ? Icon(
+                  Icons.push_pin_outlined,
+                  color: Colors.black,
+                  size: size.height * 0.01885,
+                )
+              : Icon(
+                  Icons.push_pin_rounded,
+                  color: Colors.black,
+                  size: size.height * 0.01885,
+                ),
+        ));
   }
 
   BoxDecoration pinnerBoxDecoration() {
     return BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(5.0),
-          );
-  }
-
-  SizedBox ornoment(Size size) {
-    return SizedBox(
-            height: size.height * 0.019,
-            width: size.height * 0.038,
-            child: Stack(
-              children: [
-                Container(
-                  height: size.height * 0.01716,
-                  width: size.height * 0.01716,
-                  decoration: BoxDecoration(
-                    color: lightGreenColor,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-                Positioned(
-                  left: 5.0,
-                  child: Container(
-                    height: size.height * 0.01716,
-                    width: size.height * 0.01716,
-                    decoration: BoxDecoration(
-                      color: greenColor,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 10.0,
-                  child: Container(
-                    height: size.height * 0.01716,
-                    width: size.height * 0.01716,
-                    decoration: BoxDecoration(
-                      color: darkGreenColor,
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
+      color: Colors.grey,
+      borderRadius: BorderRadius.circular(5.0),
+    );
   }
 
   setColor() {

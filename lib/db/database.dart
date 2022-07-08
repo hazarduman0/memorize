@@ -17,7 +17,7 @@ class DatabaseRepository {
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('deneme.db');
+    _database = await _initDB('deneme1.db');
     return _database!;
   }
 
@@ -100,9 +100,9 @@ class DatabaseRepository {
       ${QuizFields.noAnswerCount} $integerType,
       ${QuizFields.correctRate} $realType,
       ${QuizFields.wordCount} $integerType,
-      ${QuizFields.counter} $notNullableTextType,
+      ${QuizFields.countDown} $notNullableTextType,
       ${QuizFields.date} $notNullableTextType,
-      FOREIGN KEY (${QuizFields.archiveID} REFERENCES $tableArchives (${ArchiveFields.id}) ON DELETE CASCADE)
+      FOREIGN KEY (${QuizFields.archiveID}) REFERENCES $tableArchives (${ArchiveFields.id}) ON DELETE CASCADE
     )
  ''');
   }

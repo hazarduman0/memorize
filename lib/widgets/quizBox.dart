@@ -3,11 +3,10 @@ import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/model/archive.dart';
+import 'package:memorize/view/createQuizPage.dart';
 
 class QuizBox extends StatefulWidget {
-  QuizBox({
-    Key? key, required this.archive
-  }) : super(key: key);
+  QuizBox({Key? key, required this.archive}) : super(key: key);
 
   Archive archive;
 
@@ -72,19 +71,21 @@ class _QuizBoxState extends State<QuizBox> {
       );
 
   GestureDetector lastExamTextButton(Size size) => GestureDetector(
-    onTap: () {
-      setState(() {
-        openedCard = !openedCard;
-      });
-    },
-    child: Row(
+        onTap: () {
+          setState(() {
+            openedCard = !openedCard;
+          });
+        },
+        child: Row(
           children: [
             Text(
               keys.lastQuizs,
               style: textStyles.lastQuizsTextStyle
                   .copyWith(fontSize: size.width * 0.030),
             ),
-            const SizedBox(width: 5.0,),
+            const SizedBox(
+              width: 5.0,
+            ),
             Icon(
               openedCard
                   ? Icons.keyboard_arrow_up_rounded
@@ -94,7 +95,7 @@ class _QuizBoxState extends State<QuizBox> {
             ),
           ],
         ),
-  );
+      );
 
   Padding openedQuizBox(Size size) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
@@ -198,12 +199,24 @@ class _QuizBoxState extends State<QuizBox> {
     );
   }
 
-  Container takeExamButton(Size size) {
-    return Container(
-      height: size.height * 0.03,
-      width: size.width * 0.25,
-      child: insideExamButton(size),
-      decoration: examButtonDecoration(),
+  GestureDetector takeExamButton(Size size) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateQuizStagePage(
+                archiveName: archiveName,
+                color: color,
+              ),
+            ));
+      },
+      child: Container(
+        height: size.height * 0.03,
+        width: size.width * 0.25,
+        child: insideExamButton(size),
+        decoration: examButtonDecoration(),
+      ),
     );
   }
 

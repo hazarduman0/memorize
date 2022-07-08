@@ -94,6 +94,8 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    // print(size.height);
+    // print(size.width);
     return mainPageScaffoldBuild(size);
   }
 
@@ -109,8 +111,11 @@ class _MainPageState extends State<MainPage> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           Widget children;
           if (snapshot.hasData) {
-            children =
-                haveDataPageStack(size, snapshot.data[0], snapshot.data[1]);
+            if (snapshot.data[0].isEmpty && snapshot.data[1].isEmpty) {
+              children = NoDataPage();
+            } else {
+              children = haveDataPageStack(size, snapshot.data[0], snapshot.data[1]);
+            }
           } else if (snapshot.hasError) {
             children = Center(child: Text('${snapshot.error}'));
           } else {

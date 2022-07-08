@@ -32,10 +32,20 @@ class ProjectKeys{
   final String ooDelete = 'Sil    ';
   final String ooEdit = 'Düzenle';
   final String takeExam = 'sınava gir';
+  final String startQuiz = 'Sınava Başla!';
   final String tableColumnName1 = 'Kelime Sayısı';
   final String tableColumnName2 = 'Süre';
   final String tableColumnName3 = 'Doğru Sayısı';
   final String tableColumnName4 = 'Yanlış Sayısı';
-  final String lastQuizs = 'Son 3 sınav'; 
+  final String lastQuizs = 'Son 3 sınav';
+  final String quizCreateStage = 'Sınav Oluşturma Aşaması';
+  final String randomWords = 'Kelimeler rastgele gelsin';
+  final String inOrderWords = 'Kelimeler sıralı gelsin'; 
+  final String durationText = 'Süre: ';
+  final String enterQuestionNumber = 'Soru sayısını giriniz: ';
+  final String enterTimeText = 'Süre giriniz: ';
+  final String hintText = 'İpucu: ';
+  final String minuteText = 'dakika';
+  final String secondText = 'saniye';
 
 }

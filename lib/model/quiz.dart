@@ -9,7 +9,7 @@ class QuizFields {
     noAnswerCount,
     correctRate,
     wordCount,
-    counter,
+    countDown,
     date
   ];
 
@@ -20,7 +20,7 @@ class QuizFields {
   static const String noAnswerCount = 'noAnswerCount';
   static const String correctRate = 'correctRate';
   static const String wordCount = 'wordCount';
-  static const String counter = 'counter';
+  static const String countDown = 'countDown';
   static const String date = 'date';
 }
 
@@ -32,7 +32,7 @@ class Quiz {
   final int noAnswerCount;
   final double correctRate;
   final int wordCount;
-  final DateTime counter;
+  final DateTime countDown;
   final DateTime date;
 
   Quiz({
@@ -43,7 +43,7 @@ class Quiz {
     required this.noAnswerCount,
     required this.correctRate,
     required this.wordCount,
-    required this.counter,
+    required this.countDown,
     required this.date,
   });
 
@@ -55,7 +55,7 @@ class Quiz {
     int? noAnswerCount,
     double? correctRate,
     int? wordCount,
-    DateTime? counter,
+    DateTime? countDown,
     DateTime? date,
   }) =>
       Quiz(
@@ -66,7 +66,7 @@ class Quiz {
         noAnswerCount: noAnswerCount ?? this.noAnswerCount,
         correctRate: correctRate ?? this.correctRate,
         wordCount: wordCount ?? this.wordCount,
-        counter: counter ?? this.counter,
+        countDown: countDown ?? this.countDown,
         date: date ?? this.date,
       );
 
@@ -78,7 +78,7 @@ class Quiz {
       noAnswerCount: json[QuizFields.noAnswerCount] as int,
       correctRate: json[QuizFields.correctRate] as double,
       wordCount: json[QuizFields.wordCount] as int,
-      counter: DateTime.parse(json[QuizFields.counter] as String),
+      countDown: DateTime.parse(json[QuizFields.countDown] as String),
       date: DateTime.parse(json[QuizFields.date] as String));
 
   Map<String, Object?> toJson() => {
@@ -89,7 +89,7 @@ class Quiz {
         QuizFields.noAnswerCount: noAnswerCount,
         QuizFields.correctRate: correctRate,
         QuizFields.wordCount: wordCount,
-        QuizFields.counter: counter.second,
+        QuizFields.countDown: countDown.second,
         QuizFields.date: date.toIso8601String(),
       };
 }
