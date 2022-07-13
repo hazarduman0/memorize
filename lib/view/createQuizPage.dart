@@ -191,44 +191,46 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
         height: size.height * 0.0479,
         width: size.width,
         child: ElevatedButton(
-            onPressed: isValid
-                ? () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DuringExamPage(
-                              questionAmaount: questionAmaount,
-                              timeLeft: getTimeLeft(minute, second)),
-                        ));
-                  }
-                : () {
-                    var snackBar;
-                    if (!isTimeValid) {
-                      snackBar = SnackBar(
-                          content: Text(keys.isTimeValidText,
-                              style: textStyles.snackBarWarningText));
-                    }
-                    if (!isEnoughQuestion) {
-                      snackBar = SnackBar(
-                          content: Text(keys.isEnoughQuestionText,
-                              style: textStyles.snackBarWarningText));
-                    }
-                    if (!isChoosenAnyCard) {
-                      snackBar = SnackBar(
-                          content: Text(keys.isChoosenAnyCardText,
-                              style: textStyles.snackBarWarningText));
-                    }
-                    if (isInOrderCardChoosen && !isSortByChoosen) {
-                      snackBar = SnackBar(
-                          content: Text(keys.isSortByChoosenText,
-                              style: textStyles.snackBarWarningText));
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
+            onPressed: isValid ? _isValidFunc : _isNotValidFunc,
             style: startQuizButtonStyle(),
             child: startQuizButtonText(size)),
       ),
     );
+  }
+
+  void _isValidFunc() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DuringExamPage(
+              questionAmaount: questionAmaount,
+              timeLeft: getTimeLeft(minute, second)),
+        ));
+  }
+
+  void _isNotValidFunc() {
+    var snackBar;
+    if (!isTimeValid) {
+      snackBar = SnackBar(
+          content: Text(keys.isTimeValidText,
+              style: textStyles.snackBarWarningText));
+    }
+    if (!isEnoughQuestion) {
+      snackBar = SnackBar(
+          content: Text(keys.isEnoughQuestionText,
+              style: textStyles.snackBarWarningText));
+    }
+    if (!isChoosenAnyCard) {
+      snackBar = SnackBar(
+          content: Text(keys.isChoosenAnyCardText,
+              style: textStyles.snackBarWarningText));
+    }
+    if (isInOrderCardChoosen && !isSortByChoosen) {
+      snackBar = SnackBar(
+          content: Text(keys.isSortByChoosenText,
+              style: textStyles.snackBarWarningText));
+    }
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   Text startQuizButtonText(Size size) {
