@@ -19,6 +19,9 @@ class MyApp extends StatelessWidget {
         // navigationBarTheme: NavigationBarThemeData(
         //   backgroundColor: AppColors.UIColor,
         // ),
+        snackBarTheme: const SnackBarThemeData(
+          backgroundColor: Colors.white
+        ),
         primarySwatch: Colors.blue,   
         appBarTheme: AppBarTheme(
           backgroundColor: AppColors.backgroundColor,
