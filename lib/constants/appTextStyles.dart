@@ -218,7 +218,7 @@ class AppTextStyles{
 
   TextStyle snackBarWarningText = GoogleFonts.inter(
     color: Colors.red,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w500,
     fontSize: 12.0
   );
  }
