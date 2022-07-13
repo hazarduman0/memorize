@@ -28,12 +28,14 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
   int questionAmaount = 0;
   int minute = 0;
   int second = 0;
+  late String sortBy;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     string = widget.string;
+    sortBy = keys.sortBy;
     isChoosen = widget.isChoosen;
   }
 
@@ -52,7 +54,11 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: AnimatedContainer(
-        height: !isChoosen ? size.height * 0.07 : size.height * 0.4,
+        height: !isChoosen
+            ? size.height * 0.07
+            : string != keys.inOrderWords
+                ? size.height * 0.4
+                : size.height * 0.45,
         width: size.width,
         duration: const Duration(milliseconds: 0),
         child: !isChoosen ? cardNotSelected(size, string) : _cardSelected(size),
@@ -62,7 +68,6 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
   }
 
   Padding _cardSelected(Size size) {
-    double _intent = size.width * 0.07638888888888888;
     double _enterTimeHeight = size.width * 0.10185185185185185;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -70,53 +75,160 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _cardHeader(size, string),
-          const SizedBox(
-            height: 20.0,
-          ),
-          _enterQuestionNumberRow(size),
-          _dividerBuild(_intent),
-          _enterTimeColumn(size, _enterTimeHeight),
-          _dividerBuild(_intent),
-          Padding(
-            padding: const EdgeInsets.only(left: 40.0),
-            child: Row(
-              children: [
-                _hintTextBuilder(size),
-                const SizedBox(
-                  width: 10.0,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isHintSelected = !isHintSelected;
-                      widget.parentChange(
-                          string == keys.randomWords,
-                          string == keys.inOrderWords,
-                          isHintSelected,
-                          questionAmaount,
-                          minute,
-                          second);
-                    });
-                  },
-                  child: Container(
-                    height: size.width * 0.07,
-                    width: size.width * 0.07,
-                    child: isHintSelected
-                        ? Icon(
-                            Icons.check_rounded,
-                            color: AppColors.zimaBlue,
-                            size: size.width * 0.06,
-                          )
-                        : const SizedBox(),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.grey, width: 1.0)),
-                  ),
-                ),
-              ],
-            ),
-          )
+          const SizedBox(height: 20.0),
+          string == keys.inOrderWords
+              ? _sortByListTileBuild(size)
+              : const SizedBox(),
+          const SizedBox(height: 20.0),
+          _questionAmountListTileBuild(size),
+          const SizedBox(height: 20.0),
+          _timeListTileBuild(size, _enterTimeHeight),
+          const SizedBox(height: 20.0),
+          _hintListTileBuild(size),
         ],
+      ),
+    );
+  }
+
+  ListTile _sortByListTileBuild(Size size) {
+    return ListTile(
+      leading: Text(
+        '${keys.sortBy}:',
+        style:
+            textStyles.enterTimeTextStyle.copyWith(fontSize: size.width * 0.03),
+      ),
+      trailing: _sortPopupMenuBuild(size),
+    );
+  }
+
+  SizedBox _sortPopupMenuBuild(Size size) {
+    return SizedBox(
+      height: size.height * 0.15,
+      width: sortBy == keys.byDate ? size.width * 0.24 : sortBy == keys.alphabetic ? size.width * 0.20 : size.width * 0.16,
+      child: PopupMenuButton(
+          child: Row(
+            children: [
+              Text(
+                sortBy,
+                style: textStyles.hashtagWordTextStyle,
+              ),
+              Icon(
+                Icons.keyboard_arrow_down_outlined,
+                color: Colors.black,
+                size: size.width * 0.05,
+              )
+            ],
+          ),
+          itemBuilder: (ctx) => [
+                _buildPopupMenuItem(keys.byDate, Icons.calendar_month_outlined),
+                _buildPopupMenuItem(keys.alphabetic, Icons.abc_outlined),
+                _buildPopupMenuItem(keys.close, Icons.clear),
+              ]),
+    );
+  }
+
+  PopupMenuItem _buildPopupMenuItem(String title, IconData iconData) {
+    return PopupMenuItem(
+      onTap: () {
+        if(title != keys.close){
+          setState(() {
+          sortBy = title;
+        });
+        }
+        setState(() {
+            widget.parentChange(
+                string == keys.randomWords,
+                string == keys.inOrderWords,
+                isHintSelected,
+                questionAmaount,
+                minute,
+                second,
+                sortBy
+                );
+          });
+      },
+      child: Row(
+        children: [
+          Icon(
+            iconData,
+            color: Colors.black,
+          ),
+          Text(title),
+        ],
+      ),
+    );
+  }
+
+  ListTile _hintListTileBuild(Size size) {
+    return ListTile(
+      leading: _hintTextBuilder(size),
+      trailing: _customCheckBoxBuild(size),
+    );
+  }
+
+  ListTile _timeListTileBuild(Size size, double _enterTimeHeight) {
+    return ListTile(
+      leading: _enterTimeTextBuild(size),
+      trailing: SizedBox(
+        //AO
+        height: size.height * 0.15,
+        width: size.width * 0.34,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _timerRow(_enterTimeHeight, size),
+            _timerTextRow(size),
+          ],
+        ),
+      ),
+    );
+  }
+
+  ListTile _questionAmountListTileBuild(Size size) {
+    return ListTile(
+      leading: Text(
+        keys.enterQuestionNumber,
+        style:
+            textStyles.enterTimeTextStyle.copyWith(fontSize: size.width * 0.03),
+      ),
+      trailing: questionNumberTextFieldBuild(size),
+    );
+  }
+
+  Padding _customCheckBoxBuild(Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 15.0),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            isHintSelected = !isHintSelected;
+            widget.parentChange(
+                string == keys.randomWords,
+                string == keys.inOrderWords,
+                isHintSelected,
+                questionAmaount,
+                minute,
+                second,
+                sortBy
+                );
+          });
+        },
+        child: Container(
+          height: size.width * 0.07,
+          width: size.width * 0.07,
+          child: isHintSelected
+              ? Icon(
+                  Icons.check_rounded,
+                  color: AppColors.zimaBlue,
+                  size: size.width * 0.06,
+                )
+              : const SizedBox(),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey, width: 1.0),
+              borderRadius: BorderRadius.circular(4.0)),
+        ),
       ),
     );
   }
@@ -159,12 +271,12 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
       //crossAxisAlignment: CrossAxisAlignment.center,
       //mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(width: size.width * 0.185),
+        SizedBox(width: size.width * 0.030),
         Text(keys.minuteText,
             style: textStyles.enterTimeTextStyle
                 .copyWith(fontSize: size.width * 0.03)),
         const SizedBox(
-          width: 28.0,
+          width: 30.0,
         ),
         Text(
           keys.secondText,
@@ -211,7 +323,7 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
 
   void questionNumberTextFieldFunction(String value) {
     setState(() {
-      if(value.isEmpty){
+      if (value.isEmpty) {
         value = '0';
       }
       questionAmaount = int.parse(value);
@@ -221,23 +333,28 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
           isHintSelected,
           questionAmaount,
           minute,
-          second);
+          second,
+          sortBy
+          );
     });
   }
 
-  SizedBox questionNumberTextFieldBuild(Size size) {
-    return SizedBox(
-        height: size.height * 0.06700854700854701,
-        width: size.width * 0.11277777777777777,
-        child: TextFormField(
-          onChanged: (value) => questionNumberTextFieldFunction(value),
-          keyboardType: TextInputType.number,
-          maxLines: 1,
-          maxLength: 4, //MAX LENGTH !!!!
-          cursorColor: Colors.black,
+  Padding questionNumberTextFieldBuild(Size size) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 15.0),
+      child: SizedBox(
+          height: size.height * 0.06700854700854701,
+          width: size.width * 0.11277777777777777,
+          child: TextFormField(
+            onChanged: (value) => questionNumberTextFieldFunction(value),
+            keyboardType: TextInputType.number,
+            maxLines: 1,
+            maxLength: 4, //MAX LENGTH !!!!
+            cursorColor: Colors.black,
 
-          decoration: _createQuizTextFieldBuildDecoration(),
-        ));
+            decoration: _createQuizTextFieldBuildDecoration(),
+          )),
+    );
   }
 
   InputDecoration _createQuizTextFieldBuildDecoration() {
@@ -268,7 +385,9 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
           isHintSelected,
           questionAmaount,
           minute,
-          second);
+          second,
+          sortBy,
+          );
     });
   }
 
@@ -346,7 +465,7 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
             isChoosen = !isChoosen;
             isHintSelected = false;
             widget.parentChange(string == keys.randomWords,
-                string == keys.inOrderWords, isHintSelected, 0, 0, 0);
+                string == keys.inOrderWords, isHintSelected, 0, 0, 0, sortBy);
           });
         },
         child: Container(
