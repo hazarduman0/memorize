@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/view/duringExamPage.dart';
 import 'package:memorize/widgets/createQuizOptionWidget.dart';
 import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
@@ -29,11 +30,39 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
   int questionAmaount = 0;
   int minute = 0;
   int second = 0;
+  late String sortBy;
 
-  bool get isValid => questionAmaount > 0 && (minute > 0 || second > 0);
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sortBy = keys.close;
+  }
 
-  void parentChange(bool _isRandomCardChoosen, bool _isInOrderCardChoosen,
-      bool _isHintSelected, int _questionAmaount, int _minute, int _second) {
+  int getTimeLeft(int minute, int second) {
+    return minute * 60 + second;
+  }
+
+  bool get isTimeValid => minute > 0 || second > 0;
+  bool get isEnoughQuestion => questionAmaount > 0;
+  bool get isChoosenAnyCard => isRandomCardChoosen || isInOrderCardChoosen;
+  bool get isSortByChoosen => !(sortBy == keys.close || sortBy == keys.sortBy);
+  bool get isRandomCardValid =>
+      isRandomCardChoosen && (isEnoughQuestion && isTimeValid);
+  bool get isInOrderCardValid =>
+      isInOrderCardChoosen &&
+      (isSortByChoosen && (isEnoughQuestion && isTimeValid));
+  bool get isValid => (isRandomCardValid || isInOrderCardValid);
+  //bool get isValid => (questionAmaount > 0 && (minute > 0 || second > 0));
+
+  void parentChange(
+      bool _isRandomCardChoosen,
+      bool _isInOrderCardChoosen,
+      bool _isHintSelected,
+      int _questionAmaount,
+      int _minute,
+      int _second,
+      String _sortBy) {
     setState(() {
       isRandomCardChoosen = _isRandomCardChoosen;
       isInOrderCardChoosen = _isInOrderCardChoosen;
@@ -41,6 +70,7 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
       questionAmaount = _questionAmaount;
       minute = _minute;
       second = _second;
+      sortBy = _sortBy;
     });
   }
 
@@ -161,7 +191,40 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
         height: size.height * 0.0479,
         width: size.width,
         child: ElevatedButton(
-            onPressed: () {},
+            onPressed: isValid
+                ? () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DuringExamPage(
+                              questionAmaount: questionAmaount,
+                              timeLeft: getTimeLeft(minute, second)),
+                        ));
+                  }
+                : () {
+                    var snackBar;
+                    if (!isTimeValid) {
+                      snackBar = SnackBar(
+                          content: Text(keys.isTimeValidText,
+                              style: textStyles.snackBarWarningText));
+                    }
+                    if (!isEnoughQuestion) {
+                      snackBar = SnackBar(
+                          content: Text(keys.isEnoughQuestionText,
+                              style: textStyles.snackBarWarningText));
+                    }
+                    if (!isChoosenAnyCard) {
+                      snackBar = SnackBar(
+                          content: Text(keys.isChoosenAnyCardText,
+                              style: textStyles.snackBarWarningText));
+                    }
+                    if (isInOrderCardChoosen && !isSortByChoosen) {
+                      snackBar = SnackBar(
+                          content: Text(keys.isSortByChoosenText,
+                              style: textStyles.snackBarWarningText));
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
             style: startQuizButtonStyle(),
             child: startQuizButtonText(size)),
       ),
