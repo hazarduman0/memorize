@@ -7,34 +7,45 @@ class QuizCard extends StatefulWidget {
       {Key? key,
       required this.initialValue,
       required this.function,
-      required this.position})
+      required this.position,
+      required this.word,
+      required this.meaningList})
       : super(key: key);
 
   String initialValue;
   Function function;
   int position;
+  String word;
+  List<String>? meaningList;
 
   @override
   State<QuizCard> createState() => _QuizCardState();
 }
 
 class _QuizCardState extends State<QuizCard> {
-  String _word = 'kelime';
+  late String _word;
   AppTextStyles textStyles = AppTextStyles();
   ProjectKeys keys = ProjectKeys();
   late String _initialValue;
+  late List<String>? _meaningList;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _word = widget.word;
     _initialValue = widget.initialValue;
+    _meaningList = widget.meaningList;
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Card(
+      elevation: 1.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
@@ -43,14 +54,7 @@ class _QuizCardState extends State<QuizCard> {
             children: [
               _hashtagWordText(size),
               const SizedBox(height: 40.0),
-              TextFormField(
-                initialValue: _initialValue,
-                cursorColor: Colors.black,
-                onChanged: (text) {
-                  widget.function(text, widget.position);
-                },
-                decoration: _inputDecorationBuild(),
-              ),
+              _textFormFieldBuild(size),
             ],
           ),
         ),
@@ -58,12 +62,30 @@ class _QuizCardState extends State<QuizCard> {
     );
   }
 
+  TextFormField _textFormFieldBuild(Size size) {
+    return TextFormField(
+              initialValue: _initialValue,
+              cursorColor: Colors.black,
+              maxLines: 1,
+              maxLength: 50,
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.text,
+              style: textStyles.hashtagWordTextStyle.copyWith(
+                fontSize: size.width * 0.05,
+              ),
+              onChanged: (text) {
+                widget.function(text, widget.position);
+              },
+              decoration: _inputDecorationBuild(),
+            );
+  }
+
   InputDecoration _inputDecorationBuild() {
-    return const InputDecoration(
-        border: OutlineInputBorder(),
+    return InputDecoration(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 2.0),
-        ));
+            borderSide: const BorderSide(width: 2.0),
+            borderRadius: BorderRadius.circular(10.0)));
   }
 
   FittedBox _hashtagWordText(Size size) {
