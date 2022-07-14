@@ -33,34 +33,8 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
     // TODO: implement initState
     super.initState();
     archiveName = widget.archive.archiveName;
-    color = getColor(widget.archive.color);
-    lightColor = getLightColor(widget.archive.color);
-  }
-
-  Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableBlueColor;
-    }
-    return AppColors.selectableGreenColor;
-  }
-
-  Color getLightColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableLightOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableLightYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectableLightPurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableLightBlueColor;
-    }
-    return AppColors.selectableLightGreenColor;
+    color = ColorFunctions.getColor(widget.archive.color);
+    lightColor = ColorFunctions.getLightColor(widget.archive.color);
   }
 
   @override

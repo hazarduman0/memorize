@@ -24,25 +24,12 @@ class _QuizBoxState extends State<QuizBox> {
 
   bool openedCard = false;
 
-  Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableBlueColor;
-    }
-    return AppColors.selectableGreenColor;
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     archiveName = widget.archive.archiveName;
-    color = getColor(widget.archive.color);
+    color = ColorFunctions.getColor(widget.archive.color);
   }
 
   @override

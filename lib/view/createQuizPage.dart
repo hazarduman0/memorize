@@ -40,24 +40,11 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
     super.initState();
     sortBy = keys.close;
     archiveName = widget.archive.archiveName;
-    color = getColor(widget.archive.color);
+    color = ColorFunctions.getColor(widget.archive.color);
   }
 
   int getTimeLeft(int minute, int second) {
     return minute * 60 + second;
-  }
-
-  Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableBlueColor;
-    }
-    return AppColors.selectableGreenColor;
   }
 
   bool get isTimeValid => minute > 0 || second > 0;

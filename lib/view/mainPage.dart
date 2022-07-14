@@ -45,25 +45,12 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       ooArchiveName = archive!.archiveName;
       ooArchiveDescription = archive!.description;
-      ooArchiveColor = getColor(archive!.color);
+      ooArchiveColor = ColorFunctions.getColor(archive!.color);
     });
   }
 
   Future<Archive> getArchive(int? archiveID) async {
     return await archiveOperations.getArchive(archiveID);
-  }
-
-  Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableBlueColor;
-    }
-    return AppColors.selectableGreenColor;
   }
 
   @override

@@ -82,30 +82,11 @@ class _WordsPageState extends State<WordsPage> {
   @override
   void initState() {
     super.initState();
-    color = getColor(widget.archive.color);
+    color = ColorFunctions.getColor(widget.archive.color);
     heroBool = widget.archive.isPinned;
-    // WidgetsBinding.instance!.addPostFrameCallback((_) async{
-    //   //words = await wordOperations.getArchiveWords(widget.archive.id);
-    //   //getWords(widget.archive);
-    // });
     getWords(widget.archive).then((value) {
       setState(() {});
     });
-    //getWord(clickedWordID);
-    //words = getWords(widget.archive);
-  }
-
-  Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableBlueColor;
-    }
-    return AppColors.selectableGreenColor;
   }
 
   @override

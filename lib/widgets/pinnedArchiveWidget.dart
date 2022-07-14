@@ -37,8 +37,8 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     archiveName = widget.archive.archiveName;
     description = widget.archive.description;
     lastUpdate = timeago.format(widget.archive.createdTime, locale: 'tr');
-    color = getColor(widget.archive.color);
-    lightColor = getLightColor(widget.archive.color);
+    color = ColorFunctions.getColor(widget.archive.color);
+    lightColor = ColorFunctions.getLightColor(widget.archive.color);
     getWordCount();
   }
 
@@ -55,32 +55,6 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
     print('sayi $_wordCount');
     wordCount = '${_wordCount.toString()} kelime';
-  }
-
-  Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableBlueColor;
-    }
-    return AppColors.selectableGreenColor;
-  }
-
-  Color getLightColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableLightOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableLightYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectableLightPurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableLightBlueColor;
-    }
-    return AppColors.selectableLightGreenColor;
   }
 
   @override

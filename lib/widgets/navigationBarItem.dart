@@ -33,9 +33,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
         const SizedBox(
           width: 5.0,
         ),
-        // navigationItem(currentPage == 0, currentPage),
-        // navigationItem(currentPage == 1, currentPage),
-        // navigationItem(currentPage == 2, currentPage),
         navigationStatisticsItem(),
         navigationHomePageItem(),
         navigationExamsItem(),
@@ -163,55 +160,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
           ? AppColors.selectedBottomColor
           : AppColors.unSelectedBottomColor,
       borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-      // border: currentPage == 0
-      //     ? Border.all(
-      //         color: AppColors.selectedBottomBorderColor,
-      //         width: 1.0)
-      //     : Border.all(width: 0.0),
     );
   }
-
-  // navigationItem(bool isCurrent, int currentPage) {
-  //   return GestureDetector(
-  //     onTap: () {},
-  //     child: Column(
-  //       children: [
-  //         Center(
-  //           child: Row(
-  //             children: [
-  //               Icon(
-  //                 currentPage == 0
-  //                     ? CustomIcons.presentation
-  //                     : currentPage == 1
-  //                         ? CustomIcons.discovery
-  //                         : CustomIcons.discovery,
-  //                 color: isCurrent
-  //                     ? AppColors.selectedBottomColor
-  //                     : AppColors.unSelectedBottomColor,
-  //               ),
-  //               const SizedBox(
-  //                 width: 3.0,
-  //               ),
-  //               Text(
-  //                 currentPage == 0
-  //                     ? keys.statistics
-  //                     : currentPage == 1
-  //                         ? keys.homePage
-  //                         : keys.exams,
-  //                 style: isCurrent
-  //                     ? textStyles.selectedbottomTextStyle
-  //                     : textStyles.unselectedbottomTextStyle,
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //         Container(
-  //           height: 5.0,
-  //           width: size.width * 0.277,
-  //           decoration: boxDecorationBuild(isCurrent),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 }

@@ -22,32 +22,6 @@ class ArchivePage extends StatelessWidget {
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
 
-  Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableBlueColor;
-    }
-    return AppColors.selectableGreenColor;
-  }
-
-  Color getLightColor(String color) {
-    if (color == 'selectableOrangeColor') {
-      return AppColors.selectableLightOrangeColor;
-    } else if (color == 'selectableYellowColor') {
-      return AppColors.selectableLightYellowColor;
-    } else if (color == 'selectablePurpleColor') {
-      return AppColors.selectableLightPurpleColor;
-    } else if (color == 'selectableBlueColor') {
-      return AppColors.selectableLightBlueColor;
-    }
-    return AppColors.selectableLightGreenColor;
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
