@@ -1,20 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/db/database_quiz.dart';
+import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/mainPage.dart';
-import 'package:memorize/view/quizPage.dart';
 import 'package:memorize/widgets/quizCard.dart';
 import 'package:memorize/widgets/timerWidget.dart';
-import 'package:memorize/widgets/turnBackButton.dart';
 
 class DuringExamPage extends StatefulWidget {
-  DuringExamPage({Key? key, required this.questionAmaount, required this.timeLeft}) : super(key: key);
+  DuringExamPage(
+      {Key? key,
+      required this.archive,
+      required this.questionAmaount,
+      required this.timeLeft,
+      required this.isHintSelected,
+      required this.isInOrderCardChoosen,
+      required this.isRandomCardChoosen})
+      : super(key: key);
 
+  Archive archive;
   int questionAmaount;
   int timeLeft;
+  bool isHintSelected;
+  Map<bool, String> isInOrderCardChoosen;
+  bool isRandomCardChoosen;
 
   @override
   State<DuringExamPage> createState() => _DuringExamPageState();
@@ -26,16 +36,17 @@ class _DuringExamPageState extends State<DuringExamPage> {
   late int _questionAmaount; // s!!
   late int _timeLeft;
   late List<String> _answerArray;
+  QuizOperations _quizOperations = QuizOperations();
 
-  List<String> initialArrayGenerator(){
+  List<String> initialArrayGenerator() {
     List<String>? _lAnswerArray = [''];
-    for(int i = 0; i <= _questionAmaount; i++){
+    for (int i = 0; i <= _questionAmaount; i++) {
       _lAnswerArray.add('');
     }
     return _lAnswerArray;
   }
 
-  void parentChange(String answer, int position){
+  void parentChange(String answer, int position) {
     setState(() {
       _answerArray[position] = answer;
     });
@@ -64,6 +75,7 @@ class _DuringExamPageState extends State<DuringExamPage> {
         padding: const EdgeInsets.only(
             top: 40.0, left: 20.0, right: 20.0, bottom: 40.0),
         child: Container(
+          height: size.height * 0.9,
           width: size.width,
           child: _insideMainContainer(context, size),
           decoration: _pageItemsContainerDecoration(),
@@ -81,22 +93,48 @@ class _DuringExamPageState extends State<DuringExamPage> {
             const SizedBox(height: 40.0),
             _timerBuild(_timeLeft),
             const SizedBox(height: 60.0),
-            SizedBox(
-              height: size.height * 0.4,
-              width: size.width,
-              child: PageView.builder(
+            _quizCardBuild(size)
+          ],
+        ),
+      );
+
+  SizedBox _quizCardBuild(Size size) {
+    return SizedBox(
+      height: size.height * 0.4,
+      width: size.width,
+      child: FutureBuilder(
+        future: _quizOperations.getRandomWordsAndAnswers(
+            widget.archive.id, _questionAmaount),
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<String, List<String>>> snapshot) {
+          Widget children;
+          List<String>? _keyList = snapshot.data?.keys.toList();
+          List<List<String>>? _meaningList = snapshot.data?.values.toList();
+
+          if (snapshot.hasData) {
+            children = PageView.builder(
                 itemCount: _questionAmaount,
-                itemBuilder: (context, position){
+                itemBuilder: (context, position) {
                   return QuizCard(
                     initialValue: _answerArray[position],
                     function: parentChange,
                     position: position,
+                    word: _keyList?[position] ?? 'Hata',
+                    meaningList: _meaningList?[position],
                   );
-                }),
-            )
-          ],
-        ),
-      );
+                });
+          } else if (snapshot.hasError) {
+            children = Center(child: Text('${snapshot.error}'));
+          } else {
+            children = const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return children;
+        },
+      ),
+    );
+  }
 
   Align _timerBuild(int timeLeft) {
     return Align(
@@ -120,7 +158,7 @@ class _DuringExamPageState extends State<DuringExamPage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MainPage(),
+                builder: (context) => const MainPage(),
               ));
         },
         child: SizedBox(
