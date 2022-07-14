@@ -206,8 +206,7 @@ class _QuizBoxState extends State<QuizBox> {
             context,
             MaterialPageRoute(
               builder: (context) => CreateQuizStagePage(
-                archiveName: archiveName,
-                color: color,
+                archive: widget.archive,
               ),
             ));
       },
