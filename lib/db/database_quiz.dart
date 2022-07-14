@@ -1,5 +1,4 @@
 import 'package:memorize/db/database.dart';
-import 'package:memorize/model/archive.dart';
 import 'package:memorize/model/meaning.dart';
 import 'package:memorize/model/word.dart';
 
