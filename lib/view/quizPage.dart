@@ -18,13 +18,13 @@ class QuizPage extends StatelessWidget {
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 15.0),
-        decoration: QuizPageBackgroundDecoration(),
+        decoration: _quizPageBackgroundDecoration(),
         child: quizPageMaterials(),
       ),
     );
   }
 
-  BoxDecoration QuizPageBackgroundDecoration() => BoxDecoration(
+  BoxDecoration _quizPageBackgroundDecoration() => BoxDecoration(
         color: AppColors.archiveAreaBackgroundColor,
         borderRadius: const BorderRadius.all(Radius.circular(10.0)),
       );
@@ -54,12 +54,6 @@ class QuizPage extends StatelessWidget {
           return children;
         },
       ),
-
-      // ListView(
-      //   children: [
-      //     QuizBox()
-      //   ],
-      // ),
     );
   }
 }
