@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/duringExamPage.dart';
 import 'package:memorize/widgets/createQuizOptionWidget.dart';
 import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
 
 class CreateQuizStagePage extends StatefulWidget {
-  String archiveName;
-  Color color;
+  Archive archive;
 
   CreateQuizStagePage(
-      {Key? key, required this.archiveName, required this.color})
+      {Key? key, required this.archive})
       : super(key: key);
 
   @override
@@ -31,16 +31,33 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
   int minute = 0;
   int second = 0;
   late String sortBy;
+  late String archiveName;
+  late Color color;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     sortBy = keys.close;
+    archiveName = widget.archive.archiveName;
+    color = getColor(widget.archive.color);
   }
 
   int getTimeLeft(int minute, int second) {
     return minute * 60 + second;
+  }
+
+  Color getColor(String color) {
+    if (color == 'selectableOrangeColor') {
+      return AppColors.selectableOrangeColor;
+    } else if (color == 'selectableYellowColor') {
+      return AppColors.selectableYellowColor;
+    } else if (color == 'selectablePurpleColor') {
+      return AppColors.selectablePurpleColor;
+    } else if (color == 'selectableBlueColor') {
+      return AppColors.selectableBlueColor;
+    }
+    return AppColors.selectableGreenColor;
   }
 
   bool get isTimeValid => minute > 0 || second > 0;
@@ -164,9 +181,9 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0),
       child: FittedBox(
-          child: Text(widget.archiveName,
+          child: Text(archiveName,
               style: textStyles.archiveNameStyle
-                  .copyWith(color: widget.color, fontSize: size.width * 0.06),
+                  .copyWith(color: color, fontSize: size.width * 0.06),
               maxLines: 1)),
     );
   }
@@ -203,8 +220,13 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
         context,
         MaterialPageRoute(
           builder: (context) => DuringExamPage(
+              archive: widget.archive,
               questionAmaount: questionAmaount,
-              timeLeft: getTimeLeft(minute, second)),
+              timeLeft: getTimeLeft(minute, second),
+              isHintSelected: isHintSelected,
+              isInOrderCardChoosen: {isInOrderCardChoosen : sortBy},
+              isRandomCardChoosen: isRandomCardChoosen,
+              ),
         ));
   }
 
@@ -213,7 +235,7 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
     if (!isTimeValid) {
       snackBar = SnackBar(
           content: Text(keys.isTimeValidText,
-              style: textStyles.snackBarWarningText));
+              style: textStyles.snackBarWarningText),);
     }
     if (!isEnoughQuestion) {
       snackBar = SnackBar(
