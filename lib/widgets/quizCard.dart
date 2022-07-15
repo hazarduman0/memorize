@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/view_model/quizViewModel.dart';
 import 'package:memorize/widgets/hintCard.dart';
 
 class QuizCard extends StatefulWidget {
@@ -26,7 +27,7 @@ class QuizCard extends StatefulWidget {
   State<QuizCard> createState() => _QuizCardState();
 }
 
-class _QuizCardState extends State<QuizCard> {
+class _QuizCardState extends QuizViewModel<QuizCard> {
   late String _word;
   AppTextStyles textStyles = AppTextStyles();
   ProjectKeys keys = ProjectKeys();

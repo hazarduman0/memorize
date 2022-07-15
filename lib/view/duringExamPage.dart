@@ -5,6 +5,7 @@ import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database_quiz.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/mainPage.dart';
+import 'package:memorize/view_model/quizViewModel.dart';
 import 'package:memorize/widgets/quizCard.dart';
 import 'package:memorize/widgets/timerWidget.dart';
 
@@ -30,7 +31,7 @@ class DuringExamPage extends StatefulWidget {
   State<DuringExamPage> createState() => _DuringExamPageState();
 }
 
-class _DuringExamPageState extends State<DuringExamPage> {
+class _DuringExamPageState extends QuizViewModel<DuringExamPage> {
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
   late int _questionAmaount; // s!!
@@ -121,7 +122,7 @@ class _DuringExamPageState extends State<DuringExamPage> {
           enableFeedback: true,
           highlightColor: Colors.white,
           splashColor: Colors.white,
-          onPressed: () {},
+          onPressed: duringQuizNextPage,
           icon: const Icon(Icons.keyboard_arrow_right_outlined)),
     );
   }
@@ -133,7 +134,8 @@ class _DuringExamPageState extends State<DuringExamPage> {
           enableFeedback: true,
           highlightColor: Colors.white,
           splashColor: Colors.white,
-          onPressed: () {},
+          onPressed: duringQuizPreviousPage,
+          
           icon: const Icon(Icons.keyboard_arrow_left_outlined)),
     );
   }
@@ -163,6 +165,8 @@ class _DuringExamPageState extends State<DuringExamPage> {
 
     if (snapshot.hasData) {
       children = PageView.builder(
+        controller: duringQuizPageController,
+        physics: const NeverScrollableScrollPhysics(),
           itemCount: _questionAmaount,
           itemBuilder: (context, position) {
             return QuizCard(
