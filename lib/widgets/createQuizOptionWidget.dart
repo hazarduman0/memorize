@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/view_model/quizViewModel.dart';
 
 class CreateQuizOptionCard extends StatefulWidget {
   CreateQuizOptionCard({
@@ -461,7 +462,10 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
   ) {
     return GestureDetector(
         onTap: () {
+          // createQuizWhichCardSelected(string);
+          // createQuizChangeIsChoosen();
           setState(() {
+
             isChoosen = !isChoosen;
             isHintSelected = false;
             widget.parentChange(string == keys.randomWords,
