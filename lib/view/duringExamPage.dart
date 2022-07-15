@@ -36,6 +36,7 @@ class _DuringExamPageState extends State<DuringExamPage> {
   late int _questionAmaount; // s!!
   late int _timeLeft;
   late List<String> _answerArray;
+  late bool _isHintSelected;
   QuizOperations _quizOperations = QuizOperations();
 
   List<String> initialArrayGenerator() {
@@ -59,6 +60,7 @@ class _DuringExamPageState extends State<DuringExamPage> {
     _questionAmaount = widget.questionAmaount;
     _timeLeft = widget.timeLeft;
     _answerArray = initialArrayGenerator();
+    _isHintSelected = widget.isHintSelected;
   }
 
   @override
@@ -93,14 +95,54 @@ class _DuringExamPageState extends State<DuringExamPage> {
             const SizedBox(height: 40.0),
             _timerBuild(_timeLeft),
             const SizedBox(height: 60.0),
+            _buttonRowBuild(),
             _quizCardBuild(size)
           ],
         ),
       );
 
+  Row _buttonRowBuild() {
+    return Row(
+      children: [
+        _leftSpace(),
+        _arrowLeftButtonBuild(),
+        _arrowRightButtonBuild(),
+        _rightSpace(),
+      ],
+    );
+  }
+
+  Expanded _rightSpace() => const Expanded(flex: 1, child: SizedBox());
+
+  Expanded _arrowRightButtonBuild() {
+    return Expanded(
+      flex: 3,
+      child: IconButton(
+          enableFeedback: true,
+          highlightColor: Colors.white,
+          splashColor: Colors.white,
+          onPressed: () {},
+          icon: const Icon(Icons.keyboard_arrow_right_outlined)),
+    );
+  }
+
+  Expanded _arrowLeftButtonBuild() {
+    return Expanded(
+      flex: 3,
+      child: IconButton(
+          enableFeedback: true,
+          highlightColor: Colors.white,
+          splashColor: Colors.white,
+          onPressed: () {},
+          icon: const Icon(Icons.keyboard_arrow_left_outlined)),
+    );
+  }
+
+  Expanded _leftSpace() => const Expanded(flex: 15, child: SizedBox());
+
   SizedBox _quizCardBuild(Size size) {
     return SizedBox(
-      height: size.height * 0.45,
+      height: _isHintSelected ? size.height * 0.45 : size.height * 0.35,
       width: size.width,
       child: _quizCardFutureBuilder(),
     );
@@ -129,6 +171,7 @@ class _DuringExamPageState extends State<DuringExamPage> {
               position: position,
               word: _keyList?[position] ?? 'Hata',
               meaningList: _meaningList?[position],
+              isHintSelected: _isHintSelected,
             );
           });
     } else if (snapshot.hasError) {
