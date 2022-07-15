@@ -77,7 +77,7 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
           height: 3.0,
           width: widgetWidth - 9.0,
           decoration: BoxDecoration(
-              color: lightColor, //renk buraya
+              color: lightColor, 
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0))),
@@ -86,7 +86,7 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
           height: 3.0,
           width: widgetWidth - 6.0,
           decoration: BoxDecoration(
-              color: color, //renk buraya
+              color: color, 
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0))),
