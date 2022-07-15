@@ -57,14 +57,12 @@ class _WordCardWidgetState extends State<WordCardWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    //AppProvider appProvider = Provider.of<AppProvider>(context, listen: true);
     return wordCardWidget(size, context);
   }
 
   AnimatedContainer wordCardWidget(Size size, BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 0),
-      //height: !cardBool ? cardHeight : openedCardHeight,
       width: size.width,
       child: !cardBool
           ? closedWordCard(size, context)
