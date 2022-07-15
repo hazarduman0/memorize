@@ -1,9 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 
@@ -209,7 +206,7 @@ class _HintCardState extends State<HintCard> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _clearButtonBuild(),
-        FittedBox(child: Text('$_meaningListLength adet anlam')),
+        FittedBox(child: Text('$_meaningListLength adet anlam', style: textStyles.enterTimeTextStyle,)),
         _hintButtonBuild(),
       ],
     );
