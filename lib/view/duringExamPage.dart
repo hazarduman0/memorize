@@ -100,40 +100,45 @@ class _DuringExamPageState extends State<DuringExamPage> {
 
   SizedBox _quizCardBuild(Size size) {
     return SizedBox(
-      height: size.height * 0.4,
+      height: size.height * 0.45,
       width: size.width,
-      child: FutureBuilder(
+      child: _quizCardFutureBuilder(),
+    );
+  }
+
+  FutureBuilder<Map<String, List<String>>> _quizCardFutureBuilder() {
+    return FutureBuilder(
         future: _quizOperations.getRandomWordsAndAnswers(
             widget.archive.id, _questionAmaount),
-        builder: (BuildContext context,
-            AsyncSnapshot<Map<String, List<String>>> snapshot) {
-          Widget children;
-          List<String>? _keyList = snapshot.data?.keys.toList();
-          List<List<String>>? _meaningList = snapshot.data?.values.toList();
+        builder: _quizCardFutureBuilderParam);
+  }
 
-          if (snapshot.hasData) {
-            children = PageView.builder(
-                itemCount: _questionAmaount,
-                itemBuilder: (context, position) {
-                  return QuizCard(
-                    initialValue: _answerArray[position],
-                    function: parentChange,
-                    position: position,
-                    word: _keyList?[position] ?? 'Hata',
-                    meaningList: _meaningList?[position],
-                  );
-                });
-          } else if (snapshot.hasError) {
-            children = Center(child: Text('${snapshot.error}'));
-          } else {
-            children = const Center(
-              child: CircularProgressIndicator(),
+  Widget _quizCardFutureBuilderParam(
+      BuildContext context, AsyncSnapshot<Map<String, List<String>>> snapshot) {
+    Widget children;
+    List<String>? _keyList = snapshot.data?.keys.toList();
+    List<List<String>>? _meaningList = snapshot.data?.values.toList();
+
+    if (snapshot.hasData) {
+      children = PageView.builder(
+          itemCount: _questionAmaount,
+          itemBuilder: (context, position) {
+            return QuizCard(
+              initialValue: _answerArray[position],
+              function: parentChange,
+              position: position,
+              word: _keyList?[position] ?? 'Hata',
+              meaningList: _meaningList?[position],
             );
-          }
-          return children;
-        },
-      ),
-    );
+          });
+    } else if (snapshot.hasError) {
+      children = Center(child: Text('${snapshot.error}'));
+    } else {
+      children = const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return children;
   }
 
   Align _timerBuild(int timeLeft) {
