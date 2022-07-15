@@ -10,7 +10,9 @@ class QuizCard extends StatefulWidget {
       required this.function,
       required this.position,
       required this.word,
-      required this.meaningList})
+      required this.meaningList,
+      required this.isHintSelected
+      })
       : super(key: key);
 
   String initialValue;
@@ -18,6 +20,7 @@ class QuizCard extends StatefulWidget {
   int position;
   String word;
   List<String>? meaningList;
+  bool isHintSelected;
 
   @override
   State<QuizCard> createState() => _QuizCardState();
@@ -29,6 +32,7 @@ class _QuizCardState extends State<QuizCard> {
   ProjectKeys keys = ProjectKeys();
   late String _initialValue;
   late List<String>? _meaningList;
+  late bool _isHintSelected;
 
   @override
   void initState() {
@@ -37,6 +41,7 @@ class _QuizCardState extends State<QuizCard> {
     _word = widget.word;
     _initialValue = widget.initialValue;
     _meaningList = widget.meaningList;
+    _isHintSelected = widget.isHintSelected;
   }
 
   @override
@@ -56,7 +61,7 @@ class _QuizCardState extends State<QuizCard> {
             const SizedBox(height: 40.0),
             _textFormFieldBuild(size),
             const SizedBox(height: 15.0),
-            HintCard(meaningList: _meaningList,)
+            _isHintSelected ? HintCard(meaningList: _meaningList,) : const SizedBox.shrink()
           ],
         ),
       ),
