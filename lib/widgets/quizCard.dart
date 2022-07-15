@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/widgets/hintCard.dart';
 
 class QuizCard extends StatefulWidget {
   QuizCard(
@@ -46,17 +47,17 @@ class _QuizCardState extends State<QuizCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _hashtagWordText(size),
-              const SizedBox(height: 40.0),
-              _textFormFieldBuild(size),
-            ],
-          ),
+      child: Padding(
+        padding: const EdgeInsets.only(right: 20.0, left: 20, top: 40.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _hashtagWordText(size),
+            const SizedBox(height: 40.0),
+            _textFormFieldBuild(size),
+            const SizedBox(height: 15.0),
+            HintCard(meaningList: _meaningList,)
+          ],
         ),
       ),
     );
@@ -64,20 +65,23 @@ class _QuizCardState extends State<QuizCard> {
 
   TextFormField _textFormFieldBuild(Size size) {
     return TextFormField(
-              initialValue: _initialValue,
-              cursorColor: Colors.black,
-              maxLines: 1,
-              maxLength: 50,
-              textInputAction: TextInputAction.done,
-              keyboardType: TextInputType.text,
-              style: textStyles.hashtagWordTextStyle.copyWith(
-                fontSize: size.width * 0.05,
-              ),
-              onChanged: (text) {
-                widget.function(text, widget.position);
-              },
-              decoration: _inputDecorationBuild(),
-            );
+      initialValue: _initialValue,
+      cursorColor: Colors.black,
+      maxLines: 1,
+      maxLength: 50,
+      textInputAction: TextInputAction.done,
+      keyboardType: TextInputType.text,
+      style: textStyles.hashtagWordTextStyle.copyWith(
+        fontSize: size.width * 0.05,
+      ),
+      onChanged: (text) {
+        setState(() {
+          _initialValue = text;
+          widget.function(text, widget.position);
+        });
+      },
+      decoration: _inputDecorationBuild(),
+    );
   }
 
   InputDecoration _inputDecorationBuild() {
