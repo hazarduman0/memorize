@@ -6,6 +6,7 @@ import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/wordsPage.dart';
+import 'package:memorize/view_model/main_view_model/mainViewModel.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PinnedArchive extends StatefulWidget {
@@ -13,13 +14,14 @@ class PinnedArchive extends StatefulWidget {
       : super(key: key);
 
   Archive archive;
+  //Function didParentUpdate;
   final Function customFunction;
 
   @override
   State<PinnedArchive> createState() => _PinnedArchiveState();
 }
 
-class _PinnedArchiveState extends State<PinnedArchive> {
+class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
   // bool animatedBool = true;
   late String archiveName;
   late String description;
@@ -193,6 +195,9 @@ class _PinnedArchiveState extends State<PinnedArchive> {
     return IconButton(
         onPressed: () {
           widget.customFunction(true, widget.archive.id);
+          //archiveMoreButtonFunc(widget.archive, didUpdateWidget(otherOptions));
+          //widget.didParentUpdate(otherOptions);
+          //print(otherOptions);
         },
         icon: Icon(
           CustomIcons.more,
