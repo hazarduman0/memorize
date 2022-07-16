@@ -4,6 +4,7 @@ import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/db/database_meaning.dart';
 import 'package:memorize/model/meaning.dart';
 import 'package:memorize/model/word.dart';
+import 'package:memorize/view_model/word_view_model.dart/wordCardViewModel.dart';
 
 class WordCardWidget extends StatefulWidget {
   WordCardWidget(
@@ -21,7 +22,7 @@ class WordCardWidget extends StatefulWidget {
   State<WordCardWidget> createState() => _WordCardWidgetState();
 }
 
-class _WordCardWidgetState extends State<WordCardWidget> {
+class _WordCardWidgetState extends WordCardViewModel<WordCardWidget> {
   AppTextStyles textStyles = AppTextStyles();
   bool cardBool = false;
   late Word word;
@@ -94,11 +95,7 @@ class _WordCardWidgetState extends State<WordCardWidget> {
           children: [
             openedCardWordWithHashtag(size),
             InkWell(
-              onTap: () {
-                setState(() {
-                  cardBool = false;
-                });
-              },
+              onTap: showLessButtonFunc,
               child: showLessButton(size),
             ),
           ],
@@ -204,11 +201,7 @@ class _WordCardWidgetState extends State<WordCardWidget> {
             ),
             meanings.length > 1
                 ? InkWell(
-                    onTap: () {
-                      setState(() {
-                        cardBool = true;
-                      });
-                    },
+                    onTap: showMoreButtonFunc,
                     child: showMoreButton(size),
                   )
                 : const SizedBox(),
