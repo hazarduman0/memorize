@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
-import 'package:memorize/db/database_meaning.dart';
-import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/model/meaning.dart';
 import 'package:memorize/model/word.dart';
+import 'package:memorize/view_model/word_view_model.dart/wordViewModel.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
 import 'package:memorize/widgets/wordCardWidget.dart';
 import 'package:glassmorphism/glassmorphism.dart';
@@ -19,64 +18,20 @@ class WordsPage extends StatefulWidget {
   State<WordsPage> createState() => _WordsPageState();
 }
 
-class _WordsPageState extends State<WordsPage> {
+class _WordsPageState extends WordViewModel<WordsPage> {
   ProjectKeys keys = ProjectKeys();
-  String sword = '';
   final _formKey = GlobalKey<FormState>();
 
   AppTextStyles textStyles = AppTextStyles();
   late Color color;
   late bool heroBool;
   List<Word> words = [];
-  bool cardBool = false;
-  bool addOrUpdateStackBool = false;
-  bool addMeanBool = false;
-  bool otherOptions = false;
-  bool editMeaning = false;
-  String clickedWord = '';
-  String initialValue = '';
-  int? clickedWordID = 1;
-  int? clickedMeaningID = 1;
-  Word? word;
-  Meaning? meaning;
-  WordOperations wordOperations = WordOperations();
-  MeaningOperations meaningOperations = MeaningOperations();
-
-  //String ooWord = '';
-
-  // Future<List<Word>> getWords(Archive archive) async{
-  //   return await wordOperations.getArchiveWords(archive.id);
-  // }
 
   Future getWords(Archive archive) async {
     //setState(() => isLoading = true);
     words = await wordOperations.getArchiveWords(archive.id);
     setState(() {});
     //setState(() => isLoading = false);
-  }
-
-  void parentChange(int? fclickedWordID, String fclickedWord,
-      bool fotherOptions, Word fword) {
-    word = fword;
-    setState(() {
-      // word = word;
-      //  clickedWordID = fclickedWordID;
-      //  clickedWord = fclickedWord;
-      clickedWordID = fword.id;
-      clickedWord = fword.word;
-      otherOptions = fotherOptions;
-    });
-  }
-
-  void meaningChange(Meaning fmeaning, bool fotherOptions) {
-    meaning = fmeaning;
-    setState(() {
-      clickedMeaningID = fmeaning.id;
-      clickedWordID = fmeaning.wordId;
-      clickedWord = fmeaning.meaning;
-      otherOptions = fotherOptions;
-      editMeaning = true;
-    });
   }
 
   @override
@@ -206,11 +161,7 @@ class _WordsPageState extends State<WordsPage> {
                 children: [
                   TurnBackButton(),
                   IconButton(
-                      onPressed: () {
-                        setState(() {
-                          addOrUpdateStackBool = true;
-                        });
-                      },
+                      onPressed: addOrUpdateStackBoolFunc,
                       icon: Icon(
                         Icons.add,
                         color: color,
@@ -264,14 +215,7 @@ class _WordsPageState extends State<WordsPage> {
 
   GestureDetector ooWordStack(Size size) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          otherOptions = false;
-          editMeaning = false;
-          // initialValue = '';
-          // addOrUpdateStackBool = false;
-        });
-      },
+      onTap: closeOtherOptionsWordStack,
       child: GlassmorphicContainer(
         height: size.height,
         width: size.width,
@@ -281,9 +225,6 @@ class _WordsPageState extends State<WordsPage> {
         linearGradient: AppColors.glassmorphicLinearGradient,
         borderGradient: AppColors.glassmorphicLinearGradient,
         alignment: Alignment.center,
-        // decoration: BoxDecoration(
-        //   color: AppColors.transparentBackgroundColor,
-        // ),
         child: SizedBox(
           height: size.height / 3,
           width: size.width * 0.8,
@@ -328,11 +269,7 @@ class _WordsPageState extends State<WordsPage> {
   InkWell addButton(Size size) {
     return InkWell(
         onTap: () {
-          setState(() {
-            addMeanBool = true;
-            addOrUpdateStackBool = true;
-            otherOptions = false;
-          });
+          addButtonFunc();
         },
         child: wordOptions(size, 'add'));
   }
@@ -340,15 +277,7 @@ class _WordsPageState extends State<WordsPage> {
   InkWell editButton(Size size) {
     return InkWell(
         onTap: () {
-          otherOptions = false;
-          //getWords(widget.archive);
-          setState(() {
-            initialValue = clickedWord;
-            addOrUpdateStackBool = true;
-            if (editMeaning) {
-              addMeanBool = true;
-            }
-          });
+          editButtonFunc();
         },
         child: wordOptions(size, 'edit'));
   }
@@ -372,22 +301,15 @@ class _WordsPageState extends State<WordsPage> {
               content: const Text('Silinecek onaylıyor musun?'), // düzenle
               actions: [
                 TextButton(
-                  style: textButtonStyle(),
-                    onPressed: () async {
-                      !editMeaning
-                          ? await wordOperations.deleteWord(clickedWordID)
-                          : await meaningOperations
-                              .deleteMeaning(clickedMeaningID);
-                      setState(() {
-                        otherOptions = false;
-                        editMeaning = false;
-                      });
+                    style: textButtonStyle(),
+                    onPressed: () {
+                      deleteButtonFunc(clickedWordID, clickedMeaningID);
                       getWords(widget.archive);
                       Navigator.pop(context);
                     },
                     child: Text(keys.yesString)),
                 TextButton(
-                  style: textButtonStyle(),
+                    style: textButtonStyle(),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -415,7 +337,8 @@ class _WordsPageState extends State<WordsPage> {
     );
   }
 
-  Padding wordOptionButtonInside(bool _add, bool _edit, double iconSize, String text, Size size) {
+  Padding wordOptionButtonInside(
+      bool _add, bool _edit, double iconSize, String text, Size size) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
@@ -458,12 +381,7 @@ class _WordsPageState extends State<WordsPage> {
     // kelimeye karakter sınırı ekle //textformfielte hata mesajı için boyutlandırmayı ayarla
     return GestureDetector(
       onTap: () {
-        setState(() {
-          initialValue = '';
-          addOrUpdateStackBool = false;
-          addMeanBool = false;
-          editMeaning = false;
-        });
+        closeAddWordStack();
       },
       child: addingUpdateProccesView(size),
     );
@@ -479,9 +397,6 @@ class _WordsPageState extends State<WordsPage> {
       linearGradient: AppColors.glassmorphicLinearGradient,
       borderGradient: AppColors.glassmorphicLinearGradient,
       alignment: Alignment.center,
-      // decoration: BoxDecoration(
-      //   color: AppColors.transparentBackgroundColor,
-      // ),
       child: addingUptateProccesItems(size),
     );
   }
@@ -517,14 +432,8 @@ class _WordsPageState extends State<WordsPage> {
       child: ElevatedButton(
           onPressed: () {
             addMeanBool ? createOrUpdateMeaning() : createOrUpdateWord();
-            setState(() {
-              getWords(widget.archive);
-              if (addMeanBool) {
-                addMeanBool = false;
-              }
-              initialValue = '';
-              addOrUpdateStackBool = false;
-            });
+            addUpdateWordButtonFunc();
+            getWords(widget.archive);
           },
           style: addUpdateWordButtonStyle(),
           child: addUpdateWordButtonText(size)),
@@ -558,7 +467,7 @@ class _WordsPageState extends State<WordsPage> {
         validator: (word) =>
             word != null && word.isEmpty ? keys.archiveNameFormValidator : null,
         //onSaved: (archiveName) => setState(() => archiveName = archiveName),
-        onChanged: (wordt) => setState(() => sword = wordt),
+        onChanged: (wordt) => addUpdateWordFormFunc(wordt),
       ),
     );
   }
@@ -606,9 +515,7 @@ class _WordsPageState extends State<WordsPage> {
     //tasarla sonradan
     return ElevatedButton(
         onPressed: () {
-          setState(() {
-            addOrUpdateStackBool = true;
-          });
+          addButtonFunc();
         },
         child: Text('Kelime ekle'));
   }
@@ -633,9 +540,7 @@ class _WordsPageState extends State<WordsPage> {
           meaning: sword,
           createdTime: DateTime.now(),
         );
-    setState(() {
-      initialValue = '';
-    });
+    resetInitValue();
 
     await meaningOperations.updateMeaning(meaning);
   }
@@ -662,9 +567,7 @@ class _WordsPageState extends State<WordsPage> {
 
   Future createWord() async {
     final word = Word(
-        archiveId: widget.archive.id,
-        word: this.sword,
-        createdTime: DateTime.now());
+        archiveId: widget.archive.id, word: sword, createdTime: DateTime.now());
 
     await wordOperations.createWord(word);
   }
@@ -675,13 +578,11 @@ class _WordsPageState extends State<WordsPage> {
         archiveID: widget.archive.id,
         word: sword,
         createdTime: DateTime.now());
-    setState(() {
-      initialValue = '';
-    });
+    resetInitValue();
     await wordOperations.updateWord(word);
   }
 
-ButtonStyle textButtonStyle() {
+  ButtonStyle textButtonStyle() {
     return ButtonStyle(
       textStyle:
           MaterialStateProperty.all<TextStyle?>(textStyles.yesStringTextStyle),
