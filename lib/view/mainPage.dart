@@ -11,6 +11,7 @@ import 'package:memorize/view/chartPage.dart';
 import 'package:memorize/view/createEditArchivePage.dart';
 import 'package:memorize/view/noDataPage.dart';
 import 'package:memorize/view/quizPage.dart';
+import 'package:memorize/view_model/main_view_model/mainViewModel.dart';
 import 'package:memorize/widgets/custom_appbar.dart';
 import 'package:memorize/widgets/navigationBarItem.dart';
 
@@ -21,15 +22,15 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  int currentPage = 1;
-  int? clickedArchiveID = 1;
-  String ooArchiveName = '';
-  String ooArchiveDescription = '';
-  Color ooArchiveColor = Colors.white;
+class _MainPageState extends MainViewModel<MainPage> {
+  // int currentPage = 1;
+  // int? clickedArchiveID = 1;
+  // String ooArchiveName = '';
+  // String ooArchiveDescription = '';
+  // Color ooArchiveColor = Colors.white;
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
-  bool otherOptions = false;
+  //bool otherOptions = false;
   late PageController pageController;
   ArchiveOperations archiveOperations = ArchiveOperations();
   Archive? archive;
@@ -48,6 +49,15 @@ class _MainPageState extends State<MainPage> {
       ooArchiveColor = ColorFunctions.getColor(archive!.color);
     });
   }
+
+  // void didParentUpdate(bool lOtherOption){
+  //   if(lOtherOption){
+  //     setState(() {
+        
+  //     });
+  //   }
+  // }
+
 
   Future<Archive> getArchive(int? archiveID) async {
     return await archiveOperations.getArchive(archiveID);
@@ -72,6 +82,7 @@ class _MainPageState extends State<MainPage> {
     pageController.dispose();
     super.dispose();
   }
+
 
   Future<void> deleteArchive(int? id) async {
     await archiveOperations.deleteArchive(id);
@@ -129,9 +140,10 @@ class _MainPageState extends State<MainPage> {
   GestureDetector otherOptionsAvailable(Size size) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          otherOptions = false;
-        });
+        // setState(() {
+        //   otherOptions = false;
+        // });
+        clickVoid();
       },
       child: otherOptionsGlassMorphicContainerBuild(size),
     );
@@ -246,6 +258,7 @@ class _MainPageState extends State<MainPage> {
           ArchivePage(
             normalArchive: normalArchive,
             pinnedArchive: pinnedArchive,
+            //didParentUpdate: didParentUpdate,
             customFunction: parentChange,
           ),
           QuizPage(),
@@ -325,9 +338,10 @@ class _MainPageState extends State<MainPage> {
                     style: textButtonStyle(),
                     onPressed: () {
                       deleteArchive(archive!.id);
-                      setState(() {
-                        otherOptions = false;
-                      });
+                      // setState(() {
+                      //   otherOptions = false;
+                      // });
+                      clickVoid();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
