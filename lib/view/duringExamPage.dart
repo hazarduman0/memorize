@@ -5,7 +5,8 @@ import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database_quiz.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/mainPage.dart';
-import 'package:memorize/view_model/quizViewModel.dart';
+import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
+import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
 import 'package:memorize/widgets/quizCard.dart';
 import 'package:memorize/widgets/timerWidget.dart';
 
@@ -31,7 +32,7 @@ class DuringExamPage extends StatefulWidget {
   State<DuringExamPage> createState() => _DuringExamPageState();
 }
 
-class _DuringExamPageState extends QuizViewModel<DuringExamPage> {
+class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
   late int _questionAmaount; // s!!
