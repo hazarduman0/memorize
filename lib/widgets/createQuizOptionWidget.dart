@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
-import 'package:memorize/view_model/quizViewModel.dart';
+import 'package:memorize/view_model/quiz_view_model/createQuizOptionViewModel.dart';
+import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
 
 class CreateQuizOptionCard extends StatefulWidget {
   CreateQuizOptionCard({
@@ -20,7 +21,8 @@ class CreateQuizOptionCard extends StatefulWidget {
   State<CreateQuizOptionCard> createState() => _CreateQuizOptionCardState();
 }
 
-class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
+class _CreateQuizOptionCardState
+    extends CreateQuizOptionViewModel<CreateQuizOptionCard> {
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
   late bool isChoosen;
@@ -36,7 +38,7 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
     // TODO: implement initState
     super.initState();
     string = widget.string;
-    sortBy = keys.sortBy;
+    //sortBy = keys.sortBy;
     isChoosen = widget.isChoosen;
   }
 
@@ -105,7 +107,11 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
   SizedBox _sortPopupMenuBuild(Size size) {
     return SizedBox(
       height: size.height * 0.15,
-      width: sortBy == keys.byDate ? size.width * 0.24 : sortBy == keys.alphabetic ? size.width * 0.20 : size.width * 0.16,
+      width: sortBy == keys.byDate
+          ? size.width * 0.24
+          : sortBy == keys.alphabetic
+              ? size.width * 0.20
+              : size.width * 0.16,
       child: PopupMenuButton(
           child: Row(
             children: [
@@ -130,24 +136,7 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
 
   PopupMenuItem _buildPopupMenuItem(String title, IconData iconData) {
     return PopupMenuItem(
-      onTap: () {
-        if(title != keys.close){
-          setState(() {
-          sortBy = title;
-        });
-        }
-        setState(() {
-            widget.parentChange(
-                string == keys.randomWords,
-                string == keys.inOrderWords,
-                isHintSelected,
-                questionAmaount,
-                minute,
-                second,
-                sortBy
-                );
-          });
-      },
+      onTap: popUpMenuButtonFunc(widget.parentChange, string, title),
       child: Row(
         children: [
           Icon(
@@ -171,7 +160,6 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
     return ListTile(
       leading: _enterTimeTextBuild(size),
       trailing: SizedBox(
-        //AO
         height: size.height * 0.15,
         width: size.width * 0.34,
         child: Column(
@@ -202,18 +190,8 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
       padding: const EdgeInsets.only(right: 15.0),
       child: GestureDetector(
         onTap: () {
-          setState(() {
-            isHintSelected = !isHintSelected;
-            widget.parentChange(
-                string == keys.randomWords,
-                string == keys.inOrderWords,
-                isHintSelected,
-                questionAmaount,
-                minute,
-                second,
-                sortBy
-                );
-          });
+          //?
+          customCheckBoxFunc(widget.parentChange, string);
         },
         child: Container(
           height: size.width * 0.07,
@@ -239,23 +217,6 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
       keys.hintText,
       style:
           textStyles.enterTimeTextStyle.copyWith(fontSize: size.width * 0.03),
-    );
-  }
-
-  Padding _enterTimeColumn(Size size, double _enterTimeHeight) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 40.0, right: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _enterTimeTextBuild(size),
-          const SizedBox(
-            height: 30.0,
-          ),
-          _timerRow(_enterTimeHeight, size),
-          _timerTextRow(size),
-        ],
-      ),
     );
   }
 
@@ -288,58 +249,6 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
     );
   }
 
-  Padding _dividerBuild(double _intent) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Divider(
-        thickness: 1.0,
-        indent: _intent,
-        endIndent: _intent,
-      ),
-    );
-  }
-
-  Padding _enterQuestionNumberRow(Size size) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 40.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              keys.enterQuestionNumber,
-              style: textStyles.enterTimeTextStyle
-                  .copyWith(fontSize: size.width * 0.03),
-            ),
-          ),
-          const SizedBox(
-            width: 20.0,
-          ),
-          questionNumberTextFieldBuild(size)
-        ],
-      ),
-    );
-  }
-
-  void questionNumberTextFieldFunction(String value) {
-    setState(() {
-      if (value.isEmpty) {
-        value = '0';
-      }
-      questionAmaount = int.parse(value);
-      widget.parentChange(
-          string == keys.randomWords,
-          string == keys.inOrderWords,
-          isHintSelected,
-          questionAmaount,
-          minute,
-          second,
-          sortBy
-          );
-    });
-  }
-
   Padding questionNumberTextFieldBuild(Size size) {
     return Padding(
       padding: const EdgeInsets.only(right: 15.0),
@@ -347,7 +256,8 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
           height: size.height * 0.06700854700854701,
           width: size.width * 0.11277777777777777,
           child: TextFormField(
-            onChanged: (value) => questionNumberTextFieldFunction(value),
+            onChanged: (value) =>
+                questionNumberTextFieldFunc(value, widget.parentChange, string),
             keyboardType: TextInputType.number,
             maxLines: 1,
             maxLength: 4, //MAX LENGTH !!!!
@@ -368,29 +278,29 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
     );
   }
 
-  void enterTimeTextFieldFunction(String value, String key) {
-    setState(() {
-      if (value.isEmpty) {
-        value = '0';
-      }
-      if (key == 'minute') {
-        minute = int.parse(value);
-      }
-      if (key == 'second') {
-        second = int.parse(value);
-      }
+  // void enterTimeTextFieldFunction(String value, String key) {
+  //   setState(() {
+  //     if (value.isEmpty) {
+  //       value = '0';
+  //     }
+  //     if (key == 'minute') {
+  //       minute = int.parse(value);
+  //     }
+  //     if (key == 'second') {
+  //       second = int.parse(value);
+  //     }
 
-      widget.parentChange(
-          string == keys.randomWords,
-          string == keys.inOrderWords,
-          isHintSelected,
-          questionAmaount,
-          minute,
-          second,
-          sortBy,
-          );
-    });
-  }
+  //     widget.parentChange(
+  //       string == keys.randomWords,
+  //       string == keys.inOrderWords,
+  //       isHintSelected,
+  //       questionAmaount,
+  //       minute,
+  //       second,
+  //       sortBy,
+  //     );
+  //   });
+  // }
 
   SizedBox enterTimeTextFieldBuild(double _enterTimeHeight, String key) {
     return SizedBox(
@@ -398,7 +308,8 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
       width: _enterTimeHeight,
       child: TextFormField(
         keyboardType: TextInputType.number,
-        onChanged: (value) => enterTimeTextFieldFunction(value, key),
+        onChanged: (value) =>
+            enterTimeTextFieldFunc(value, key, widget.parentChange, string),
         cursorColor: Colors.black,
         decoration: _createQuizTextFieldBuildDecoration(),
       ),
@@ -462,15 +373,7 @@ class _CreateQuizOptionCardState extends State<CreateQuizOptionCard> {
   ) {
     return GestureDetector(
         onTap: () {
-          // createQuizWhichCardSelected(string);
-          // createQuizChangeIsChoosen();
-          setState(() {
-
-            isChoosen = !isChoosen;
-            isHintSelected = false;
-            widget.parentChange(string == keys.randomWords,
-                string == keys.inOrderWords, isHintSelected, 0, 0, 0, sortBy);
-          });
+          selectedIconFunc(isChoosen, widget.parentChange, string);
         },
         child: Container(
           height: size.width * 0.05,
