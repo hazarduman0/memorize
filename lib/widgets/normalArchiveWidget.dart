@@ -7,6 +7,7 @@ import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/wordsPage.dart';
+import 'package:memorize/view_model/main_view_model/mainViewModel.dart';
 
 class NormalArchiveWidget extends StatefulWidget {
   NormalArchiveWidget(
@@ -14,13 +15,14 @@ class NormalArchiveWidget extends StatefulWidget {
       : super(key: key);
 
   Archive archive;
+  //Function didParentUpdate;
   final Function customFunction;
 
   @override
   State<NormalArchiveWidget> createState() => _NormalArchiveWidgetState();
 }
 
-class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
+class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
   late String archiveName;
   late Color color;
   late Color lightColor;
@@ -169,7 +171,9 @@ class _NormalArchiveWidgetState extends State<NormalArchiveWidget> {
     return IconButton(
         onPressed: () {
           widget.customFunction(true, widget.archive.id);
+          //archiveMoreButtonFunc(widget.archive, widget.didParentUpdate(otherOptions));
         },
+
         icon: Icon(
           CustomIcons.more,
           color: color,
