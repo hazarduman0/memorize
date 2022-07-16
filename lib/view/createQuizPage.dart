@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/duringExamPage.dart';
-import 'package:memorize/view_model/quizViewModel.dart';
+import 'package:memorize/view_model/quiz_view_model/createQuizViewModel.dart';
 import 'package:memorize/widgets/createQuizOptionWidget.dart';
 import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
@@ -12,26 +10,14 @@ import 'package:memorize/widgets/turnBackButton.dart';
 class CreateQuizStagePage extends StatefulWidget {
   Archive archive;
 
-  CreateQuizStagePage(
-      {Key? key, required this.archive})
-      : super(key: key);
+  CreateQuizStagePage({Key? key, required this.archive}) : super(key: key);
 
   @override
   State<CreateQuizStagePage> createState() => _CreateQuizStagePageState();
 }
 
-class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
-  AppTextStyles textStyles = AppTextStyles();
-
-  ProjectKeys keys = ProjectKeys();
-
-  bool isRandomCardChoosen = false;
-  bool isInOrderCardChoosen = false;
-  bool isHintSelected = false;
-  int questionAmaount = 0;
-  int minute = 0;
-  int second = 0;
-  late String sortBy;
+class _CreateQuizStagePageState
+    extends CreateQuizViewModel<CreateQuizStagePage> {
   late String archiveName;
   late Color color;
 
@@ -39,44 +25,13 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    sortBy = keys.close;
+    //sortBy = keys.close;
     archiveName = widget.archive.archiveName;
     color = ColorFunctions.getColor(widget.archive.color);
   }
 
   int getTimeLeft(int minute, int second) {
     return minute * 60 + second;
-  }
-
-  bool get isTimeValid => minute > 0 || second > 0;
-  bool get isEnoughQuestion => questionAmaount > 0;
-  bool get isChoosenAnyCard => isRandomCardChoosen || isInOrderCardChoosen;
-  bool get isSortByChoosen => !(sortBy == keys.close || sortBy == keys.sortBy);
-  bool get isRandomCardValid =>
-      isRandomCardChoosen && (isEnoughQuestion && isTimeValid);
-  bool get isInOrderCardValid =>
-      isInOrderCardChoosen &&
-      (isSortByChoosen && (isEnoughQuestion && isTimeValid));
-  bool get isValid => (isRandomCardValid || isInOrderCardValid);
-  //bool get isValid => (questionAmaount > 0 && (minute > 0 || second > 0));
-
-  void parentChange(
-      bool _isRandomCardChoosen,
-      bool _isInOrderCardChoosen,
-      bool _isHintSelected,
-      int _questionAmaount,
-      int _minute,
-      int _second,
-      String _sortBy) {
-    setState(() {
-      isRandomCardChoosen = _isRandomCardChoosen;
-      isInOrderCardChoosen = _isInOrderCardChoosen;
-      isHintSelected = _isHintSelected;
-      questionAmaount = _questionAmaount;
-      minute = _minute;
-      second = _second;
-      sortBy = _sortBy;
-    });
   }
 
   @override
@@ -208,13 +163,13 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
         context,
         MaterialPageRoute(
           builder: (context) => DuringExamPage(
-              archive: widget.archive,
-              questionAmaount: questionAmaount,
-              timeLeft: getTimeLeft(minute, second),
-              isHintSelected: isHintSelected,
-              isInOrderCardChoosen: {isInOrderCardChoosen : sortBy},
-              isRandomCardChoosen: isRandomCardChoosen,
-              ),
+            archive: widget.archive,
+            questionAmaount: questionAmaount,
+            timeLeft: getTimeLeft(minute, second),
+            isHintSelected: isHintSelected,
+            isInOrderCardChoosen: {isInOrderCardChoosen: sortBy},
+            isRandomCardChoosen: isRandomCardChoosen,
+          ),
         ));
   }
 
@@ -222,8 +177,9 @@ class _CreateQuizStagePageState extends State<CreateQuizStagePage> {
     var snackBar;
     if (!isTimeValid) {
       snackBar = SnackBar(
-          content: Text(keys.isTimeValidText,
-              style: textStyles.snackBarWarningText),);
+        content:
+            Text(keys.isTimeValidText, style: textStyles.snackBarWarningText),
+      );
     }
     if (!isEnoughQuestion) {
       snackBar = SnackBar(
