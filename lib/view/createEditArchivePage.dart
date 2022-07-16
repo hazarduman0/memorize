@@ -5,6 +5,7 @@ import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/mainPage.dart';
+import 'package:memorize/view_model/createQuizEditArchiveViewModel.dart';
 import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
 
@@ -17,7 +18,7 @@ class CreateEditArchivePage extends StatefulWidget {
   State<CreateEditArchivePage> createState() => _CreateEditArchivePageState();
 }
 
-class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
+class _CreateEditArchivePageState extends CreateEditArchiveViewModel<CreateEditArchivePage> {
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
 
@@ -292,7 +293,7 @@ class _CreateEditArchivePageState extends State<CreateEditArchivePage> {
       },
       child: Container(
         height: size.height * 0.02397,
-        width: size.width * 0.0779, //0.0879 iphone için
+        width: size.width * 0.0779, 
         decoration: colorContainerDecoration(color),
         child: Center(
           child: isChosen
