@@ -4,6 +4,7 @@ import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/createQuizPage.dart';
+import 'package:memorize/view_model/quiz_view_model/quizBoxViewModel.dart';
 
 class QuizBox extends StatefulWidget {
   QuizBox({Key? key, required this.archive}) : super(key: key);
@@ -14,7 +15,7 @@ class QuizBox extends StatefulWidget {
   State<QuizBox> createState() => _QuizBoxState();
 }
 
-class _QuizBoxState extends State<QuizBox> {
+class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
   late Color color;
   late String archiveName;
 
@@ -58,11 +59,7 @@ class _QuizBoxState extends State<QuizBox> {
       );
 
   GestureDetector lastExamTextButton(Size size) => GestureDetector(
-        onTap: () {
-          setState(() {
-            openedCard = !openedCard;
-          });
-        },
+        onTap: lastExamTextButtonFunc,
         child: Row(
           children: [
             Text(
