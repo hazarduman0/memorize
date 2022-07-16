@@ -12,11 +12,14 @@ class ArchivePage extends StatelessWidget {
       {Key? key,
       this.normalArchive = const [],
       this.pinnedArchive = const [],
-      required this.customFunction})
+      //required this.didParentUpdate
+      required this.customFunction
+       })
       : super(key: key);
 
   List<Archive>? normalArchive;
   List<Archive>? pinnedArchive;
+  // Function didParentUpdate;
   final Function customFunction;
 
   ProjectKeys keys = ProjectKeys();
@@ -80,6 +83,7 @@ class ArchivePage extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return NormalArchiveWidget(
             archive: normalArchive![index],
+            //didParentUpdate: didParentUpdate,
             customFunction: customFunction,
           );
         });
@@ -96,12 +100,14 @@ class ArchivePage extends StatelessWidget {
           return index == pinnedArchive!.length - 1
               ? PinnedArchive(
                   archive: pinnedArchive![index],
+                  //didParentUpdate: didParentUpdate,
                   customFunction: customFunction,
                 )
               : Column(
                   children: [
                     PinnedArchive(
                       archive: pinnedArchive![index],
+                      //didParentUpdate: didParentUpdate,
                       customFunction: customFunction,
                     ),
                     const SizedBox(
