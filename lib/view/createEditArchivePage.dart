@@ -19,10 +19,7 @@ class CreateEditArchivePage extends StatefulWidget {
 }
 
 class _CreateEditArchivePageState extends CreateEditArchiveViewModel<CreateEditArchivePage> {
-  ProjectKeys keys = ProjectKeys();
-  AppTextStyles textStyles = AppTextStyles();
 
-  ArchiveOperations archiveOperations = ArchiveOperations();
   final _formKey = GlobalKey<FormState>();
   late String archiveName;
   late String description;

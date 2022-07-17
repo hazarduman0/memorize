@@ -5,7 +5,6 @@ import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/view/createEditArchivePage.dart';
-import 'package:memorize/widgets/customAppBar.dart';
 
 class NoDataPage extends StatelessWidget {
   const NoDataPage({Key? key}) : super(key: key);
