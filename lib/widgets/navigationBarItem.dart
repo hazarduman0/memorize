@@ -3,23 +3,26 @@ import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/view_model/main_view_model/mainViewModel.dart';
 
 //responsive fontlar ayarlanacak
 //seçili sayfalarda bar ile text arasında mesafe olacak
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({
+   CustomBottomNavigationBar({
     Key? key,
     required this.currentPage,
     required this.keys,
     required this.textStyles,
     required this.size,
+    required this.function
   }) : super(key: key);
 
   final int currentPage;
   final ProjectKeys keys;
   final AppTextStyles textStyles;
   final Size size;
+  Function function;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +49,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
   GestureDetector navigationExamsItem() {
     bool _iscurrent = currentPage == 2;
     return GestureDetector(
+      onTap: () {
+        function(MainPages.exams.name);
+      },
       child: Column(
         // buradan
         children: [
@@ -87,6 +93,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
   GestureDetector navigationHomePageItem() {
     bool _iscurrent = currentPage == 1;
     return GestureDetector(
+      onTap: () {
+        function(MainPages.homePage.name);
+      },
       child: Column(
         // buradan
         children: [
@@ -123,6 +132,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
   GestureDetector navigationStatisticsItem() {
     bool _iscurrent = currentPage == 0;
     return GestureDetector(
+      onTap: (){
+        function(MainPages.statistics.name);
+      },
       child: Column(
         // buradan
         children: [
