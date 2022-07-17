@@ -125,7 +125,7 @@ class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
             ],
           ),
           FutureBuilder(
-              future: wordOperations.getWordCount(widget.archive.id),
+              future: wordOperations.getWordWithMeaningCount(widget.archive.id),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 Widget children;
                 if (snapshot.hasData) {

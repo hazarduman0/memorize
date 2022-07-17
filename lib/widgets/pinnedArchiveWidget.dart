@@ -54,7 +54,7 @@ class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
   }
 
   Future<void> getWordCount() async {
-    int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
+    int? _wordCount = await wordOperations.getWordWithMeaningCount(widget.archive.id);
     print('sayi $_wordCount');
     wordCount = '${_wordCount.toString()} kelime';
   }
@@ -149,7 +149,7 @@ class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
               children: [
                 lastUpdateText(textStyles, size),
                 FutureBuilder(
-                    future: wordOperations.getWordCount(widget.archive.id),
+                    future: wordOperations.getWordWithMeaningCount(widget.archive.id),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       Widget children;
                       if (snapshot.hasData) {
