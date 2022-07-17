@@ -24,25 +24,31 @@ abstract class QuizBoxViewModel<T extends StatefulWidget> extends State<T> {
   }
 
   setHaveThreeQuiz() {
-    setState(() {
-      haveThreeQuiz = true;
-    });
+    if (mounted) {
+      setState(() {
+        haveThreeQuiz = true;
+      });
+    }
   }
 
   setHaveTenWord() {
-    setState(() {
-      haveTenWord = true;
-    });
+    if (mounted) {
+      setState(() {
+        haveTenWord = true;
+      });
+    }
   }
 
   void notEnoughWordFunc() async {
-    setState(() {
-      showWordInformation = true;
-    });
-    await Future.delayed(const Duration(seconds: 5));
+    if (mounted) {
+      setState(() {
+        showWordInformation = true;
+      });
+      await Future.delayed(const Duration(seconds: 5));
 
-    setState(() {
-      showWordInformation = false;
-    });
+      setState(() {
+        showWordInformation = false;
+      });
+    }
   }
 }
