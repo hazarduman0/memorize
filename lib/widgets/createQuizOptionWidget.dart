@@ -50,8 +50,8 @@ class _CreateQuizOptionCardState
         height: !isChoosen
             ? size.height * 0.07
             : string != keys.inOrderWords
-                ? size.height * 0.4
-                : size.height * 0.45,
+                ? size.height * 0.45
+                : size.height * 0.55,
         width: size.width,
         duration: const Duration(milliseconds: 0),
         child: !isChoosen ? cardNotSelected(size, string) : _cardSelected(size),
