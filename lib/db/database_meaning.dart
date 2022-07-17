@@ -33,6 +33,23 @@ class MeaningOperations {
     );
   }
 
+  Future<int?> getMeaningCount(int? wordId) async{
+    final db = await dbRepository.database;
+
+    const where = '${MeaningFields.wordId} = ?';
+
+    var whereArgs = [wordId];
+
+    final result = await db.query(
+      tableMeanings,
+      where: where,
+      whereArgs: whereArgs
+      );
+    var _list = result.map((json) => Meaning.fromJson(json)).toList();  
+
+    return _list.isEmpty ? 0 : _list.length;
+  }
+
   Future<List<Meaning>> getWordMeanings(int? wordID) async{
     final db = await dbRepository.database;
 
@@ -48,4 +65,6 @@ class MeaningOperations {
 
       return result.map((json) => Meaning.fromJson(json)).toList();
   }
+
+
 }
