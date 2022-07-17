@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/db/database_meaning.dart';
 import 'package:memorize/model/meaning.dart';
 import 'package:memorize/model/word.dart';
 import 'package:memorize/view_model/word_view_model.dart/wordCardViewModel.dart';
@@ -23,27 +21,23 @@ class WordCardWidget extends StatefulWidget {
 }
 
 class _WordCardWidgetState extends WordCardViewModel<WordCardWidget> {
-  AppTextStyles textStyles = AppTextStyles();
-  bool cardBool = false;
-  late Word word;
-  late List<Meaning> meanings;
-  MeaningOperations meaningOperations = MeaningOperations();
 
-  Future<void> getMeanings(Word word) async {
-    meanings = await meaningOperations.getWordMeanings(word.id);
-    setState(() {});
-  }
+  late Word word;
+  
+
+  // Future<void> getMeanings(Word word) async {
+  //   meanings = await meaningOperations.getWordMeanings(word.id);
+  //   // setState(() {});
+  // }
+
+  
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    meanings = [];
     word = widget.word;
-    getMeanings(word);
-    setState(() {});
-    // print(meanings);
-    //print(widget.word.word);
+    initMeanings(word.id);
   }
 
   @override
@@ -51,7 +45,7 @@ class _WordCardWidgetState extends WordCardViewModel<WordCardWidget> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if (widget.word != word) {
-      getMeanings(widget.word);
+      initMeanings(widget.word.id);
     }
   }
 
