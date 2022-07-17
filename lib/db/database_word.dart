@@ -1,30 +1,30 @@
 import 'package:memorize/db/database.dart';
-import 'package:memorize/model/archive.dart';
+import 'package:memorize/db/database_meaning.dart';
 import 'package:memorize/model/word.dart';
-import 'package:sqflite/sqflite.dart';
 
-class WordOperations{
+class WordOperations {
+  MeaningOperations meaningOperations = MeaningOperations();
   DatabaseRepository dbRepository = DatabaseRepository.instance;
 
-  Future<Word> createWord(Word word) async{
+  Future<Word> createWord(Word word) async {
     final db = await dbRepository.database;
 
     final id = await db.insert(tableWords, word.toJson());
     return word.copy(id: id);
   }
 
-  Future<int> updateWord(Word word) async{
+  Future<int> updateWord(Word word) async {
     final db = await dbRepository.database;
 
     return db.update(
-      tableWords, 
+      tableWords,
       word.toJson(),
       where: '${WordFields.id} = ?',
       whereArgs: [word.id],
-      );
+    );
   }
 
-  Future<int> deleteWord(int? id) async{
+  Future<int> deleteWord(int? id) async {
     final db = await dbRepository.database;
 
     return await db.delete(
@@ -34,62 +34,50 @@ class WordOperations{
     );
   }
 
-  Future<List<Word>> getWord(int? wordID) async{
+  Future<List<Word>> getWord(int? wordID) async {
     final db = await dbRepository.database;
 
     const where = '${WordFields.id} = ?';
 
     var whereArgs = [wordID];
 
-    final result = await db.query(
-      tableWords,
-      where: where,
-      whereArgs: whereArgs
-    );
+    final result =
+        await db.query(tableWords, where: where, whereArgs: whereArgs);
 
     return result.map((json) => Word.fromJson(json)).toList();
   }
 
-  Future<int?> getWordCount(int? archiveID) async{
+  Future<int?> getWordWithMeaningCount(int? archiveID) async {
     final db = await dbRepository.database;
 
     const where = '${WordFields.archiveID} = ?';
 
     var whereArgs = [archiveID];
 
-    final result = await db.query(
-      tableWords,
-      where: where,
-      whereArgs: whereArgs
-      );
-    return result.map((json) => Word.fromJson(json)).toList().length;  
+    final result =
+        await db.query(tableWords, where: where, whereArgs: whereArgs);
+    var _list = result.map((json) => Word.fromJson(json)).toList();
+    int _wordWithMeaningCount = 0;
+
+    for (int i = 0; i < _list.length; i++) {
+      int? _meaningCount = await meaningOperations.getMeaningCount(_list[i].id);
+      if (_meaningCount! > 0) {
+        _wordWithMeaningCount++;
+      }
+    }
+
+    return _wordWithMeaningCount;
   }
 
-//   Future<int?> getWordCount(int? archiveID) async {
-//     final db = await dbRepository.database;
-
-//     const where = WordFields.archiveID;
-
-//     var whereArgs = archiveID;
-
-//     var x = await db.rawQuery('SELECT COUNT (*) from $tableWords $where = $whereArgs');
-//     int? count = Sqflite.firstIntValue(x);
-//     return count;
-// }
-
-  Future<List<Word>> getArchiveWords(int? archiveID) async{
-    
+  Future<List<Word>> getArchiveWords(int? archiveID) async {
     final db = await dbRepository.database;
 
     const where = '${WordFields.archiveID} = ?';
 
     var whereArgs = [archiveID];
 
-    final result = await db.query(
-      tableWords,
-      where: where,
-      whereArgs: whereArgs
-    );
+    final result =
+        await db.query(tableWords, where: where, whereArgs: whereArgs);
     return result.map((json) => Word.fromJson(json)).toList();
   }
 }
