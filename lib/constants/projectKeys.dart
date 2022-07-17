@@ -2,7 +2,7 @@ class ProjectKeys{
   final String title = 'MEMORIZE';
   final String slogan = '"Zihninizi genişletin, blabla"';
   final String searchText = 'Aramak için yazın..';
-  final String statistics = 'istatistik';
+  final String statistics = 'istatistik'; //enum mainViewModel
   final String homePage = 'anasayfa';
   final String exams = 'sınavlar';
   final String noArchiveText1 = 'Hay Aksi!';
