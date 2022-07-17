@@ -25,7 +25,6 @@ class _CreateQuizStagePageState
   void initState() {
     // TODO: implement initState
     super.initState();
-    //sortBy = keys.close;
     archiveName = widget.archive.archiveName;
     color = ColorFunctions.getColor(widget.archive.color);
   }

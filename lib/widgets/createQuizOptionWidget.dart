@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/view_model/quiz_view_model/createQuizOptionViewModel.dart';
-import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
 
 class CreateQuizOptionCard extends StatefulWidget {
   CreateQuizOptionCard({
@@ -23,15 +20,8 @@ class CreateQuizOptionCard extends StatefulWidget {
 
 class _CreateQuizOptionCardState
     extends CreateQuizOptionViewModel<CreateQuizOptionCard> {
-  ProjectKeys keys = ProjectKeys();
-  AppTextStyles textStyles = AppTextStyles();
   late bool isChoosen;
-  bool isHintSelected = false;
   late String string;
-  int questionAmaount = 0;
-  int minute = 0;
-  int second = 0;
-  late String sortBy;
 
   @override
   void initState() {
@@ -277,30 +267,6 @@ class _CreateQuizOptionCardState
       ),
     );
   }
-
-  // void enterTimeTextFieldFunction(String value, String key) {
-  //   setState(() {
-  //     if (value.isEmpty) {
-  //       value = '0';
-  //     }
-  //     if (key == 'minute') {
-  //       minute = int.parse(value);
-  //     }
-  //     if (key == 'second') {
-  //       second = int.parse(value);
-  //     }
-
-  //     widget.parentChange(
-  //       string == keys.randomWords,
-  //       string == keys.inOrderWords,
-  //       isHintSelected,
-  //       questionAmaount,
-  //       minute,
-  //       second,
-  //       sortBy,
-  //     );
-  //   });
-  // }
 
   SizedBox enterTimeTextFieldBuild(double _enterTimeHeight, String key) {
     return SizedBox(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/createQuizPage.dart';
 import 'package:memorize/view_model/quiz_view_model/quizBoxViewModel.dart';
@@ -18,12 +16,6 @@ class QuizBox extends StatefulWidget {
 class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
   late Color color;
   late String archiveName;
-
-  AppTextStyles textStyles = AppTextStyles();
-
-  ProjectKeys keys = ProjectKeys();
-
-  bool openedCard = false;
 
   @override
   void initState() {
