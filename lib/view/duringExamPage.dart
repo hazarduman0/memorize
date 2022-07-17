@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/constants/projectKeys.dart';
-import 'package:memorize/db/database_quiz.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/mainPage.dart';
-import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
 import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
 import 'package:memorize/widgets/quizCard.dart';
 import 'package:memorize/widgets/timerWidget.dart';
@@ -33,13 +29,12 @@ class DuringExamPage extends StatefulWidget {
 }
 
 class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
-  ProjectKeys keys = ProjectKeys();
-  AppTextStyles textStyles = AppTextStyles();
+  
   late int _questionAmaount; // s!!
   late int _timeLeft;
   late List<String> _answerArray;
   late bool _isHintSelected;
-  QuizOperations _quizOperations = QuizOperations();
+  
 
   List<String> initialArrayGenerator() {
     List<String>? _lAnswerArray = [''];
@@ -153,7 +148,7 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
 
   FutureBuilder<Map<String, List<String>>> _quizCardFutureBuilder() {
     return FutureBuilder(
-        future: _quizOperations.getRandomWordsAndAnswers(
+        future: quizOperations.getRandomWordsAndAnswers(
             widget.archive.id, _questionAmaount),
         builder: _quizCardFutureBuilderParam);
   }
