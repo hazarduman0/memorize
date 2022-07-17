@@ -1,5 +1,6 @@
 import 'package:memorize/db/database.dart';
 import 'package:memorize/model/meaning.dart';
+import 'package:memorize/model/quiz.dart';
 import 'package:memorize/model/word.dart';
 
 class QuizOperations {
@@ -48,5 +49,22 @@ class QuizOperations {
     }
 
     return _wordsAndAnswers;
+  }
+
+  Future<int?> getQuizCount(int? archiveID) async{
+    final db = await dbRepository.database;
+
+    const where = '${QuizFields.archiveID} = ?';
+
+    var whereArgs = [archiveID];
+
+    final result = await db.query(
+      tableQuizs,
+      where: where,
+      whereArgs: whereArgs
+      );
+    var _list = result.map((json) => Quiz.fromJson(json)).toList();
+
+    return _list.isEmpty ? 0 : _list.length;  
   }
 }
