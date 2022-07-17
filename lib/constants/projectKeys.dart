@@ -56,5 +56,6 @@ class ProjectKeys{
   final String isEnoughQuestionText = 'Lütfen uygun soru sayısını giriniz';
   final String isChoosenAnyCardText = 'Lütfen seçip ilgili alanları doldurunuz';
   final String isSortByChoosenText = 'Lütfen bir sıralama ölçütü seçiniz';
+  final String wordInformationText = 'Karşılığı bulunan en az 10 kelime gerekli.';
 
 }
