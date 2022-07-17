@@ -75,28 +75,35 @@ class AppColors {
 
 class ColorFunctions {
   static Color getColor(String color) {
-    if (color == 'selectableOrangeColor') {
+    if (color == ColorDB.selectableOrangeColor.name) {
       return AppColors.selectableOrangeColor;
-    } else if (color == 'selectableYellowColor') {
+    } else if (color == ColorDB.selectableYellowColor.name) {
       return AppColors.selectableYellowColor;
-    } else if (color == 'selectablePurpleColor') {
+    } else if (color == ColorDB.selectablePurpleColor.name) {
       return AppColors.selectablePurpleColor;
-    } else if (color == 'selectableBlueColor') {
+    } else if (color == ColorDB.selectableBlueColor.name) {
       return AppColors.selectableBlueColor;
     }
     return AppColors.selectableGreenColor;
   }
 
   static Color getLightColor(String color) {
-    if (color == 'selectableOrangeColor') {
+    if (color == ColorDB.selectableOrangeColor.name) {
       return AppColors.selectableLightOrangeColor;
-    } else if (color == 'selectableYellowColor') {
+    } else if (color == ColorDB.selectableYellowColor.name) {
       return AppColors.selectableLightYellowColor;
-    } else if (color == 'selectablePurpleColor') {
+    } else if (color == ColorDB.selectablePurpleColor.name) {
       return AppColors.selectableLightPurpleColor;
-    } else if (color == 'selectableBlueColor') {
+    } else if (color == ColorDB.selectableBlueColor.name) {
       return AppColors.selectableLightBlueColor;
     }
     return AppColors.selectableLightGreenColor;
   }
+}
+
+enum ColorDB {
+  selectableOrangeColor,
+  selectableYellowColor,
+  selectablePurpleColor,
+  selectableBlueColor
 }
