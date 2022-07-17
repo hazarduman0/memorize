@@ -177,23 +177,23 @@ class _CreateQuizStagePageState
     if (!isTimeValid) {
       snackBar = SnackBar(
         content:
-            Text(keys.isTimeValidText, style: textStyles.snackBarWarningText),
+            Text(keys.isTimeValidText, style: textStyles.warningText),
       );
     }
     if (!isEnoughQuestion) {
       snackBar = SnackBar(
           content: Text(keys.isEnoughQuestionText,
-              style: textStyles.snackBarWarningText));
+              style: textStyles.warningText));
     }
     if (!isChoosenAnyCard) {
       snackBar = SnackBar(
           content: Text(keys.isChoosenAnyCardText,
-              style: textStyles.snackBarWarningText));
+              style: textStyles.warningText));
     }
     if (isInOrderCardChoosen && !isSortByChoosen) {
       snackBar = SnackBar(
           content: Text(keys.isSortByChoosenText,
-              style: textStyles.snackBarWarningText));
+              style: textStyles.warningText));
     }
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
