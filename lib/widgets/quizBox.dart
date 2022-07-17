@@ -23,6 +23,23 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
     super.initState();
     archiveName = widget.archive.archiveName;
     color = ColorFunctions.getColor(widget.archive.color);
+    initHaveTenWord();
+    initHaveThreeQuiz();
+  }
+
+  initHaveTenWord() async {
+    int? _wordCount =
+        await wordOperations.getWordWithMeaningCount(widget.archive.id);
+    if (_wordCount! >= 10) {
+      setHaveTenWord();
+    }
+  }
+
+  initHaveThreeQuiz() async {
+    int? _quizCount = await quizOperations.getQuizCount(widget.archive.id);
+    if (_quizCount! >= 3) {
+      setHaveThreeQuiz();
+    }
   }
 
   @override
@@ -40,14 +57,24 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
   Padding quizBox(Size size) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             boxHeader(size),
             const SizedBox(
               height: 15.0,
             ),
-            lastExamTextButton(size),
+            showWordInformation
+                ? wordInformation
+                : haveThreeQuiz
+                    ? lastExamTextButton(size)
+                    : const SizedBox(),
           ],
         ),
+      );
+
+  Text get wordInformation => Text(
+        keys.wordInformationText,
+        style: textStyles.warningText,
       );
 
   GestureDetector lastExamTextButton(Size size) => GestureDetector(
@@ -178,13 +205,7 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
   GestureDetector takeExamButton(Size size) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CreateQuizStagePage(
-                archive: widget.archive,
-              ),
-            ));
+        haveTenWord ? takeExamButtonFunc() : notEnoughWordFunc();
       },
       child: Container(
         height: size.height * 0.03,
@@ -193,6 +214,16 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
         decoration: examButtonDecoration(),
       ),
     );
+  }
+
+  void takeExamButtonFunc() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateQuizStagePage(
+            archive: widget.archive,
+          ),
+        ));
   }
 
   Row insideExamButton(Size size) {
@@ -215,7 +246,7 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
             child: Center(
                 child: Icon(
               Icons.arrow_forward_ios,
-              color: color,
+              color: haveTenWord ? color : AppColors.lightGrey,
               size: size.height * 0.02,
             )),
           ),
@@ -226,6 +257,7 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
 
   BoxDecoration examButtonDecoration() {
     return BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0), color: color);
+        borderRadius: BorderRadius.circular(25.0),
+        color: haveTenWord ? color : AppColors.lightGrey);
   }
 }
