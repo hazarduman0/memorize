@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:memorize/constants/appColors.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/constants/projectKeys.dart';
-import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/archivePage.dart';
 import 'package:memorize/view/chartPage.dart';
@@ -23,45 +20,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends MainViewModel<MainPage> {
-  // int currentPage = 1;
-  // int? clickedArchiveID = 1;
-  // String ooArchiveName = '';
-  // String ooArchiveDescription = '';
-  // Color ooArchiveColor = Colors.white;
-  ProjectKeys keys = ProjectKeys();
-  AppTextStyles textStyles = AppTextStyles();
-  //bool otherOptions = false;
-  late PageController pageController;
-  ArchiveOperations archiveOperations = ArchiveOperations();
-  Archive? archive;
-
-  void parentChange(bool fotherOptions, int? fclickedArchiveID) async {
-    setState(() {
-      clickedArchiveID = fclickedArchiveID;
-      otherOptions = fotherOptions;
-    });
-
-    archive = await getArchive(clickedArchiveID);
-
-    setState(() {
-      ooArchiveName = archive!.archiveName;
-      ooArchiveDescription = archive!.description;
-      ooArchiveColor = ColorFunctions.getColor(archive!.color);
-    });
-  }
-
-  // void didParentUpdate(bool lOtherOption){
-  //   if(lOtherOption){
-  //     setState(() {
-        
-  //     });
-  //   }
-  // }
-
-
-  Future<Archive> getArchive(int? archiveID) async {
-    return await archiveOperations.getArchive(archiveID);
-  }
 
   @override
   void initState() {
@@ -70,7 +28,6 @@ class _MainPageState extends MainViewModel<MainPage> {
     //SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
         overlays: [SystemUiOverlay.top]);
-    pageController = PageController(initialPage: 1);
     //SystemChrome.latestStyle!.systemNavigationBarColor;
   }
 
@@ -92,8 +49,6 @@ class _MainPageState extends MainViewModel<MainPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // print(size.height);
-    // print(size.width);
     return mainPageScaffoldBuild(size);
   }
 
@@ -101,28 +56,35 @@ class _MainPageState extends MainViewModel<MainPage> {
     Size size,
   ) {
     return Scaffold(
-      body: FutureBuilder(
-        future: Future.wait([
-          archiveOperations.getNormalArchives(),
-          archiveOperations.getPinnedArchives()
-        ]),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          Widget children;
-          if (snapshot.hasData) {
-            if (snapshot.data[0].isEmpty && snapshot.data[1].isEmpty) {
-              children = NoDataPage();
-            } else {
-              children = haveDataPageStack(size, snapshot.data[0], snapshot.data[1]);
-            }
-          } else if (snapshot.hasError) {
-            children = Center(child: Text('${snapshot.error}'));
-          } else {
-            children = const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return children;
-        },
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: SizedBox(
+          height: size.height,
+          width: size.width,
+          child: FutureBuilder(
+            future: Future.wait([
+              archiveOperations.getNormalArchives(),
+              archiveOperations.getPinnedArchives()
+            ]),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              Widget children;
+              if (snapshot.hasData) {
+                if (snapshot.data[0].isEmpty && snapshot.data[1].isEmpty) {
+                  children = NoDataPage();
+                } else {
+                  children = haveDataPageStack(size, snapshot.data[0], snapshot.data[1]);
+                }
+              } else if (snapshot.hasError) {
+                children = Center(child: Text('${snapshot.error}'));
+              } else {
+                children = const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return children;
+            },
+          ),
+        ),
       ),
     );
   }
@@ -139,12 +101,7 @@ class _MainPageState extends MainViewModel<MainPage> {
 
   GestureDetector otherOptionsAvailable(Size size) {
     return GestureDetector(
-      onTap: () {
-        // setState(() {
-        //   otherOptions = false;
-        // });
-        clickVoid();
-      },
+      onTap: clickVoid,
       child: otherOptionsGlassMorphicContainerBuild(size),
     );
   }
@@ -237,7 +194,9 @@ class _MainPageState extends MainViewModel<MainPage> {
                 currentPage: currentPage,
                 keys: keys,
                 textStyles: textStyles,
-                size: size),
+                size: size,
+                function: parentPageChange,
+                ),
           ],
         ));
   }
@@ -249,16 +208,13 @@ class _MainPageState extends MainViewModel<MainPage> {
       child: PageView(
         controller: pageController,
         onPageChanged: (value) {
-          setState(() {
-            currentPage = value;
-          });
+          pageViewFunc(value);
         },
         children: [
           ChartPage(),
           ArchivePage(
             normalArchive: normalArchive,
             pinnedArchive: pinnedArchive,
-            //didParentUpdate: didParentUpdate,
             customFunction: parentChange,
           ),
           QuizPage(),
@@ -338,9 +294,6 @@ class _MainPageState extends MainViewModel<MainPage> {
                     style: textButtonStyle(),
                     onPressed: () {
                       deleteArchive(archive!.id);
-                      // setState(() {
-                      //   otherOptions = false;
-                      // });
                       clickVoid();
                       Navigator.push(
                           context,

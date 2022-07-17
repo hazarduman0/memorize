@@ -30,7 +30,17 @@ abstract class CreateQuizViewModel<T extends StatefulWidget> extends State<T> {
       (isSortByChoosen && (isEnoughQuestion && isTimeValid));
   bool get isValid => (isRandomCardValid || isInOrderCardValid);
 
-  void parentIsRandomCardChoosenChange(){} /// 
+  // void isParentRandomCardChoosenChange(bool _isRandomCardChoosen){
+  //   setState(() {
+  //     isRandomCardChoosen = _isRandomCardChoosen;
+  //   });
+  // }
+
+  // void isParentInOrderCardChoosen(bool _isInOrderCardChoosen){
+  //   setState(() {
+  //     isInOrderCardChoosen = _isInOrderCardChoosen;
+  //   });
+  // }
 
   void parentChange(
       bool _isRandomCardChoosen,

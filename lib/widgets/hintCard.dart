@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
+import 'package:memorize/view_model/quiz_view_model/hintCardViewModel.dart';
 
 class HintCard extends StatefulWidget {
   HintCard({Key? key, required this.meaningList}) : super(key: key);
@@ -13,25 +14,17 @@ class HintCard extends StatefulWidget {
   State<HintCard> createState() => _HintCardState();
 }
 
-class _HintCardState extends State<HintCard> {
-  bool needHelp = false;
-  int _pageViewIndex = 0;
+class _HintCardState extends HintCardViewModel<HintCard> {
   late List<String>? _meaningList;
   late List<String> _clues;
   late Map<int, int> _meaningListData;
   late int _meaningListLength;
-  final Random _random = Random();
-  AppTextStyles textStyles = AppTextStyles();
-  final PageController _pageController =
-      PageController(viewportFraction: 1, keepPage: true);
 
   List<String> _initClues(Map<int, int> meaningListData) {
     List<String> _lClue = [];
     for (int i = 0; i < meaningListData.keys.length; i++) {
       _lClue.add(_createUnderlineString(meaningListData[i] ?? 0));
-      // _lClue[i] = _changeCharacter(_lClue[i].length);
     }
-    print('_lClue : $_lClue');
     return _lClue;
   }
 
@@ -40,7 +33,6 @@ class _HintCardState extends State<HintCard> {
     for (int i = 0; i < meaningList!.length; i++) {
       _lMeaningListData[i] = meaningList[i].length;
     }
-    print('_lMeaningListData : $_lMeaningListData');
     return _lMeaningListData;
   }
 
@@ -53,28 +45,20 @@ class _HintCardState extends State<HintCard> {
   }
 
   void _giveClue(String clue, int index) {
-    // print('1. $clue');
-    // print('index : $index');
     String _tempClue;
-    int _randomNumber = _random.nextInt(clue.length);
+    int _randomNumber = random.nextInt(clue.length);
     while (true) {
       if (clue[_randomNumber] == '_') {
         _tempClue = clue.substring(0, _randomNumber) +
             _meaningList![index][_randomNumber] +
             clue.substring(_randomNumber + 1);
-        // print('temp: $_tempClue');
-        // print('_meaningList![index][_randomNumber] : ${_meaningList![index][_randomNumber]}');
-        // print('clue.substring(0,_randomNumber) : ${clue.substring(0,_randomNumber)}');
-        // print('_meaningList![index]  : ${_meaningList![index]}');
-        // print('clue.substring(_randomNumber + 1) : ${clue.substring(_randomNumber + 1)}');
-        // print('_randomNumber : $_randomNumber');
 
         setState(() {
           _clues[index] = _tempClue;
         });
         break;
       } else {
-        _randomNumber = _random.nextInt(clue.length);
+        _randomNumber = random.nextInt(clue.length);
       }
     }
   }
@@ -131,13 +115,13 @@ class _HintCardState extends State<HintCard> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _pageViewIndex == 0
+        pageViewIndex == 0
             ? const SizedBox(
                 width: 50,
               )
             : _arrowLeftBuild(),
         _hintPageViewBuild(size),
-        _pageViewIndex == _meaningListLength - 1
+        pageViewIndex == _meaningListLength - 1
             ? const SizedBox(
                 width: 50,
               )
@@ -152,7 +136,7 @@ class _HintCardState extends State<HintCard> {
         height: size.height * 0.03,
         width: size.width * 0.45,
         child: PageView.builder(
-          controller: _pageController,
+          controller: pageController,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: _meaningListLength,
           itemBuilder: (context, index) {
@@ -174,14 +158,7 @@ class _HintCardState extends State<HintCard> {
         enableFeedback: false,
         highlightColor: Colors.white,
         splashColor: Colors.white,
-        onPressed: () {
-          setState(() {
-            _pageViewIndex++;
-            _pageController.nextPage(
-                duration: const Duration(milliseconds: 1),
-                curve: Curves.easeIn);
-          });
-        },
+        onPressed: arrowRightFunc,
         icon: const Icon(Icons.keyboard_arrow_right_outlined));
   }
 
@@ -190,14 +167,7 @@ class _HintCardState extends State<HintCard> {
         enableFeedback: false,
         highlightColor: Colors.white,
         splashColor: Colors.white,
-        onPressed: () {
-          setState(() {
-            _pageViewIndex--;
-            _pageController.previousPage(
-                duration: const Duration(milliseconds: 1),
-                curve: Curves.easeIn);
-          });
-        },
+        onPressed: arrowLeftFunc,
         icon: const Icon(Icons.keyboard_arrow_left_outlined));
   }
 
@@ -206,7 +176,11 @@ class _HintCardState extends State<HintCard> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _clearButtonBuild(),
-        FittedBox(child: Text('$_meaningListLength adet anlam', style: textStyles.enterTimeTextStyle,)),
+        FittedBox(
+            child: Text(
+          '$_meaningListLength adet anlam',
+          style: textStyles.enterTimeTextStyle,
+        )),
         _hintButtonBuild(),
       ],
     );
@@ -219,8 +193,7 @@ class _HintCardState extends State<HintCard> {
         splashColor: Colors.white,
         enableFeedback: false,
         onPressed: () {
-          _giveClue(_clues[_pageViewIndex], _pageViewIndex);
-          // print(_clues);
+          _giveClue(_clues[pageViewIndex], pageViewIndex);
         },
         icon: const Icon(
           Icons.wb_incandescent_rounded,
@@ -233,11 +206,7 @@ class _HintCardState extends State<HintCard> {
         highlightColor: Colors.white,
         splashColor: Colors.white,
         enableFeedback: false,
-        onPressed: () {
-          setState(() {
-            needHelp = false;
-          });
-        },
+        onPressed: clearButtonFunc,
         icon: const Icon(
           Icons.clear,
         ));
@@ -250,11 +219,7 @@ class _HintCardState extends State<HintCard> {
             enableFeedback: false,
             highlightColor: Colors.white,
             splashColor: Colors.white,
-            onPressed: () {
-              setState(() {
-                needHelp = true;
-              });
-            },
+            onPressed: getHintCard,
             icon: const Icon(
               Icons.info,
             )));
