@@ -515,7 +515,7 @@ class _WordsPageState extends WordViewModel<WordsPage> {
     //tasarla sonradan
     return ElevatedButton(
         onPressed: () {
-          addButtonFunc();
+          addOrUpdateStackBoolFunc();
         },
         child: Text('Kelime ekle'));
   }
