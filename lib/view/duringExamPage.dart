@@ -158,7 +158,6 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
     Widget children;
     List<String>? _keyList = snapshot.data?.keys.toList();
     List<List<String>>? _meaningList = snapshot.data?.values.toList();
-
     if (snapshot.hasData) {
       children = PageView.builder(
         controller: duringQuizPageController,
