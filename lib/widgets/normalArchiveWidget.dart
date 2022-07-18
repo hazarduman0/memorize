@@ -26,8 +26,6 @@ class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
   late String archiveName;
   late Color color;
   late Color lightColor;
-  ProjectKeys keys = ProjectKeys();
-  ArchiveOperations archiveOperations = ArchiveOperations();
   WordOperations wordOperations = WordOperations();
 
   @override
@@ -125,7 +123,7 @@ class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
             ],
           ),
           FutureBuilder(
-              future: wordOperations.getWordWithMeaningCount(widget.archive.id),
+              future: wordOperations.getWordCount(widget.archive.id),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 Widget children;
                 if (snapshot.hasData) {

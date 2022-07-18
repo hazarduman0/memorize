@@ -14,7 +14,6 @@ class PinnedArchive extends StatefulWidget {
       : super(key: key);
 
   Archive archive;
-  //Function didParentUpdate;
   final Function customFunction;
 
   @override
@@ -22,14 +21,12 @@ class PinnedArchive extends StatefulWidget {
 }
 
 class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
-  // bool animatedBool = true;
   late String archiveName;
   late String description;
   late String lastUpdate;
   late Color color;
   late Color lightColor;
   String wordCount = '';
-  ArchiveOperations archiveOperations = ArchiveOperations();
   WordOperations wordOperations = WordOperations();
 
   @override
@@ -54,8 +51,7 @@ class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
   }
 
   Future<void> getWordCount() async {
-    int? _wordCount = await wordOperations.getWordWithMeaningCount(widget.archive.id);
-    print('sayi $_wordCount');
+    int? _wordCount = await wordOperations.getWordCount(widget.archive.id);
     wordCount = '${_wordCount.toString()} kelime';
   }
 
@@ -149,7 +145,7 @@ class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
               children: [
                 lastUpdateText(textStyles, size),
                 FutureBuilder(
-                    future: wordOperations.getWordWithMeaningCount(widget.archive.id),
+                    future: wordOperations.getWordCount(widget.archive.id),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       Widget children;
                       if (snapshot.hasData) {
@@ -195,9 +191,6 @@ class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
     return IconButton(
         onPressed: () {
           widget.customFunction(true, widget.archive.id);
-          //archiveMoreButtonFunc(widget.archive, didUpdateWidget(otherOptions));
-          //widget.didParentUpdate(otherOptions);
-          //print(otherOptions);
         },
         icon: Icon(
           CustomIcons.more,
@@ -208,7 +201,7 @@ class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
 
   Hero pinnedArchiveName(AppTextStyles textStyles, Size size) {
     return Hero(
-      tag: widget.archive.id.toString(), //'pinnedArchiveName',
+      tag: widget.archive.id.toString(),
       child: Material(
         color: Colors.transparent,
         child: Text(archiveName,

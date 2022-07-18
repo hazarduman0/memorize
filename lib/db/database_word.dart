@@ -69,6 +69,23 @@ class WordOperations {
     return _wordWithMeaningCount;
   }
 
+  Future<int?> getWordCount(int? archiveId) async{
+    final db = await dbRepository.database;
+
+    const where = '${WordFields.archiveID} = ?';
+
+    var whereArgs = [archiveId];
+
+    final result = await db.query(
+      tableWords,
+      where: where,
+      whereArgs: whereArgs
+      );
+    var _list = result.map((json) => Word.fromJson(json)).toList();  
+
+    return _list.isEmpty ? 0 : _list.length;
+  }
+
   Future<List<Word>> getArchiveWords(int? archiveID) async {
     final db = await dbRepository.database;
 
