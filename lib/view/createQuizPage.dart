@@ -27,10 +27,7 @@ class _CreateQuizStagePageState
     super.initState();
     archiveName = widget.archive.archiveName;
     color = ColorFunctions.getColor(widget.archive.color);
-  }
-
-  int getTimeLeft(int minute, int second) {
-    return minute * 60 + second;
+    getMaxQuestionAmount(widget.archive.id);
   }
 
   @override
@@ -179,6 +176,11 @@ class _CreateQuizStagePageState
         content:
             Text(keys.isTimeValidText, style: textStyles.warningText),
       );
+    }
+    if(questionAmaount > maxQuestionAmount!){
+      snackBar = SnackBar(
+          content: Text(keys.overMaxQuestionAmount(maxQuestionAmount),
+              style: textStyles.warningText));
     }
     if (!isEnoughQuestion) {
       snackBar = SnackBar(
