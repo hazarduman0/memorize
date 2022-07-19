@@ -63,7 +63,7 @@ class ArchiveOperations {
   Future<List<Archive>> getPinnedArchives() async {
     final db = await dbRepository.database;
 
-    const orderBy = '${ArchiveFields.time} ASC';
+    const orderBy = '${ArchiveFields.archiveName} ASC';
 
     const where = '${ArchiveFields.isPinned} = ?';
 
@@ -78,7 +78,7 @@ class ArchiveOperations {
   Future<List<Archive>> getNormalArchives() async {
     final db = await dbRepository.database;
 
-    const orderBy = '${ArchiveFields.time} ASC';
+    const orderBy = '${ArchiveFields.archiveName} ASC';
 
     const where = '${ArchiveFields.isPinned} = ?';
 
@@ -93,7 +93,7 @@ class ArchiveOperations {
   Future<List<Archive>> getAllArchives() async {
     final db = await dbRepository.database;
 
-    const orderBy = '${ArchiveFields.time} ASC';
+    const orderBy = '${ArchiveFields.archiveName} ASC';
 
     final result = await db.query(
       tableArchives,
