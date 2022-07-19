@@ -12,33 +12,30 @@ class DuringExamPage extends StatefulWidget {
       required this.archive,
       required this.questionAmaount,
       required this.timeLeft,
-      required this.isHintSelected,
-      required this.isInOrderCardChoosen,
-      required this.isRandomCardChoosen})
+      required this.sortBy,
+      required this.isHintSelected})
       : super(key: key);
 
   Archive archive;
-  int questionAmaount;
-  int timeLeft;
+  int? questionAmaount;
+  int? timeLeft;
+  String sortBy;
   bool isHintSelected;
-  Map<bool, String> isInOrderCardChoosen;
-  bool isRandomCardChoosen;
 
   @override
   State<DuringExamPage> createState() => _DuringExamPageState();
 }
 
 class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
-  
-  late int _questionAmaount; // s!!
-  late int _timeLeft;
+  late int? _questionAmaount; // s!!
+  late int? _timeLeft;
   late List<String> _answerArray;
+  late String _sortBy;
   late bool _isHintSelected;
-  
 
   List<String> initialArrayGenerator() {
     List<String>? _lAnswerArray = [''];
-    for (int i = 0; i <= _questionAmaount; i++) {
+    for (int i = 0; i <= widget.questionAmaount!; i++) {
       _lAnswerArray.add('');
     }
     return _lAnswerArray;
@@ -57,6 +54,7 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
     _questionAmaount = widget.questionAmaount;
     _timeLeft = widget.timeLeft;
     _answerArray = initialArrayGenerator();
+    _sortBy = widget.sortBy;
     _isHintSelected = widget.isHintSelected;
   }
 
@@ -90,7 +88,7 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
           children: [
             _cancelQuizButton(context, size),
             const SizedBox(height: 40.0),
-            _timerBuild(_timeLeft),
+            _timerBuild(_timeLeft!),
             const SizedBox(height: 60.0),
             _buttonRowBuild(),
             _quizCardBuild(size)
@@ -131,7 +129,6 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
           highlightColor: Colors.white,
           splashColor: Colors.white,
           onPressed: duringQuizPreviousPage,
-          
           icon: const Icon(Icons.keyboard_arrow_left_outlined)),
     );
   }
@@ -148,8 +145,8 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
 
   FutureBuilder<Map<String, List<String>>> _quizCardFutureBuilder() {
     return FutureBuilder(
-        future: quizOperations.getRandomWordsAndAnswers(
-            widget.archive.id, _questionAmaount),
+        future: quizOperations.getWordsAndAnswers(
+            widget.archive.id, _questionAmaount, _sortBy),
         builder: _quizCardFutureBuilderParam);
   }
 
@@ -160,8 +157,8 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
     List<List<String>>? _meaningList = snapshot.data?.values.toList();
     if (snapshot.hasData) {
       children = PageView.builder(
-        controller: duringQuizPageController,
-        physics: const NeverScrollableScrollPhysics(),
+          controller: duringQuizPageController,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: _questionAmaount,
           itemBuilder: (context, position) {
             return QuizCard(
