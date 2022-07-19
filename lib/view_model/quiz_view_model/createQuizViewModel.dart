@@ -1,80 +1,113 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
-import 'package:memorize/db/database_word.dart';
 
-abstract class CreateQuizViewModel<T extends StatefulWidget> extends State<T> {
+abstract class NewCreateQuizViewModel<T extends StatefulWidget>
+    extends State<T> {
   AppTextStyles textStyles = AppTextStyles();
 
   ProjectKeys keys = ProjectKeys();
 
-  WordOperations wordOperations = WordOperations();
+  String selectedSortValue = '';
+  String selectedClueValue = '';
+  String sortBy = '';
 
-  bool isRandomCardChoosen = false;
-  bool isInOrderCardChoosen = false;
+  List<String> listOfSortValue = ['Rastgele', 'Alfabetik', 'Tarihe Göre'];
+  List<String> listOfClueValue = ['Hayır! Ben hallederim', 'Evet, lütfen'];
+  List<int>? listOfNumber;
+
+  bool pickSortNotValid = false;
+  bool pickClueNotValid = false;
   bool isHintSelected = false;
-  int questionAmaount = 0;
-  int? maxQuestionAmount;
-  int minute = 0;
-  int second = 0;
-  late String sortBy;
 
-  CreateQuizViewModel() {
-    sortBy = keys.close;
-  }
+  int? questionAmaount;
+  int? timeLeft;
 
-  bool get isTimeValid => minute > 0 || second > 0;
-  bool get isEnoughQuestion => questionAmaount > 0;
-  bool get isQuestionUnderLimit => questionAmaount < maxQuestionAmount!;
-  bool get isQuestionFormOk => isEnoughQuestion && isQuestionUnderLimit;
-  bool get isChoosenAnyCard => isRandomCardChoosen || isInOrderCardChoosen;
-  bool get isSortByChoosen => !(sortBy == keys.close || sortBy == keys.sortBy);
-  bool get isRandomCardValid =>
-      isRandomCardChoosen && (isQuestionFormOk && isTimeValid);
-  bool get isInOrderCardValid =>
-      isInOrderCardChoosen &&
-      (isSortByChoosen && (isQuestionFormOk && isTimeValid));
-  bool get isValid => (isRandomCardValid || isInOrderCardValid);
+  FixedExtentScrollController? questionAmountFormController;
 
-  // void isParentRandomCardChoosenChange(bool _isRandomCardChoosen){
-  //   setState(() {
-  //     isRandomCardChoosen = _isRandomCardChoosen;
-  //   });
-  // }
+  Duration duration = const Duration(minutes: 5, seconds: 30);
 
-  // void isParentInOrderCardChoosen(bool _isInOrderCardChoosen){
-  //   setState(() {
-  //     isInOrderCardChoosen = _isInOrderCardChoosen;
-  //   });
-  // }
+  final formKey = GlobalKey<FormState>();
 
-  void getMaxQuestionAmount(int? archiveId) async{
-    var _maxQuestionAmount = await wordOperations.getWordWithMeaningCount(archiveId);
+  listOfNumberGenerator(int length) {
+    List<int>? _listOfNumber = [];
+    for (int i = 0; i < length; i++) {
+      _listOfNumber.add(i + 1);
+    }
     setState(() {
-      maxQuestionAmount = _maxQuestionAmount;
+      listOfNumber = _listOfNumber;
     });
   }
 
-  int getTimeLeft(int minute, int second) {
-    return minute * 60 + second;
+  List<DropdownMenuItem<String>>? get sortDropDownMenuList =>
+      listOfSortValue.map((String val) {
+        return DropdownMenuItem(value: val, child: Text(val));
+      }).toList();
+
+  List<DropdownMenuItem<String>>? get clueDropDownMenuList =>
+      listOfClueValue.map((String val) {
+        return DropdownMenuItem(value: val, child: Text(val));
+      }).toList();
+
+  List<Widget> get qetListOfNumber => listOfNumber!
+      .map((item) => Center(child: Text(item.toString())))
+      .toList();
+
+  void sortFormFunc(Object? value) {
+    setState(() {
+      selectedSortValue = value.toString();
+    });
   }
 
-  void parentChange(
-      bool _isRandomCardChoosen,
-      bool _isInOrderCardChoosen,
-      bool _isHintSelected,
-      int _questionAmaount,
-      int _minute,
-      int _second,
-      String _sortBy) {
+  void clueFormFunc(Object? value) {
     setState(() {
-      isRandomCardChoosen = _isRandomCardChoosen;
-      isInOrderCardChoosen = _isInOrderCardChoosen;
-      isHintSelected = _isHintSelected;
-      questionAmaount = _questionAmaount;
-      minute = _minute;
-      second = _second;
-      sortBy = _sortBy;
+      selectedClueValue = value.toString();
+    });
+    if (selectedClueValue == keys.yesPleaseText) {
+      setState(() {
+        isHintSelected = true;
+      });
+    } else {
+      setState(() {
+        isHintSelected = false;
+      });
+    }
+  }
+
+  setDuration(Duration _duration) {
+    setState(() {
+      duration = _duration;
+      timeLeft = duration.inSeconds;
+    });
+  }
+
+  setQuestionAmount(int? value) {
+    setState(() {
+      questionAmaount = value;
+    });
+  }
+
+  void setTruePickSortNotValid() {
+    setState(() {
+      pickSortNotValid = true;
+    });
+  }
+
+  void setTruePickClueNotValid() {
+    setState(() {
+      pickClueNotValid = true;
+    });
+  }
+
+  void setFalsePickSortNotValid() {
+    setState(() {
+      pickSortNotValid = false;
+    });
+  }
+
+  void setFalsePickClueNotValid() {
+    setState(() {
+      pickClueNotValid = true;
     });
   }
 }
