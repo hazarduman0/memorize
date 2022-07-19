@@ -9,6 +9,8 @@ abstract class QuizBoxViewModel<T extends StatefulWidget> extends State<T> {
 
   ProjectKeys keys = ProjectKeys();
 
+  int? length = 0;
+
   bool openedCard = false;
   bool haveThreeQuiz = false;
   bool haveTenWord = false;
@@ -37,6 +39,12 @@ abstract class QuizBoxViewModel<T extends StatefulWidget> extends State<T> {
         haveTenWord = true;
       });
     }
+  }
+
+  initLength(int _length){
+    setState(() {
+      length = _length;
+    });
   }
 
   void notEnoughWordFunc() async {
