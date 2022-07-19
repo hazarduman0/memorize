@@ -1,98 +1,288 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/duringExamPage.dart';
 import 'package:memorize/view_model/quiz_view_model/createQuizViewModel.dart';
-import 'package:memorize/widgets/createQuizOptionWidget.dart';
 import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
 
-class CreateQuizStagePage extends StatefulWidget {
+class NewCreateQuizPage extends StatefulWidget {
   Archive archive;
+  int length;
 
-  CreateQuizStagePage({Key? key, required this.archive}) : super(key: key);
+  NewCreateQuizPage({Key? key, required this.archive, required this.length})
+      : super(key: key);
 
   @override
-  State<CreateQuizStagePage> createState() => _CreateQuizStagePageState();
+  State<NewCreateQuizPage> createState() => _NewCreateQuizPageState();
 }
 
-class _CreateQuizStagePageState
-    extends CreateQuizViewModel<CreateQuizStagePage> {
-  late String archiveName;
-  late Color color;
-
+class _NewCreateQuizPageState
+    extends NewCreateQuizViewModel<NewCreateQuizPage> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    archiveName = widget.archive.archiveName;
-    color = ColorFunctions.getColor(widget.archive.color);
-    getMaxQuestionAmount(widget.archive.id);
+    listOfNumberGenerator(widget.length);
+    questionAmountFormController =
+        FixedExtentScrollController(initialItem: widget.length ~/ 2);
+    questionAmaount = widget.length ~/ 2;
+    timeLeft = duration.inSeconds;    
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return _scaffoldBuild(context, size);
-  }
-
-  Scaffold _scaffoldBuild(BuildContext context, Size size) {
     return Scaffold(
-      body: _pageContainer(context, size),
+      body: _pageArea(context, size),
     );
   }
 
-  SingleChildScrollView _pageContainer(BuildContext context, Size size) =>
+  SingleChildScrollView _pageArea(BuildContext context, Size size) =>
       SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(
-              right: 10.0, left: 10.0, top: 60.0, bottom: 40.0),
+          padding: EdgeInsets.only(
+              right: size.width * 0.0254,
+              left: size.width * 0.0254,
+              top: size.height * 0.0705,
+              bottom: size.height * 0.0470),
           child: Container(
             width: MediaQuery.of(context).size.width,
-            child: _pageItemsAndFeatures(context, size),
+            child: _pageItemsAndFeatures(size, context),
             decoration: _pageItemsContainerDecoration(),
           ),
         ),
       );
 
-  Padding _pageItemsAndFeatures(BuildContext context, Size size) => Padding(
-        padding: const EdgeInsets.only(
-            right: 15.0, left: 15.0, top: 30.0, bottom: 40.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _backButtonBuild(context),
-            const SizedBox(
-              height: 30.0,
-            ),
-            _archiveNameText(size),
-            const SizedBox(
-              height: 30.0,
-            ),
-            _createQuizStageRow(size),
-            const SizedBox(
-              height: 30.0,
-            ),
-            CreateQuizOptionCard(
-              string: keys.randomWords,
-              isChoosen: isRandomCardChoosen,
-              parentChange: parentChange,
-            ),
-            const SizedBox(
-              height: 30.0,
-            ),
-            CreateQuizOptionCard(
-              string: keys.inOrderWords,
-              isChoosen: isInOrderCardChoosen,
-              parentChange: parentChange,
-            ),
-            const SizedBox(
-              height: 30.0,
-            ),
-            startQuizButton(size),
-          ],
+  Padding _pageItemsAndFeatures(Size size, BuildContext context) => Padding(
+        padding: EdgeInsets.only(
+            right: size.width * 0.0382,
+            left: size.width * 0.0382,
+            top: size.height * 0.0353,
+            bottom: size.height * 0.047),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _backButtonBuild(context),
+              SizedBox(height: size.height * 0.0353),
+              _archiveNameText(size),
+              SizedBox(height: size.height * 0.0353),
+              _createQuizStageRow(size),
+              SizedBox(height: size.height * 0.0253),
+              _formPadding(size),
+              _startQuizButton(size)
+            ],
+          ),
         ),
       );
+
+  Align _startQuizButton(Size size) {
+    return Align(
+      alignment: Alignment.center,
+      child: SizedBox(
+        height: size.height * 0.06,
+        width: size.width * 0.7,
+        child: ElevatedButton(
+            onPressed: () {
+              final _isValid = formKey.currentState!.validate();
+              if (_isValid) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DuringExamPage(
+                          archive: widget.archive,
+                          questionAmaount: questionAmaount,
+                          timeLeft: timeLeft,
+                          sortBy: sortBy,
+                          isHintSelected: isHintSelected,
+                          ),
+                    ));
+              }
+            },
+            style: _startQuizButtonStyle(),
+            child: _startButtonTextBuild(size)),
+      ),
+    );
+  }
+
+  Text _startButtonTextBuild(Size size) {
+    return Text(keys.startQuiz,
+        style: textStyles.createArchiveButtonTextStyle2
+            .copyWith(fontSize: size.height * 0.01874));
+  }
+
+  ButtonStyle _startQuizButtonStyle() {
+    return ButtonStyle(
+        elevation: MaterialStateProperty.all<double>(0.0),
+        backgroundColor: MaterialStateProperty.all<Color>(
+            AppColors.createArchiveButtonColor),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))));
+  }
+
+  Padding _formPadding(Size size) => Padding(
+        padding: EdgeInsets.only(
+            right: size.width * 0.015,
+            left: size.width * 0.015,
+            bottom: size.height * 0.047),
+        child: _formContainer(size),
+      );
+
+  Container _formContainer(Size size) => Container(
+        padding: EdgeInsets.only(
+            right: size.width * 0.0382,
+            left: size.width * 0.0382,
+            top: size.height * 0.0353,
+            bottom: size.height * 0.047),
+        height: size.height * 0.75,
+        width: size.width,
+        decoration: _formContainerDecoration(),
+        child: _formColumn(size),
+      );
+
+  BoxDecoration _formContainerDecoration() {
+    return BoxDecoration(
+        color: AppColors.archiveAreaBackgroundColor,
+        borderRadius: BorderRadius.circular(15.0));
+  }
+
+  Column _formColumn(Size size) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _formTextBuild(size, 'Soru sayısı'),
+        _questionAmountForm(size),
+        SizedBox(height: size.height * 0.0353),
+        _formTextBuild(size, 'Sıralama ölçütü'),
+        _sortFormBuild(size),
+        SizedBox(height: size.height * 0.0353),
+        _formTextBuild(size, 'Sınav süresi'),
+        _timePickerContainer(size),
+        SizedBox(height: size.height * 0.0353),
+        _formTextBuild(size, 'İpucu'),
+        _pickClueFormBuild(size),
+      ],
+    );
+  }
+
+  Container _timePickerContainer(Size size) {
+    return Container(
+      height: size.height * 0.25,
+      width: size.width * 0.7,
+      child: CupertinoTimerPicker(
+          mode: CupertinoTimerPickerMode.ms,
+          initialTimerDuration: duration,
+          onTimerDurationChanged: (duration) => setDuration(duration)),
+      decoration: _containerDecoration(),
+    );
+  }
+
+  BoxDecoration _containerDecoration() {
+    return BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+        border: Border.all(color: Colors.grey, width: 1.0));
+  }
+
+  SizedBox _sortFormBuild(Size size) {
+    return SizedBox(
+      height: pickSortNotValid ? size.height * 0.085 : size.height * 0.06,
+      width: size.width * 0.5,
+      child: DropdownButtonFormField(
+        dropdownColor: Colors.white,
+        decoration: _textFieldBuildDecoration(),
+        items: sortDropDownMenuList,
+        onChanged: (value) {
+          sortFormFunc(value);
+        },
+        validator: (value) {
+          if (selectedSortValue.isEmpty) {
+            setTruePickSortNotValid();
+            return 'Lütfen bir seçenek seçiniz';
+          } else {
+            setFalsePickSortNotValid();
+            return null;
+          }
+        },
+      ),
+    );
+  }
+
+  SizedBox _pickClueFormBuild(Size size) {
+    return SizedBox(
+      height: pickClueNotValid ? size.height * 0.085 : size.height * 0.06,
+      width: size.width * 0.7,
+      child: DropdownButtonFormField(
+        dropdownColor: Colors.white,
+        decoration: _textFieldBuildDecoration(),
+        items: clueDropDownMenuList,
+        onChanged: (value) {
+          clueFormFunc(value);
+        },
+        validator: (value) {
+          if (selectedClueValue.isEmpty) {
+            setTruePickClueNotValid();
+            return 'Lütfen bir seçenek seçiniz';
+          } else {
+            setFalsePickClueNotValid();
+            return null;
+          }
+        },
+      ),
+    );
+  }
+
+  Container _questionAmountForm(Size size) {
+    return Container(
+      height: size.height * 0.05,
+      width: size.width * 0.5,
+      decoration: _containerDecoration(),
+      child: Column(
+        children: [
+          CupertinoPicker(
+              looping: true,
+              useMagnifier: true,
+              scrollController: questionAmountFormController,
+              itemExtent: size.height * 0.045,
+              selectionOverlay: const CupertinoPickerDefaultSelectionOverlay(
+                background: Colors.transparent,
+              ),
+              onSelectedItemChanged: (index) {
+                setQuestionAmount(index + 1);
+              },
+              children: qetListOfNumber)
+        ],
+      ),
+    );
+  }
+
+  InputDecoration _textFieldBuildDecoration() {
+    return InputDecoration(
+      isDense: true,
+      filled: true,
+      fillColor: Colors.white,
+      focusColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(5),
+        borderSide: const BorderSide(color: Colors.grey),
+      ),
+    );
+  }
+
+  Text _formTextBuild(Size size, String string) {
+    return Text(
+      string,
+      style: textStyles.archiveNameStyle
+          .copyWith(color: Colors.black, fontSize: size.height * 0.018),
+    );
+  }
 
   Row _createQuizStageRow(Size size) {
     return Row(
@@ -118,14 +308,20 @@ class _CreateQuizStagePageState
 
   Padding _archiveNameText(Size size) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
+      padding: EdgeInsets.only(left: size.width * 0.0254),
       child: FittedBox(
-          child: Text(archiveName,
-              style: textStyles.archiveNameStyle
-                  .copyWith(color: color, fontSize: size.width * 0.06),
+          child: Text(widget.archive.archiveName,
+              style: textStyles.archiveNameStyle.copyWith(
+                  color: ColorFunctions.getColor(widget.archive.color),
+                  fontSize: size.width * 0.06),
               maxLines: 1)),
     );
   }
+
+  BoxDecoration _pageItemsContainerDecoration() => BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
+      );
 
   GestureDetector _backButtonBuild(BuildContext context) {
     return GestureDetector(
@@ -133,90 +329,5 @@ class _CreateQuizStagePageState
           Navigator.pop(context);
         },
         child: TurnBackButton());
-  }
-
-  BoxDecoration _pageItemsContainerDecoration() => BoxDecoration(
-        color: AppColors.archiveAreaBackgroundColor,
-        borderRadius: BorderRadius.circular(10.0),
-      );
-
-  Padding startQuizButton(Size size) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: SizedBox(
-        height: size.height * 0.0479,
-        width: size.width,
-        child: ElevatedButton(
-            onPressed: isValid ? _isValidFunc : _isNotValidFunc,
-            style: startQuizButtonStyle(),
-            child: startQuizButtonText(size)),
-      ),
-    );
-  }
-
-  void _isValidFunc() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DuringExamPage(
-            archive: widget.archive,
-            questionAmaount: questionAmaount,
-            timeLeft: getTimeLeft(minute, second),
-            isHintSelected: isHintSelected,
-            isInOrderCardChoosen: {isInOrderCardChoosen: sortBy},
-            isRandomCardChoosen: isRandomCardChoosen,
-          ),
-        ));
-  }
-
-  void _isNotValidFunc() {
-    var snackBar;
-    if (!isTimeValid) {
-      snackBar = SnackBar(
-        content:
-            Text(keys.isTimeValidText, style: textStyles.warningText),
-      );
-    }
-    if(questionAmaount > maxQuestionAmount!){
-      snackBar = SnackBar(
-          content: Text(keys.overMaxQuestionAmount(maxQuestionAmount),
-              style: textStyles.warningText));
-    }
-    if (!isEnoughQuestion) {
-      snackBar = SnackBar(
-          content: Text(keys.isEnoughQuestionText,
-              style: textStyles.warningText));
-    }
-    if (!isChoosenAnyCard) {
-      snackBar = SnackBar(
-          content: Text(keys.isChoosenAnyCardText,
-              style: textStyles.warningText));
-    }
-    if (isInOrderCardChoosen && !isSortByChoosen) {
-      snackBar = SnackBar(
-          content: Text(keys.isSortByChoosenText,
-              style: textStyles.warningText));
-    }
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  Text startQuizButtonText(Size size) {
-    return Text(
-      keys.startQuiz,
-      style: isValid
-          ? textStyles.createArchiveButtonTextStyle2
-              .copyWith(fontSize: size.height * 0.01874)
-          : textStyles.createArchiveButtonTextStyle2
-              .copyWith(fontSize: size.height * 0.01874, color: Colors.grey),
-    );
-  }
-
-  ButtonStyle startQuizButtonStyle() {
-    return ButtonStyle(
-        elevation: MaterialStateProperty.all<double>(0.0),
-        backgroundColor: MaterialStateProperty.all<Color>(
-            isValid ? AppColors.createArchiveButtonColor : AppColors.lightGrey),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))));
   }
 }
