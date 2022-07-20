@@ -38,6 +38,7 @@ dependencies:
   sqflite: ^2.0.2+1
   timeago: ^3.2.2
   glassmorphism: ^3.0.0
+  percent_indicator: ^4.2.2
 
 dev_dependencies:
   flutter_test:
