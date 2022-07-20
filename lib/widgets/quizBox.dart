@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/createQuizPage.dart';
+import 'package:memorize/view/createQuizPage.dart';
 import 'package:memorize/view_model/quiz_view_model/quizBoxViewModel.dart';
 
 class QuizBox extends StatefulWidget {
@@ -30,7 +31,8 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
   initHaveTenWord() async {
     int? _wordCount =
         await wordOperations.getWordWithMeaningCount(widget.archive.id);
-    if (_wordCount! >= 10) {
+    initLength(_wordCount!);
+    if (_wordCount >= 10) {
       setHaveTenWord();
     }
   }
@@ -220,9 +222,8 @@ class _QuizBoxState extends QuizBoxViewModel<QuizBox> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CreateQuizStagePage(
-            archive: widget.archive,
-          ),
+          builder: (context) =>
+              CreateQuizPage(archive: widget.archive, length: length ?? 0),
         ));
   }
 
