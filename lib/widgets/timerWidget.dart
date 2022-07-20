@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 
 class TimerWidget extends StatefulWidget {
-  TimerWidget({Key? key, required this.timeLeft}) : super(key: key);
+  TimerWidget({Key? key, required this.timeLeft, required this.color}) : super(key: key);
 
-  int timeLeft;
+  int? timeLeft;
+  Color color;
 
   @override
   State<TimerWidget> createState() => _TimerWidgetState();
@@ -16,9 +16,10 @@ class TimerWidget extends StatefulWidget {
 class _TimerWidgetState extends State<TimerWidget> {
   AppTextStyles textStyles = AppTextStyles();
   Timer? _timer;
-  late int _timeLeft;
+  late int? _timeLeft;
   late int _minute;
   late int _second;
+  late Color _color;
 
   int getMinute(int timeLeft) {
     int _lTime = timeLeft ~/ 60;
@@ -31,19 +32,19 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   void startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (_timeLeft > 0) {
+      if (_timeLeft! > 0) {
 
         if (_second <= 0) {
           _second = 60;
         }
 
-        if (_timeLeft % 60 == 0) {
+        if (_timeLeft! % 60 == 0) {
           _minute = _minute - 1;
         }
 
         setState(() {
           _second = _second - 1;
-          _timeLeft = _timeLeft - 1;
+          _timeLeft = _timeLeft! - 1;
         });
       } 
       else {
@@ -57,8 +58,9 @@ class _TimerWidgetState extends State<TimerWidget> {
     // TODO: implement initState
     super.initState();
     _timeLeft = widget.timeLeft;
-    _minute = getMinute(widget.timeLeft);
-    _second = widget.timeLeft - (_minute * 60);
+    _minute = getMinute(widget.timeLeft!);
+    _second = widget.timeLeft! - (_minute * 60);
+    _color = widget.color;
     startTimer();
   }
 
@@ -70,6 +72,8 @@ class _TimerWidgetState extends State<TimerWidget> {
       height: size.height * 0.040,
       width: size.width * 0.40, //responsive uygunluğunu test et!!
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _minuteText(size),
           _colonTextBuild(size),
@@ -81,12 +85,12 @@ class _TimerWidgetState extends State<TimerWidget> {
 
   Text _secondText(Size size) {
     return Text(_secondInText, style:
-        textStyles.colonSymbolTextStyle.copyWith(fontSize: size.width * 0.06, color: AppColors.battleToad),);
+        textStyles.colonSymbolTextStyle.copyWith(fontSize: size.width * 0.06, color: _color),);
   }
 
   Text _minuteText(Size size) {
     return Text(_minuteInText, style:
-        textStyles.colonSymbolTextStyle.copyWith(fontSize: size.width * 0.06, color: AppColors.battleToad),);
+        textStyles.colonSymbolTextStyle.copyWith(fontSize: size.width * 0.06, color: _color),);
   }
 
   String get _secondInText => _second < 10 ? '0${_second.toString()}' : _second.toString();
@@ -97,7 +101,7 @@ class _TimerWidgetState extends State<TimerWidget> {
     return Text(
       ':',
       style:
-          textStyles.colonSymbolTextStyle.copyWith(fontSize: size.width * 0.06, color: AppColors.battleToad),
+          textStyles.colonSymbolTextStyle.copyWith(fontSize: size.width * 0.06, color: _color),
     );
   }
 }
