@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/model/archive.dart';
+import 'package:memorize/model/meaning.dart';
+import 'package:memorize/model/word.dart';
 import 'package:memorize/view/mainPage.dart';
 import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
 import 'package:memorize/widgets/quizCard.dart';
@@ -143,7 +145,7 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
     );
   }
 
-  FutureBuilder<Map<String, List<String>>> _quizCardFutureBuilder() {
+  FutureBuilder<Map<Word, List<Meaning>>> _quizCardFutureBuilder() {
     return FutureBuilder(
         future: quizOperations.getWordsAndAnswers(
             widget.archive.id, _questionAmaount, _sortBy),
@@ -151,10 +153,10 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
   }
 
   Widget _quizCardFutureBuilderParam(
-      BuildContext context, AsyncSnapshot<Map<String, List<String>>> snapshot) {
+      BuildContext context, AsyncSnapshot<Map<Word, List<Meaning>>> snapshot) {
     Widget children;
-    List<String>? _keyList = snapshot.data?.keys.toList();
-    List<List<String>>? _meaningList = snapshot.data?.values.toList();
+    List<Word>? _keyList = snapshot.data?.keys.toList();
+    List<List<Meaning>>? _meaningList = snapshot.data?.values.toList();
     if (snapshot.hasData) {
       children = PageView.builder(
           controller: duringQuizPageController,
@@ -165,7 +167,7 @@ class _DuringExamPageState extends DuringQuizViewModel<DuringExamPage> {
               initialValue: _answerArray[position],
               function: parentChange,
               position: position,
-              word: _keyList?[position] ?? 'Hata',
+              word: _keyList?[position].word ?? 'Hata',
               meaningList: _meaningList?[position],
               isHintSelected: _isHintSelected,
             );

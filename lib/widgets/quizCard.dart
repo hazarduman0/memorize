@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/constants/projectKeys.dart';
+import 'package:memorize/model/meaning.dart';
 import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
 import 'package:memorize/widgets/hintCard.dart';
 
@@ -20,7 +19,7 @@ class QuizCard extends StatefulWidget {
   Function function;
   int position;
   String word;
-  List<String>? meaningList;
+  List<Meaning>? meaningList;
   bool isHintSelected;
 
   @override
@@ -29,10 +28,8 @@ class QuizCard extends StatefulWidget {
 
 class _QuizCardState extends DuringQuizViewModel<QuizCard> {
   late String _word;
-  AppTextStyles textStyles = AppTextStyles();
-  ProjectKeys keys = ProjectKeys();
   late String _initialValue;
-  late List<String>? _meaningList;
+  late List<Meaning>? _meaningList;
   late bool _isHintSelected;
 
   @override

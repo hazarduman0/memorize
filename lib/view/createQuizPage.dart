@@ -7,28 +7,28 @@ import 'package:memorize/view_model/quiz_view_model/createQuizViewModel.dart';
 import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
 
-class NewCreateQuizPage extends StatefulWidget {
+class CreateQuizPage extends StatefulWidget {
   Archive archive;
   int length;
 
-  NewCreateQuizPage({Key? key, required this.archive, required this.length})
+  CreateQuizPage({Key? key, required this.archive, required this.length})
       : super(key: key);
 
   @override
-  State<NewCreateQuizPage> createState() => _NewCreateQuizPageState();
+  State<CreateQuizPage> createState() => _CreateQuizPageState();
 }
 
-class _NewCreateQuizPageState
-    extends NewCreateQuizViewModel<NewCreateQuizPage> {
+class _CreateQuizPageState
+    extends CreateQuizViewModel<CreateQuizPage> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     listOfNumberGenerator(widget.length);
     questionAmountFormController =
-        FixedExtentScrollController(initialItem: widget.length ~/ 2);
+        FixedExtentScrollController(initialItem: (widget.length ~/ 2) - 1);
     questionAmaount = widget.length ~/ 2;
-    timeLeft = duration.inSeconds;    
+    timeLeft = duration.inSeconds;
   }
 
   @override
@@ -93,12 +93,12 @@ class _NewCreateQuizPageState
                     context,
                     MaterialPageRoute(
                       builder: (context) => DuringExamPage(
-                          archive: widget.archive,
-                          questionAmaount: questionAmaount,
-                          timeLeft: timeLeft,
-                          sortBy: sortBy,
-                          isHintSelected: isHintSelected,
-                          ),
+                        archive: widget.archive,
+                        questionAmaount: questionAmaount,
+                        timeLeft: timeLeft,
+                        sortBy: sortBy,
+                        isHintSelected: isHintSelected,
+                      ),
                     ));
               }
             },

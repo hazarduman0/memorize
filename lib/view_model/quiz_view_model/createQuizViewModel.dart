@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/projectKeys.dart';
 
-abstract class NewCreateQuizViewModel<T extends StatefulWidget>
+abstract class CreateQuizViewModel<T extends StatefulWidget>
     extends State<T> {
   AppTextStyles textStyles = AppTextStyles();
 

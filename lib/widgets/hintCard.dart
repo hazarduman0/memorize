@@ -3,19 +3,20 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
+import 'package:memorize/model/meaning.dart';
 import 'package:memorize/view_model/quiz_view_model/hintCardViewModel.dart';
 
 class HintCard extends StatefulWidget {
   HintCard({Key? key, required this.meaningList}) : super(key: key);
 
-  List<String>? meaningList;
+  List<Meaning>? meaningList;
 
   @override
   State<HintCard> createState() => _HintCardState();
 }
 
 class _HintCardState extends HintCardViewModel<HintCard> {
-  late List<String>? _meaningList;
+  late List<Meaning>? _meaningList;
   late List<String> _clues;
   late Map<int, int> _meaningListData;
   late int _meaningListLength;
@@ -28,10 +29,10 @@ class _HintCardState extends HintCardViewModel<HintCard> {
     return _lClue;
   }
 
-  Map<int, int> _initMeaningListData(List<String>? meaningList) {
+  Map<int, int> _initMeaningListData(List<Meaning>? meaningList) {
     Map<int, int> _lMeaningListData = {};
     for (int i = 0; i < meaningList!.length; i++) {
-      _lMeaningListData[i] = meaningList[i].length;
+      _lMeaningListData[i] = meaningList[i].meaning.length;
     }
     return _lMeaningListData;
   }
@@ -50,7 +51,7 @@ class _HintCardState extends HintCardViewModel<HintCard> {
     while (true) {
       if (clue[_randomNumber] == '_') {
         _tempClue = clue.substring(0, _randomNumber) +
-            _meaningList![index][_randomNumber] +
+            _meaningList![index].meaning[_randomNumber] +
             clue.substring(_randomNumber + 1);
 
         setState(() {
