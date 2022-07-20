@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
-import 'package:memorize/constants/projectKeys.dart';
-import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/wordsPage.dart';
