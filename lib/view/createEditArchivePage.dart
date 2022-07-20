@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
-import 'package:memorize/constants/appTextStyles.dart';
-import 'package:memorize/constants/projectKeys.dart';
-import 'package:memorize/db/database_archive.dart';
 import 'package:memorize/model/archive.dart';
 import 'package:memorize/view/mainPage.dart';
 import 'package:memorize/view_model/createQuizEditArchiveViewModel.dart';
@@ -166,9 +163,6 @@ class _CreateEditArchivePageState extends CreateEditArchiveViewModel<CreateEditA
   }
 
   Future createArchive() async {
-    //_formKey.currentState!.save();
-    // print('kayıt edildi an: '+archiveName);
-    // print('kayıt edildi de: '+description);
     final archive = Archive(
         isPinned: isPinned,
         archiveName: archiveName,
