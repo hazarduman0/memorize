@@ -5,9 +5,6 @@ import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/view_model/main_view_model/mainViewModel.dart';
 
-//responsive fontlar ayarlanacak
-//seçili sayfalarda bar ile text arasında mesafe olacak
-
 class CustomBottomNavigationBar extends StatelessWidget {
    CustomBottomNavigationBar({
     Key? key,
