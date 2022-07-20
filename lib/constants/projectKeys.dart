@@ -49,13 +49,17 @@ class ProjectKeys{
   final String secondText = 'saniye';
   final String cancalQuizText = 'Sınavı iptal et';
   final String sortBy = 'Sırala';
-  final String byDate = 'Tarihe Göre';
-  final String alphabetic = 'Alfabetik';
   final String close = 'Kapat';
-  final String isTimeValidText = 'Lütfen uygun bir süre giriniz';
-  final String isEnoughQuestionText = 'Lütfen uygun soru sayısını giriniz';
-  final String isChoosenAnyCardText = 'Lütfen seçip ilgili alanları doldurunuz';
-  final String isSortByChoosenText = 'Lütfen bir sıralama ölçütü seçiniz';
+  // final String isTimeValidText = 'Lütfen uygun bir süre giriniz';
+  // final String isEnoughQuestionText = 'Lütfen uygun soru sayısını giriniz';
+  // final String isChoosenAnyCardText = 'Lütfen seçip ilgili alanları doldurunuz';
+  // final String isSortByChoosenText = 'Lütfen bir sıralama ölçütü seçiniz';
+  final String random = 'Rastgele';
+  final String alphabetic = 'Alfabetik';
+  final String byDate = 'Tarihe Göre';
+  final String illHandleItText = 'Hayır! Ben hallederim';
+  final String yesPleaseText = 'Evet, lütfen';
   final String wordInformationText = 'Karşılığı bulunan en az 10 kelime gerekli.';
+  String overMaxQuestionAmount(int? _maxQuestionAmount) => 'Karşılığı bulunan kelime sayısı $_maxQuestionAmount. En fazla $_maxQuestionAmount girebilirsiniz.';
 
 }
