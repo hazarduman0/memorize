@@ -59,6 +59,7 @@ class AppColors {
   static Color lightGrey = const Color.fromRGBO(229, 229, 229, 1.0);
   static Color zimaBlue = const Color.fromRGBO(21, 171, 255, 1.0);
   static Color battleToad = const Color.fromRGBO(28, 202, 80, 1);
+  static Color cherenkovRadiation = const Color.fromRGBO(35, 180, 255, 1);
 
   static LinearGradient glassmorphicLinearGradient = LinearGradient(
       begin: Alignment.topLeft,
@@ -70,6 +71,23 @@ class AppColors {
       stops: const [
         0.1,
         1,
+      ]);
+
+  static LinearGradient quizBackGround = const LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Color.fromRGBO(204, 139, 244, 1),
+        Color.fromRGBO(35, 180, 255, 1),
+        Color.fromRGBO(0, 212, 255, 1)
+      ]);
+
+  static LinearGradient quizPercentIndicator = const LinearGradient(
+      begin: Alignment.centerRight,
+      end: Alignment.centerLeft,
+      colors: [
+        Color.fromRGBO(35, 180, 255, 1),
+        Color.fromRGBO(169, 231, 251, 1)
       ]);
 }
 
