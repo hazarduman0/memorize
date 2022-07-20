@@ -1,10 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/model/meaning.dart';
-import 'package:memorize/view_model/quiz_view_model/hintCardViewModel.dart';
 
 class HintCard extends StatefulWidget {
   HintCard({Key? key, required this.meaningList}) : super(key: key);
@@ -15,11 +13,13 @@ class HintCard extends StatefulWidget {
   State<HintCard> createState() => _HintCardState();
 }
 
-class _HintCardState extends HintCardViewModel<HintCard> {
+class _HintCardState extends State<HintCard> {
+  late int _length;
   late List<Meaning>? _meaningList;
   late List<String> _clues;
   late Map<int, int> _meaningListData;
-  late int _meaningListLength;
+  final Random random = Random();
+  AppTextStyles textStyles = AppTextStyles();
 
   List<String> _initClues(Map<int, int> meaningListData) {
     List<String> _lClue = [];
@@ -68,8 +68,9 @@ class _HintCardState extends HintCardViewModel<HintCard> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _length = widget.meaningList!.length;
     _meaningList = widget.meaningList;
-    _meaningListLength = widget.meaningList?.length ?? 0;
+    //_meaningListLength = widget.meaningList?.length ?? 0;
     _meaningListData = _initMeaningListData(_meaningList);
     _clues = _initClues(_meaningListData);
   }
@@ -77,152 +78,54 @@ class _HintCardState extends HintCardViewModel<HintCard> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Center(
-      child: SizedBox(
-        height: size.height * 0.15,
-        width: size.width * 0.8,
-        child: _animatedCrossFadeBuild(size),
-      ),
-    );
-  }
-
-  AnimatedCrossFade _animatedCrossFadeBuild(Size size) {
-    return AnimatedCrossFade(
-      firstChild: _firstChildBuild(),
-      secondChild: _secondChildBuild(size),
-      crossFadeState:
-          !needHelp ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      duration: const Duration(seconds: 0),
-    );
-  }
-
-  Column _secondChildBuild(Size size) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: _topRow(),
-        ),
-        const SizedBox(
-          height: 10.0,
-        ),
-        _hintRow(size),
-      ],
-    );
-  }
-
-  Row _hintRow(Size size) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        pageViewIndex == 0
-            ? const SizedBox(
-                width: 50,
-              )
-            : _arrowLeftBuild(),
-        _hintPageViewBuild(size),
-        pageViewIndex == _meaningListLength - 1
-            ? const SizedBox(
-                width: 50,
-              )
-            : _arrowRightBuild(),
-      ],
-    );
-  }
-
-  FittedBox _hintPageViewBuild(Size size) {
-    return FittedBox(
-      child: SizedBox(
-        height: size.height * 0.03,
-        width: size.width * 0.45,
-        child: PageView.builder(
-          controller: pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: _meaningListLength,
-          itemBuilder: (context, index) {
-            return Center(
-                child: Text(
-              _clues[index],
-              style:
-                  textStyles.hashtagWordTextStyle.copyWith(letterSpacing: 5.0),
-              maxLines: 1,
-            ));
-          },
-        ),
-      ),
-    );
-  }
-
-  IconButton _arrowRightBuild() {
-    return IconButton(
-        enableFeedback: false,
-        highlightColor: Colors.white,
-        splashColor: Colors.white,
-        onPressed: arrowRightFunc,
-        icon: const Icon(Icons.keyboard_arrow_right_outlined));
-  }
-
-  IconButton _arrowLeftBuild() {
-    return IconButton(
-        enableFeedback: false,
-        highlightColor: Colors.white,
-        splashColor: Colors.white,
-        onPressed: arrowLeftFunc,
-        icon: const Icon(Icons.keyboard_arrow_left_outlined));
-  }
-
-  Row _topRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _clearButtonBuild(),
-        FittedBox(
-            child: Text(
-          '$_meaningListLength adet anlam',
-          style: textStyles.enterTimeTextStyle,
-        )),
-        _hintButtonBuild(),
-      ],
-    );
-  }
-
-  IconButton _hintButtonBuild() {
-    return IconButton(
-        color: Colors.amber,
-        highlightColor: Colors.white,
-        splashColor: Colors.white,
-        enableFeedback: false,
-        onPressed: () {
-          _giveClue(_clues[pageViewIndex], pageViewIndex);
+    return SizedBox(
+      height: size.height * 0.15,
+      width: size.width,
+      child: PageView.builder(
+        itemCount: _length,
+        itemBuilder: (context, index) {
+          return _hintCardBuild(index, size, _clues[index]);
         },
-        icon: const Icon(
-          Icons.wb_incandescent_rounded,
-        ));
+      ),
+    );
   }
 
-  IconButton _clearButtonBuild() {
-    return IconButton(
-        color: Colors.grey,
-        highlightColor: Colors.white,
-        splashColor: Colors.white,
-        enableFeedback: false,
-        onPressed: clearButtonFunc,
-        icon: const Icon(
-          Icons.clear,
-        ));
-  }
+  GestureDetector _hintCardBuild(int index, Size size, String clue) =>
+      GestureDetector(
+        onDoubleTap: () {
+          _giveClue(clue, index);
+        },
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.04, vertical: size.height * 0.015),
+            child: Column(
+              children: [
+                _currentPageTextBuild(index),
+                SizedBox(
+                  height: size.height * 0.04,
+                ),
+                _clueText(clue, size)
+              ],
+            ),
+          ),
+        ),
+      );
 
-  Center _firstChildBuild() {
+  Center _clueText(String clue, Size size) {
     return Center(
-        child: IconButton(
-            color: AppColors.zimaBlue,
-            enableFeedback: false,
-            highlightColor: Colors.white,
-            splashColor: Colors.white,
-            onPressed: getHintCard,
-            icon: const Icon(
-              Icons.info,
-            )));
+      child: Text(
+        clue,
+        style: textStyles.hashtagWordTextStyle.copyWith(letterSpacing: 5.0, fontSize: size.width * 0.04),
+        maxLines: 1,
+      ),
+    );
+  }
+
+  Align _currentPageTextBuild(int index) {
+    return Align(
+        alignment: Alignment.topRight, child: Text('${index + 1}/$_length'));
   }
 }
