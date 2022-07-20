@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:memorize/constants/appColors.dart';
 import 'package:memorize/model/archive.dart';
-import 'package:memorize/view/duringExamPage.dart';
+import 'package:memorize/view/duringQuizPage.dart';
 import 'package:memorize/view_model/quiz_view_model/createQuizViewModel.dart';
 import 'package:memorize/widgets/ornomentWidget.dart';
 import 'package:memorize/widgets/turnBackButton.dart';
@@ -18,8 +18,7 @@ class CreateQuizPage extends StatefulWidget {
   State<CreateQuizPage> createState() => _CreateQuizPageState();
 }
 
-class _CreateQuizPageState
-    extends CreateQuizViewModel<CreateQuizPage> {
+class _CreateQuizPageState extends CreateQuizViewModel<CreateQuizPage> {
   @override
   void initState() {
     // TODO: implement initState
@@ -41,69 +40,71 @@ class _CreateQuizPageState
 
   SingleChildScrollView _pageArea(BuildContext context, Size size) =>
       SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(
-              right: size.width * 0.0254,
-              left: size.width * 0.0254,
-              top: size.height * 0.0705,
-              bottom: size.height * 0.0470),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: _pageItemsAndFeatures(size, context),
-            decoration: _pageItemsContainerDecoration(),
-          ),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          child: _pageItemsAndFeatures(size, context),
+          decoration: _pageItemsContainerDecoration(),
         ),
       );
 
-  Padding _pageItemsAndFeatures(Size size, BuildContext context) => Padding(
-        padding: EdgeInsets.only(
-            right: size.width * 0.0382,
-            left: size.width * 0.0382,
-            top: size.height * 0.0353,
-            bottom: size.height * 0.047),
+  Form _pageItemsAndFeatures(Size size, BuildContext context) => Form(
         child: Form(
           key: formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _backButtonBuild(context),
-              SizedBox(height: size.height * 0.0353),
-              _archiveNameText(size),
-              SizedBox(height: size.height * 0.0353),
-              _createQuizStageRow(size),
+              Padding(
+                padding: EdgeInsets.only(
+                    right: size.width * 0.0382,
+                    left: size.width * 0.0382,
+                    top: size.height * 0.0353),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _backButtonBuild(context),
+                    SizedBox(height: size.height * 0.0353),
+                    _archiveNameText(size),
+                    SizedBox(height: size.height * 0.0353),
+                    _createQuizStageRow(size),
+                  ],
+                ),
+              ),
               SizedBox(height: size.height * 0.0253),
-              _formPadding(size),
+              _formContainer(size),
               _startQuizButton(size)
             ],
           ),
         ),
       );
 
-  Align _startQuizButton(Size size) {
-    return Align(
-      alignment: Alignment.center,
-      child: SizedBox(
-        height: size.height * 0.06,
-        width: size.width * 0.7,
-        child: ElevatedButton(
-            onPressed: () {
-              final _isValid = formKey.currentState!.validate();
-              if (_isValid) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DuringExamPage(
-                        archive: widget.archive,
-                        questionAmaount: questionAmaount,
-                        timeLeft: timeLeft,
-                        sortBy: sortBy,
-                        isHintSelected: isHintSelected,
-                      ),
-                    ));
-              }
-            },
-            style: _startQuizButtonStyle(),
-            child: _startButtonTextBuild(size)),
+  Padding _startQuizButton(Size size) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: size.height * 0.0353),
+      child: Align(
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: size.height * 0.06,
+          width: size.width * 0.7,
+          child: ElevatedButton(
+              onPressed: () {
+                final _isValid = formKey.currentState!.validate();
+                if (_isValid) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DuringQuizPage(
+                          archive: widget.archive,
+                          questionAmaount: questionAmaount,
+                          timeLeft: timeLeft,
+                          sortBy: selectedSortValue,
+                          selectedClueValue: selectedClueValue,
+                        ),
+                      ));
+                }
+              },
+              style: _startQuizButtonStyle(),
+              child: _startButtonTextBuild(size)),
+        ),
       ),
     );
   }
@@ -123,20 +124,11 @@ class _CreateQuizPageState
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))));
   }
 
-  Padding _formPadding(Size size) => Padding(
-        padding: EdgeInsets.only(
-            right: size.width * 0.015,
-            left: size.width * 0.015,
-            bottom: size.height * 0.047),
-        child: _formContainer(size),
-      );
-
   Container _formContainer(Size size) => Container(
         padding: EdgeInsets.only(
             right: size.width * 0.0382,
             left: size.width * 0.0382,
-            top: size.height * 0.0353,
-            bottom: size.height * 0.047),
+            top: size.height * 0.0353),
         height: size.height * 0.75,
         width: size.width,
         decoration: _formContainerDecoration(),
@@ -149,22 +141,25 @@ class _CreateQuizPageState
         borderRadius: BorderRadius.circular(15.0));
   }
 
-  Column _formColumn(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _formTextBuild(size, 'Soru sayısı'),
-        _questionAmountForm(size),
-        SizedBox(height: size.height * 0.0353),
-        _formTextBuild(size, 'Sıralama ölçütü'),
-        _sortFormBuild(size),
-        SizedBox(height: size.height * 0.0353),
-        _formTextBuild(size, 'Sınav süresi'),
-        _timePickerContainer(size),
-        SizedBox(height: size.height * 0.0353),
-        _formTextBuild(size, 'İpucu'),
-        _pickClueFormBuild(size),
-      ],
+  Padding _formColumn(Size size) {
+    return Padding(
+      padding: EdgeInsets.only(left: size.width * 0.0254),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _formTextBuild(size, 'Soru sayısı'),
+          _questionAmountForm(size),
+          SizedBox(height: size.height * 0.0353),
+          _formTextBuild(size, 'Sıralama ölçütü'),
+          _sortFormBuild(size),
+          SizedBox(height: size.height * 0.0353),
+          _formTextBuild(size, 'Sınav süresi'),
+          _timePickerContainer(size),
+          SizedBox(height: size.height * 0.0353),
+          _formTextBuild(size, 'İpucu'),
+          _pickClueFormBuild(size),
+        ],
+      ),
     );
   }
 
@@ -284,15 +279,18 @@ class _CreateQuizPageState
     );
   }
 
-  Row _createQuizStageRow(Size size) {
-    return Row(
-      children: [
-        _createQuizStageText(size),
-        const SizedBox(
-          width: 10.0,
-        ),
-        OrnomentWidget(),
-      ],
+  Padding _createQuizStageRow(Size size) {
+    return Padding(
+      padding: EdgeInsets.only(left: size.width * 0.0254),
+      child: Row(
+        children: [
+          _createQuizStageText(size),
+          const SizedBox(
+            width: 10.0,
+          ),
+          OrnomentWidget(),
+        ],
+      ),
     );
   }
 
