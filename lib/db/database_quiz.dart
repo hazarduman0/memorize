@@ -1,3 +1,4 @@
+import 'package:memorize/constants/projectKeys.dart';
 import 'package:memorize/db/database.dart';
 import 'package:memorize/model/meaning.dart';
 import 'package:memorize/model/quiz.dart';
@@ -5,9 +6,10 @@ import 'package:memorize/model/word.dart';
 
 class QuizOperations {
   DatabaseRepository dbRepository = DatabaseRepository.instance;
+  ProjectKeys keys = ProjectKeys();
 
-  Future<Map<String, List<String>>> getRandomWordsAndAnswers(
-      int? archiveID, int? questionAmaount) async {
+  Future<Map<Word, List<Meaning>>> getWordsAndAnswers(
+      int? archiveID, int? questionAmaount, String sortBy) async {
     final db = await dbRepository.database;
 
     const wordWhere = '${WordFields.archiveID} = ?';
@@ -15,36 +17,40 @@ class QuizOperations {
 
     var wordWhereArgs = [archiveID];
 
-    var random = 'RANDOM()';
+    var random = sortBy == keys.random
+        ? 'RANDOM()'
+        : sortBy == keys.alphabetic
+            ? WordFields.word
+            : '${WordFields.time} DESC';
 
-    Map<String, List<String>> _wordsAndAnswers = {};
+    Map<Word, List<Meaning>> _wordsAndAnswers = {};
+
+    final _wordResult = await db.query(
+      tableWords,
+      where: wordWhere,
+      whereArgs: wordWhereArgs,
+      orderBy: random,
+    );
+
+    List<Word> _wordList =
+        _wordResult.map((json) => Word.fromJson(json)).toList();
 
     for (int i = 0; i < questionAmaount!; i++) {
-      final _wordResult = await db.query(
-        tableWords,
-        where: wordWhere,
-        whereArgs: wordWhereArgs,
-        orderBy: random,
-        limit: 1,
+      var meaningWhereArgs = [_wordList[i].id];
+      final _meaningResult = await db.query(
+        tableMeanings,
+        where: meaningWhere,
+        whereArgs: meaningWhereArgs,
       );
 
-      Word _wordObj =
-          _wordResult.map((json) => Word.fromJson(json)).toList().first;
+      List<Meaning> _meaningList =
+          _meaningResult.map((json) => Meaning.fromJson(json)).toList();
 
-      var meaningWhereArgs = [_wordObj.id];
-
-      final _meaningResult = await db.query(tableMeanings,
-          where: meaningWhere, whereArgs: meaningWhereArgs);
-
-      var _meaningListResult =
-          _meaningResult.map((json) => Meaning.fromJson(json).meaning).toList();
-
-      bool _isValid = _meaningListResult.isNotEmpty &&
-          _wordsAndAnswers[_wordObj.word] == null;
-      if (_isValid) {
-        _wordsAndAnswers[_wordObj.word] = _meaningListResult;
-      } else {
+      if (_meaningList.isEmpty) {
+        _wordList.removeAt(i);
         i--;
+      } else {
+        _wordsAndAnswers[_wordList[i]] = _meaningList;
       }
     }
 
