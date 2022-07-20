@@ -1,74 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:memorize/model/meaning.dart';
-import 'package:memorize/view_model/quiz_view_model/duringQuizViewModel.dart';
-import 'package:memorize/widgets/hintCard.dart';
+import 'package:memorize/constants/appTextStyles.dart';
 
-class QuizCard extends StatefulWidget {
+class QuizCard extends StatelessWidget {
   QuizCard(
       {Key? key,
       required this.initialValue,
-      required this.function,
-      required this.position,
       required this.word,
-      required this.meaningList,
-      required this.isHintSelected
-      })
+      required this.function,
+      required this.index})
       : super(key: key);
-
+  String word;
   String initialValue;
   Function function;
-  int position;
-  String word;
-  List<Meaning>? meaningList;
-  bool isHintSelected;
+  int index;
 
-  @override
-  State<QuizCard> createState() => _QuizCardState();
-}
-
-class _QuizCardState extends DuringQuizViewModel<QuizCard> {
-  late String _word;
-  late String _initialValue;
-  late List<Meaning>? _meaningList;
-  late bool _isHintSelected;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _word = widget.word;
-    _initialValue = widget.initialValue;
-    _meaningList = widget.meaningList;
-    _isHintSelected = widget.isHintSelected;
-  }
-
+  AppTextStyles textStyles = AppTextStyles();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Card(
-      elevation: 1.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(right: 20.0, left: 20, top: 40.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _hashtagWordText(size),
-            const SizedBox(height: 40.0),
-            _textFormFieldBuild(size),
-            const SizedBox(height: 15.0),
-            _isHintSelected ? HintCard(meaningList: _meaningList,) : const SizedBox.shrink()
-          ],
-        ),
-      ),
-    );
+    return SizedBox(
+        height: size.height * 0.425,
+        width: size.width,
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.06, vertical: size.height * 0.06),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _hashtagWordText(size),
+                SizedBox(height: size.height * 0.07),
+                _textFormFieldBuild(size)
+              ],
+            ),
+          ),
+        ));
   }
 
   TextFormField _textFormFieldBuild(Size size) {
     return TextFormField(
-      initialValue: _initialValue,
+      initialValue: initialValue,
       cursorColor: Colors.black,
       maxLines: 1,
       maxLength: 50,
@@ -77,13 +50,10 @@ class _QuizCardState extends DuringQuizViewModel<QuizCard> {
       style: textStyles.hashtagWordTextStyle.copyWith(
         fontSize: size.width * 0.05,
       ),
-      onChanged: (text) {
-        setState(() {
-          _initialValue = text;
-          widget.function(text, widget.position);
-        });
-      },
       decoration: _inputDecorationBuild(),
+      onChanged: (value) {
+        function(value, index, value.isNotEmpty);
+      },
     );
   }
 
@@ -98,7 +68,7 @@ class _QuizCardState extends DuringQuizViewModel<QuizCard> {
   FittedBox _hashtagWordText(Size size) {
     return FittedBox(
         child: Text(
-      '#$_word',
+      '#$word',
       style: textStyles.hashtagWordTextStyle.copyWith(
         fontSize: size.width * 0.1,
       ),
