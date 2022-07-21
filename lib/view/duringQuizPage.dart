@@ -39,60 +39,29 @@ class _DuringQuizPageState extends DuringQuizViewModel<DuringQuizPage> {
   void duringQuizNextPage(PageController pageController) {
     duringQuizPageController.nextPage(
         duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
-    if (answerArray![pageIndex].isNotEmpty) {
-      calculatePercent(true);
-    } 
+    calculatePercent();
     increasePageIndex();
   }
 
   void duringQuizPreviousPage(PageController pageController) {
     duringQuizPageController.previousPage(
         duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+    calculatePercent();
     decreasePageIndex();
   }
 
   List<String> initialArrayGenerator() {
-    List<String>? _lAnswerArray = [''];
-    for (int i = 0; i <= widget.questionAmaount!; i++) {
+    List<String>? _lAnswerArray = [];
+    for (int i = 0; i < widget.questionAmaount!; i++) {
       _lAnswerArray.add('');
     }
     return _lAnswerArray;
   }
 
-  void parentChange(String answer, int position, bool isInputNotEmpty) {
+  void parentChange(String answer, int position) {
     setState(() {
       answerArray![position] = answer;
     });
-  }
-
-  void calculatePercent(bool isIncrease) {
-    print(percent);
-    var _doublePercent = ((100 / _questionAmaount!.toDouble())) / 100;
-    if (percent <= 0.0) {
-      setState(() {
-        isIncrease ? percent = (percent + _doublePercent) : percent = 0;
-      });
-      if (percent <= 0) {
-        setState(() {
-          percent = 0.0;
-        });
-      }
-    } else if (percent >= 1.0) {
-      setState(() {
-        isIncrease ? percent = 1.0 : percent = (percent - _doublePercent);
-      });
-      if (percent >= 1.0) {
-        setState(() {
-          percent = 1.0;
-        });
-      }
-    } else {
-      setState(() {
-        isIncrease
-            ? percent = (percent + _doublePercent)
-            : percent = (percent - _doublePercent);
-      });
-    }
   }
 
   @override
@@ -101,6 +70,7 @@ class _DuringQuizPageState extends DuringQuizViewModel<DuringQuizPage> {
     super.initState();
     _timeLeft = widget.timeLeft;
     _questionAmaount = widget.questionAmaount;
+    print('questionAmount: $_questionAmaount');
     _sortBy = widget.sortBy;
     answerArray = initialArrayGenerator();
     widget.selectedClueValue == keys.yesPleaseText

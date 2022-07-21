@@ -52,7 +52,7 @@ class QuizCard extends StatelessWidget {
       ),
       decoration: _inputDecorationBuild(),
       onChanged: (value) {
-        function(value, index, value.isNotEmpty);
+        function(value, index);
       },
     );
   }
