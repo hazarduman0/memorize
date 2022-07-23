@@ -52,7 +52,7 @@ class AppColors {
   static Color UIColor = Colors.white;
   static Color meaningContainerBorderColor =
       const Color.fromRGBO(208, 208, 208, 1.0);
-  static Color meaningTextColor = const Color.fromRGBO(118, 118, 118, 1.0);
+  static Color luckyGrey = const Color.fromRGBO(118, 118, 118, 1.0);
   static Color transparentBackgroundColor =
       Colors.grey.shade300.withOpacity(0.9);
   static Color tableColor = const Color.fromRGBO(179, 179, 179, 1.0);
