@@ -31,6 +31,7 @@ class ProjectKeys{
   final String customAppBarQuizsText = 'Sınavlar';
   final String ooDelete = 'Sil    ';
   final String ooEdit = 'Düzenle';
+  final String addText = 'Ekle';
   final String takeExam = 'sınava gir';
   final String startQuiz = 'Sınava Başla!';
   final String tableColumnName1 = 'Kelime Sayısı';
