@@ -4,6 +4,7 @@ import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
+import 'package:memorize/view/newWordPage.dart';
 import 'package:memorize/view/wordsPage.dart';
 import 'package:memorize/view_model/main_view_model/mainViewModel.dart';
 
@@ -47,8 +48,9 @@ class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WordsPage(archive: widget.archive),
+              builder: (context) => NewWordPage(archive: widget.archive),
             ));
+        // WordsPage(archive: widget.archive)
       },
       child:
           normalArchiveWidgetBuild(widgetHeight, widgetWidth, size, textStyles),
@@ -75,7 +77,7 @@ class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
           height: 3.0,
           width: widgetWidth - 9.0,
           decoration: BoxDecoration(
-              color: lightColor, 
+              color: lightColor,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0))),
@@ -84,7 +86,7 @@ class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
           height: 3.0,
           width: widgetWidth - 6.0,
           decoration: BoxDecoration(
-              color: color, 
+              color: color,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0))),
@@ -169,7 +171,6 @@ class _NormalArchiveWidgetState extends MainViewModel<NormalArchiveWidget> {
           widget.customFunction(true, widget.archive.id);
           //archiveMoreButtonFunc(widget.archive, widget.didParentUpdate(otherOptions));
         },
-
         icon: Icon(
           CustomIcons.more,
           color: color,
