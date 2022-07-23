@@ -123,7 +123,7 @@ class AppTextStyles{
   );
 
   TextStyle meaningTextStyle = GoogleFonts.inter(
-    color: AppColors.meaningTextColor,
+    color: AppColors.luckyGrey,
     fontWeight: FontWeight.w600,
     fontSize: 8.0,
   );
