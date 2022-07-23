@@ -18,7 +18,8 @@ class TurnBackButton extends StatelessWidget {
       height: size.height * 0.0267,
       width: size.width * 0.28014,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             CustomIcons.arrowLeft,
