@@ -4,6 +4,7 @@ import 'package:memorize/constants/appTextStyles.dart';
 import 'package:memorize/constants/customIcons.dart';
 import 'package:memorize/db/database_word.dart';
 import 'package:memorize/model/archive.dart';
+import 'package:memorize/view/newWordPage.dart';
 import 'package:memorize/view/wordsPage.dart';
 import 'package:memorize/view_model/main_view_model/mainViewModel.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -65,8 +66,9 @@ class _PinnedArchiveState extends MainViewModel<PinnedArchive> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => WordsPage(archive: widget.archive),
+              builder: (context) => NewWordPage(archive: widget.archive),
             ));
+        // WordsPage(archive: widget.archive)
       },
       child:
           pinnedArchiveWidgetBuild(widgetHeight, widgetWidth, textStyles, size),
