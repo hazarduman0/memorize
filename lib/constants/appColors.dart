@@ -60,6 +60,7 @@ class AppColors {
   static Color zimaBlue = const Color.fromRGBO(21, 171, 255, 1.0);
   static Color battleToad = const Color.fromRGBO(28, 202, 80, 1);
   static Color cherenkovRadiation = const Color.fromRGBO(35, 180, 255, 1);
+  static Color nobleBlack = const Color.fromRGBO(32, 31, 35, 1.0);
 
   static LinearGradient glassmorphicLinearGradient = LinearGradient(
       begin: Alignment.topLeft,
