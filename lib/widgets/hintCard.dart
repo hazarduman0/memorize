@@ -20,6 +20,7 @@ class _HintCardState extends State<HintCard> {
   late Map<int, int> _meaningListData;
   final Random random = Random();
   AppTextStyles textStyles = AppTextStyles();
+  final PageController _pageController = PageController(viewportFraction: 0.85);
 
   List<String> _initClues(Map<int, int> meaningListData) {
     List<String> _lClue = [];
@@ -82,6 +83,7 @@ class _HintCardState extends State<HintCard> {
       height: size.height * 0.15,
       width: size.width,
       child: PageView.builder(
+        controller: _pageController,
         itemCount: _length,
         itemBuilder: (context, index) {
           return _hintCardBuild(index, size, _clues[index]);
