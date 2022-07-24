@@ -17,7 +17,7 @@ class QuizOperations {
 
     var wordWhereArgs = [archiveID];
 
-    var random = sortBy == keys.random
+    var orderBy = sortBy == keys.random
         ? 'RANDOM()'
         : sortBy == keys.alphabetic
             ? WordFields.word
@@ -29,7 +29,7 @@ class QuizOperations {
       tableWords,
       where: wordWhere,
       whereArgs: wordWhereArgs,
-      orderBy: random,
+      orderBy: orderBy,
     );
 
     List<Word> _wordList =
