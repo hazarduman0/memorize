@@ -29,7 +29,7 @@ class ProjectKeys{
   final String customAppBarCreateArchivesText = 'arşiv oluştur';
   final String customAppBarStatisticsText = 'İstatistikler';
   final String customAppBarQuizsText = 'Sınavlar';
-  final String ooDelete = 'Sil    ';
+  final String ooDelete = 'Sil';
   final String ooEdit = 'Düzenle';
   final String addText = 'Ekle';
   final String takeExam = 'sınava gir';
@@ -51,6 +51,7 @@ class ProjectKeys{
   final String cancalQuizText = 'Sınavı iptal et';
   final String sortBy = 'Sırala';
   final String close = 'Kapat';
+  final String addWordText = 'Kelime\nekle +';
   // final String isTimeValidText = 'Lütfen uygun bir süre giriniz';
   // final String isEnoughQuestionText = 'Lütfen uygun soru sayısını giriniz';
   // final String isChoosenAnyCardText = 'Lütfen seçip ilgili alanları doldurunuz';
@@ -61,6 +62,7 @@ class ProjectKeys{
   final String illHandleItText = 'Hayır! Ben hallederim';
   final String yesPleaseText = 'Evet, lütfen';
   final String wordInformationText = 'Karşılığı bulunan en az 10 kelime gerekli.';
+  final String addMeaningText = '+anlamEkle';
   String overMaxQuestionAmount(int? _maxQuestionAmount) => 'Karşılığı bulunan kelime sayısı $_maxQuestionAmount. En fazla $_maxQuestionAmount girebilirsiniz.';
 
 }
