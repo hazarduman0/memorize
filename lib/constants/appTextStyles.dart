@@ -221,4 +221,16 @@ class AppTextStyles{
     fontWeight: FontWeight.w500,
     fontSize: 12.0
   );
+
+  TextStyle addMeaningTextStyle = GoogleFonts.inter(
+    color: AppColors.battleToad,
+    fontWeight: FontWeight.w400,
+    fontSize: 12.0
+  );
+  
+  TextStyle addWordTextStyle = GoogleFonts.inter(
+    color: AppColors.nobleBlack,
+    fontWeight: FontWeight.w600,
+    fontSize: 40.0
+  );
  }
