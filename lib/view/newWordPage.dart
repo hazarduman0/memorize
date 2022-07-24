@@ -31,6 +31,8 @@ class _NewWordPageState extends State<NewWordPage> {
   bool isGlassMorpUsed = false;
   Word? choosenWord;
 
+  List<String> dropDownMenuItems = ['Alfabetik', 'Son Oluşturulan', 'İlk Oluşturulan'];
+  String choosenSort = 'İlk Oluşturulan';
   ProjectKeys keys = ProjectKeys();
   AppTextStyles textStyles = AppTextStyles();
   WordOperations wordOperations = WordOperations();
@@ -75,12 +77,16 @@ class _NewWordPageState extends State<NewWordPage> {
                       leadingWidth: size.width * 0.25,
                       actions: [_addButtonBuild()],
                       pinned: true,
-                      expandedHeight: size.height * 0.15,
+                      expandedHeight: size.height * 0.26,
                       flexibleSpace: FlexibleSpaceBar(
-                        background: _archiveData(size),
+                        background: _flexibleBackground(size),
                       ),
                       //bottom: _archiveData(size),
                     ),
+                    SliverToBoxAdapter(
+                        child: Container(
+                            color: Colors.white,
+                            child: const Divider(thickness: 1.2))),
                     _wordListWidget()
                   ],
                 )),
@@ -230,9 +236,41 @@ class _NewWordPageState extends State<NewWordPage> {
     );
   }
 
+  Widget fakeSearchBar(Size size) {
+    return Container(
+      height: size.height * 0.035,
+      width: size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: const Color.fromARGB(255, 216, 222, 225),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 5.0),
+        child: Row(
+          children: [
+            Icon(
+              CustomIcons.search,
+              color: AppColors.searchIconColor,
+              size: size.width * 0.035,
+            ),
+            const SizedBox(
+              width: 5.0,
+            ),
+            Text(
+              keys.searchText,
+              style: textStyles.searchTextStyle
+                  .copyWith(fontSize: size.width * 0.035),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _wordListWidget() => SliverToBoxAdapter(
         child: FutureBuilder(
-          future: wordOperations.getArchiveWords(widget.archive.id),
+          future: wordOperations.getSortedArchiveWords(
+              widget.archive.id, choosenSort),
           builder: (context, AsyncSnapshot<List<Word>> snapshot) {
             Widget children;
             if (snapshot.hasData) {
@@ -260,20 +298,44 @@ class _NewWordPageState extends State<NewWordPage> {
         ),
       );
 
-  Padding _archiveData(Size size) {
+  Padding _flexibleBackground(Size size) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.04),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: size.height * 0.07),
+          SizedBox(height: size.height * 0.08),
           _archiveNameTextBuild(size),
           _archiveDescriptionTextBuild(size),
-          const Divider(thickness: 1)
+          SizedBox(height: size.height * 0.02),
+          fakeSearchBar(size),
+          Align(
+            alignment: Alignment.centerRight,
+            child: _dropdownButton(size),
+          ),
         ],
       ),
     );
   }
+
+  DropdownButton _dropdownButton(Size size) => DropdownButton(
+        items: dropDownMenuList,
+        iconEnabledColor: Colors.black,
+        underline: const Text(''),
+        hint: Text(keys.sortBy,
+            style: textStyles.hashtagWordTextStyle
+                .copyWith(fontSize: size.width * 0.05)),
+        onChanged: (value) {
+          setState(() {
+            choosenSort = value.toString();
+          });
+        },
+      );
+
+  List<DropdownMenuItem<String>>? get dropDownMenuList =>
+      dropDownMenuItems.map((String val) {
+        return DropdownMenuItem(value: val, child: Text(val));
+      }).toList();
 
   Hero _archiveDescriptionTextBuild(Size size) {
     return Hero(
@@ -317,15 +379,19 @@ class _NewWordPageState extends State<NewWordPage> {
 
   IconButton _addButtonBuild() => IconButton(
       onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => AddUpdateWordPage(archive: widget.archive)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    AddUpdateWordPage(archive: widget.archive)));
       },
       icon: Icon(Icons.add, color: _color));
 
   GestureDetector _backButtonBuild(BuildContext context, Size size) {
     return GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const MainPage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const MainPage()));
         },
         child: TurnBackButton());
   }
