@@ -34,6 +34,21 @@ class WordOperations {
     );
   }
 
+  Future<Word?> getLastWord(int? archiveId) async {
+    final db = await dbRepository.database;
+
+    const where = '${WordFields.archiveID} = ?';
+
+    var whereArgs = [archiveId];
+
+    var orderBy = '${WordFields.time} DESC';
+
+    final _wordResult = await db.query(tableWords,
+        where: where, whereArgs: whereArgs, orderBy: orderBy, limit: 1);
+
+    return _wordResult.map((json) => Word.fromJson(json)).toList().first;
+  }
+
   Future<List<Word>> getWord(int? wordID) async {
     final db = await dbRepository.database;
 
@@ -69,19 +84,16 @@ class WordOperations {
     return _wordWithMeaningCount;
   }
 
-  Future<int?> getWordCount(int? archiveId) async{
+  Future<int?> getWordCount(int? archiveId) async {
     final db = await dbRepository.database;
 
     const where = '${WordFields.archiveID} = ?';
 
     var whereArgs = [archiveId];
 
-    final result = await db.query(
-      tableWords,
-      where: where,
-      whereArgs: whereArgs
-      );
-    var _list = result.map((json) => Word.fromJson(json)).toList();  
+    final result =
+        await db.query(tableWords, where: where, whereArgs: whereArgs);
+    var _list = result.map((json) => Word.fromJson(json)).toList();
 
     return _list.isEmpty ? 0 : _list.length;
   }
