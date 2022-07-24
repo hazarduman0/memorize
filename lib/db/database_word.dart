@@ -109,4 +109,23 @@ class WordOperations {
         await db.query(tableWords, where: where, whereArgs: whereArgs);
     return result.map((json) => Word.fromJson(json)).toList();
   }
+
+  Future<List<Word>> getSortedArchiveWords(
+      int? archiveID, String sortBy) async {
+    final db = await dbRepository.database;
+
+    const where = '${WordFields.archiveID} = ?';
+
+    var whereArgs = [archiveID];
+
+    var orderBy = sortBy == 'Alfabetik'
+        ? WordFields.word
+        : sortBy == 'Son Oluşturulan'
+            ? '${WordFields.time} DESC'
+            : '${WordFields.time} ASC';
+
+    final result = await db.query(tableWords,
+        where: where, whereArgs: whereArgs, orderBy: orderBy);
+    return result.map((json) => Word.fromJson(json)).toList();
+  }
 }
